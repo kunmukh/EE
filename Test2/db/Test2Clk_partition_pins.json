@@ -1,0 +1,61 @@
+{
+	"partitions" : [
+		{
+			"name" : "Top",
+			"pins" : [
+				{
+					"name" : "Bout[0]",
+					"strict" : false
+				},
+				{
+					"name" : "Bout[1]",
+					"strict" : false
+				},
+				{
+					"name" : "Bout[2]",
+					"strict" : false
+				},
+				{
+					"name" : "Bout[3]",
+					"strict" : false
+				},
+				{
+					"name" : "Bout[4]",
+					"strict" : false
+				},
+				{
+					"name" : "Bout[5]",
+					"strict" : false
+				},
+				{
+					"name" : "Bout[6]",
+					"strict" : false
+				},
+				{
+					"name" : "Bout[7]",
+					"strict" : false
+				},
+				{
+					"name" : "Bout[8]",
+					"strict" : false
+				},
+				{
+					"name" : "Bout[9]",
+					"strict" : false
+				},
+				{
+					"name" : "btn1",
+					"strict" : false
+				},
+				{
+					"name" : "btn0",
+					"strict" : false
+				},
+				{
+					"name" : "CLOCK_50",
+					"strict" : false
+				}
+			]
+		}
+	]
+}

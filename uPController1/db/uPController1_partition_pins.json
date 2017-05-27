@@ -1,0 +1,37 @@
+{
+	"partitions" : [
+		{
+			"name" : "Top",
+			"pins" : [
+				{
+					"name" : "ControlBus[0]",
+					"strict" : false
+				},
+				{
+					"name" : "ControlBus[1]",
+					"strict" : false
+				},
+				{
+					"name" : "ControlBus[2]",
+					"strict" : false
+				},
+				{
+					"name" : "ControlBus[3]",
+					"strict" : false
+				},
+				{
+					"name" : "ControlBus[4]",
+					"strict" : false
+				},
+				{
+					"name" : "ControlBus[5]",
+					"strict" : false
+				},
+				{
+					"name" : "clk",
+					"strict" : false
+				}
+			]
+		}
+	]
+}
