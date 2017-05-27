@@ -1,0 +1,10 @@
+﻿  Source.c
+c:\users\kunal\documents\kunal\cs 210\vector test\vector test\source.c(12): warning C4101: 'vertex2': unreferenced local variable
+c:\users\kunal\documents\kunal\cs 210\vector test\vector test\source.c(12): warning C4101: 'y3': unreferenced local variable
+c:\users\kunal\documents\kunal\cs 210\vector test\vector test\source.c(12): warning C4101: 'x3': unreferenced local variable
+c:\users\kunal\documents\kunal\cs 210\vector test\vector test\source.c(12): warning C4101: 'vertex3': unreferenced local variable
+c:\users\kunal\documents\kunal\cs 210\vector test\vector test\source.c(12): warning C4101: 'vertex1': unreferenced local variable
+c:\users\kunal\documents\kunal\cs 210\vector test\vector test\source.c(50): warning C4028: formal parameter 1 different from declaration
+c:\users\kunal\documents\kunal\cs 210\vector test\vector test\source.c(125): warning C4716: 'LineLength': must return a value
+  vector test.vcxproj -> C:\Users\Kunal\Documents\Kunal\CS 210\vector test\Debug\vector test.exe
+  vector test.vcxproj -> C:\Users\Kunal\Documents\Kunal\CS 210\vector test\Debug\vector test.pdb (Full PDB)
