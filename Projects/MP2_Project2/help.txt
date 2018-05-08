@@ -1,0 +1,19 @@
+----*Game Instructions*----
+1> quit - to quit the game
+2> go <direction> - to go in that direction
+3> look - description of the room
+4> look <object> - description of the object
+5> help - to get the help menu
+6> inventory - to get the list of items in toolbelt
+7> get <object> - to pick up the object
+8> dig <mud> - to dig mud
+9> unscrew <box> - to unscrew box
+10> hit <bottle> - to break a bottle
+11> kill <snake> - to kill a snake
+12> burn <shack> - to burn a shack
+13> open box - open a special golden box
+14> light <torch> - light a torch
+15> examine <object> - examine a object that is in the toolbelt
+16> remove <object> - remove object from tool belt
+17> untie <object> - untie a person or a thing
+18> objects - to see the objects that you can interract with
