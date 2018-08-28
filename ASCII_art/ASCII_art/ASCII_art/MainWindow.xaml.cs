@@ -1,8 +1,10 @@
 ﻿using Microsoft.Win32;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,8 +33,8 @@ namespace ASCII_art
         public BitmapImage bmi;
         public WriteableBitmap wbm;
         public WriteableBitmap wbmSave;
-        public BitmapImage bmiSave;
-        private int winWidth, winHeight;
+        public BitmapImage bmiSave;       
+        private double winWidth, winHeight;
 
         private void btnLoad_Click(object sender, RoutedEventArgs e)
         {
@@ -66,8 +68,10 @@ namespace ASCII_art
 
         private void btnConvert_Click(object sender, RoutedEventArgs e)
         {
-            winWidth = (int)imgPicture.Width;
-            winHeight = (int)imgPicture.Height;
+            ArrayList rowWeight = new ArrayList();            
+            winWidth = imgPicture.Width; winHeight = imgPicture.Height;
+            
+           
             DrawingVisual vis = new DrawingVisual();
             DrawingContext dc = vis.RenderOpen();
             //
@@ -77,22 +81,44 @@ namespace ASCII_art
                 {
                     Color c = new Color();
                     c = GetPixel(wbm, i, j);
-                    int val = (c.R + c.G + c.B) / 3;                    
-                    dc.DrawText(
-                         new FormattedText("O",
-                         CultureInfo.GetCultureInfo("en-us"),
-                         FlowDirection.LeftToRight,
-                          new Typeface("Verdana"),
-                          1, System.Windows.Media.Brushes.Red),
-                          new System.Windows.Point(i, j));
+                    int val = (c.R + c.G + c.B) / 3;
+                    rowWeight.Add(val);                    
                 }
+
+                StringBuilder sb = new StringBuilder();
+                for (int k = 0; k < rowWeight.Count; k++)
+                {
+                   sb.Append(rowWeight[k].ToString());
+                }                
+
+                dc.DrawText(new FormattedText(sb.ToString(), CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("TimesNewRoman"),
+                    8, System.Windows.Media.Brushes.Black),new System.Windows.Point(0, i * 8));
+                rowWeight.Clear();
+                sb.Clear();
             }
             
             //
             dc.Close();
-            RenderTargetBitmap bmp = new RenderTargetBitmap(wbm.PixelWidth, wbm.PixelHeight, 96, 96, PixelFormats.Pbgra32);
+            RenderTargetBitmap bmp = new RenderTargetBitmap((int)winWidth, (int)winHeight, 96, 96, PixelFormats.Pbgra32);
             bmp.Render(vis);
             imgPicture.Source = bmp;
+
+            var renderTargetBitmap = bmp;
+            var bitmapImage = new BitmapImage();
+            var bitmapEncoder = new PngBitmapEncoder();
+            bitmapEncoder.Frames.Add(BitmapFrame.Create(renderTargetBitmap));
+
+            using (var stream = new MemoryStream())
+            {
+                bitmapEncoder.Save(stream);
+                stream.Seek(0, SeekOrigin.Begin);
+
+                bitmapImage.BeginInit();
+                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapImage.StreamSource = stream;
+                bitmapImage.EndInit();
+            }
+            bmiSave = bitmapImage;           
         }
         
 
@@ -102,7 +128,7 @@ namespace ASCII_art
                 return Color.FromArgb(0, 0, 0, 0);
             if (y < 0 || x < 0)
                 return Color.FromArgb(0, 0, 0, 0);
-            if (!wbm.Format.Equals(PixelFormats.Bgra32))
+            if (!wbm.Format.Equals(PixelFormats.Bgr32))
                 return Color.FromArgb(0, 0, 0, 0); ;
             IntPtr buff = wbm.BackBuffer;
             int Stride = wbm.BackBufferStride;
@@ -116,8 +142,6 @@ namespace ASCII_art
             }
             return c;
         }
-
-
 
     }
 }
