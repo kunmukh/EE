@@ -156,7 +156,7 @@ namespace ASCII_art
                         {
                             dictKey.Add(GetColorBox(wbm, fontWidth, fontHeight, i, j), alphabet[alphabetIndex]);
                             alphabetIndex++;
-                        }
+                        }//
                         
                     }
 
