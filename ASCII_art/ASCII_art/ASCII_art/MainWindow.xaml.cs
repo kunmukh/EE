@@ -83,6 +83,15 @@ namespace ASCII_art
                     rowWeight.Add(GetColorBox(wbm, 9, 17, i, j));
                 }
 
+                StringBuilder sb = new StringBuilder();
+                for (int k = 0; k < rowWeight.Count; k++)
+                {
+                    sb.Append("0"); //rowWeight[k].ToString()
+                }
+                dc.DrawText(new FormattedText(sb.ToString(), CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("TimesNewRoman"),
+                    11, System.Windows.Media.Brushes.Black), new System.Windows.Point(0, j));
+                rowWeight.Clear();
+                sb.Clear();
             }
 
             
