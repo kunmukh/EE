@@ -34,7 +34,8 @@ namespace ASCII_art
         public WriteableBitmap wbm;
         public WriteableBitmap wbmSave;
         public BitmapImage bmiSave;       
-        private double winWidth, winHeight;
+        private double winWidth, winHeight;
+
 
         private void btnLoad_Click(object sender, RoutedEventArgs e)
         {
@@ -75,27 +76,16 @@ namespace ASCII_art
             DrawingVisual vis = new DrawingVisual();
             DrawingContext dc = vis.RenderOpen();
             //
-            for (int i = 0; i < wbm.PixelWidth; i++)
+            for (int j = 0; j < wbm.PixelHeight; j += 17) 
             {
-                for (int j = 0; j < wbm.PixelHeight; j++)
+                for (int i = 0; i < wbm.PixelWidth; i += 9)
                 {
-                    Color c = new Color();
-                    c = GetPixel(wbm, i, j);
-                    int val = (c.R + c.G + c.B) / 3;
-                    rowWeight.Add(val);                    
+                    rowWeight.Add(GetColorBox(wbm, 9, 17, i, j));
                 }
 
-                StringBuilder sb = new StringBuilder();
-                for (int k = 0; k < rowWeight.Count; k++)
-                {
-                   sb.Append(rowWeight[k].ToString());
-                }                
-
-                dc.DrawText(new FormattedText(sb.ToString(), CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("TimesNewRoman"),
-                    8, System.Windows.Media.Brushes.Black),new System.Windows.Point(0, i * 8));
-                rowWeight.Clear();
-                sb.Clear();
             }
+
+            
             
             //
             dc.Close();
@@ -119,6 +109,31 @@ namespace ASCII_art
                 bitmapImage.EndInit();
             }
             bmiSave = bitmapImage;           
+        }
+
+        public int GetColorBox(WriteableBitmap wbm, int fontWidth, int fontHeight, int startIndexX, int startIndexY)
+        {
+            List<int> rowWeight = new List<int>();
+
+            for (int i = startIndexX; i < startIndexX + fontWidth; i++)
+            {
+                for (int j = startIndexY; j < startIndexY + fontHeight; j++)
+                {
+                    Color c = new Color();
+                    c = GetPixel(wbm, i, j);
+                    int val = (c.R + c.G + c.B) / 3;
+                    rowWeight.Add(val);
+                }
+            }
+
+            int sum = 0; int count = 0;
+            for (int i = 0; i < rowWeight.Count;i++)
+            {
+                sum += rowWeight[i];
+                count++;
+            }
+
+            return sum / count;
         }
         
 
