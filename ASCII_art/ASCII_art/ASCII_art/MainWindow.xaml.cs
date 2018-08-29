@@ -35,6 +35,11 @@ namespace ASCII_art
         public WriteableBitmap wbmSave;
         public BitmapImage bmiSave;       
         private double winWidth, winHeight;
+        private int fontWidth;
+        private int fontHeight;
+        private string fontName;
+        private int fontSize;
+        private Dictionary<double, string> dictKey = new Dictionary<double, string>();
 
 
         private void btnLoad_Click(object sender, RoutedEventArgs e)
@@ -48,6 +53,8 @@ namespace ASCII_art
                 imgPicture.Source = wbm;
                 bmiSave = bmi;
             }
+
+            MakeFontDictionary();
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
@@ -69,32 +76,37 @@ namespace ASCII_art
 
         private void btnConvert_Click(object sender, RoutedEventArgs e)
         {
-            ArrayList rowWeight = new ArrayList();            
+            List<double> rowWeight = new List<double>();
             winWidth = imgPicture.Width; winHeight = imgPicture.Height;
             
            
             DrawingVisual vis = new DrawingVisual();
             DrawingContext dc = vis.RenderOpen();
             //
-            for (int j = 0; j < wbm.PixelHeight; j += 17) 
+            fontHeight = 15;
+            fontWidth = 11;
+            fontName = "CourierNew";
+            FontSize = 11;
+
+            for (int j = 0; j < wbm.PixelHeight; j += fontHeight) 
             {
-                for (int i = 0; i < wbm.PixelWidth; i += 9)
+                for (int i = 0; i < wbm.PixelWidth; i += fontWidth)
                 {
-                    rowWeight.Add(GetColorBox(wbm, 9, 17, i, j));
+                    rowWeight.Add(GetColorBox(wbm, fontWidth, fontHeight, i, j));
                 }
 
                 StringBuilder sb = new StringBuilder();
+                string result;
                 for (int k = 0; k < rowWeight.Count; k++)
                 {
-                    sb.Append("0"); //rowWeight[k].ToString()
+                    dictKey.TryGetValue(rowWeight[k], out result); //
+                    sb.Append(result);
                 }
-                dc.DrawText(new FormattedText(sb.ToString(), CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("TimesNewRoman"),
+                dc.DrawText(new FormattedText(sb.ToString(), CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface(fontName),
                     11, System.Windows.Media.Brushes.Black), new System.Windows.Point(0, j));
                 rowWeight.Clear();
-                sb.Clear();
-            }
-
-            
+                sb.Clear(); //9*7*255^3
+            }            
             
             //
             dc.Close();
@@ -120,7 +132,42 @@ namespace ASCII_art
             bmiSave = bitmapImage;           
         }
 
-        public int GetColorBox(WriteableBitmap wbm, int fontWidth, int fontHeight, int startIndexX, int startIndexY)
+        public void MakeFontDictionary ()
+        {
+            BitmapImage bmiTemp;
+            WriteableBitmap wbmTemp;  
+            OpenFileDialog op = new OpenFileDialog();
+            op.Title = "Select a picture";
+            if (op.ShowDialog() == true)
+            {
+                bmiTemp = new BitmapImage(new Uri(op.FileName));
+                wbmTemp = new WriteableBitmap(bmiTemp);
+
+                string[] alphabet = {"_", "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t",
+            "u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T"
+            ,"U","V","W","Y","Z","!","@","#","$","%","^","&","*","(",")","+","-","~"};
+
+                int alphabetIndex = 0;
+                for (int j = 0; j < wbmTemp.PixelHeight; j += fontHeight)
+                {
+                    for (int i = 0; i < wbmTemp.PixelWidth; i += fontWidth)
+                    {
+                        if (!dictKey.ContainsKey(GetColorBox(wbm, fontWidth, fontHeight, i, j)))
+                        {
+                            dictKey.Add(GetColorBox(wbm, fontWidth, fontHeight, i, j), alphabet[alphabetIndex]);
+                            alphabetIndex++;
+                        }
+                        
+                    }
+
+                }
+            }
+
+            
+
+        }
+
+        public double GetColorBox(WriteableBitmap wbm, int fontWidth, int fontHeight, int startIndexX, int startIndexY)
         {
             List<int> rowWeight = new List<int>();
 
@@ -130,19 +177,18 @@ namespace ASCII_art
                 {
                     Color c = new Color();
                     c = GetPixel(wbm, i, j);
-                    int val = (c.R + c.G + c.B) / 3;
+                    int val = c.R + c.G + c.B;
                     rowWeight.Add(val);
                 }
             }
 
-            int sum = 0; int count = 0;
+            int sum = 0;
             for (int i = 0; i < rowWeight.Count;i++)
             {
-                sum += rowWeight[i];
-                count++;
+                sum += rowWeight[i];                
             }
 
-            return sum / count;
+            return (double) sum / (fontWidth * fontHeight * Math.Pow(255,3));
         }
         
 
