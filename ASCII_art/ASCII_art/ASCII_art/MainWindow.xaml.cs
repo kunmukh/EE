@@ -35,8 +35,8 @@ namespace ASCII_art
         public WriteableBitmap wbmSave;
         public BitmapImage bmiSave;       
         private double winWidth, winHeight;
-        private int fontWidth;
-        private int fontHeight;
+        private int fontWidth = 11;
+        private int fontHeight = 15;
         private string fontName;
         private int fontSize;
         private Dictionary<double, string> dictKey = new Dictionary<double, string>();
@@ -138,6 +138,7 @@ namespace ASCII_art
             WriteableBitmap wbmTemp;  
             OpenFileDialog op = new OpenFileDialog();
             op.Title = "Select a picture";
+
             if (op.ShowDialog() == true)
             {
                 bmiTemp = new BitmapImage(new Uri(op.FileName));
@@ -155,15 +156,18 @@ namespace ASCII_art
                         if (!dictKey.ContainsKey(GetColorBox(wbm, fontWidth, fontHeight, i, j)))
                         {
                             dictKey.Add(GetColorBox(wbm, fontWidth, fontHeight, i, j), alphabet[alphabetIndex]);
-                            alphabetIndex++;
-                        }//
-                        
+                            if(alphabetIndex < 64)
+                                alphabetIndex++;
+                            Console.WriteLine(GetColorBox(wbm, fontWidth, fontHeight, i, j));                            
+                            Console.WriteLine(alphabet[alphabetIndex]);
+                            
+                        }
+
                     }
 
                 }
-            }
 
-            
+            }            
 
         }
 
