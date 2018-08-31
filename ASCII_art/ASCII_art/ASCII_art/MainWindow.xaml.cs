@@ -30,17 +30,22 @@ namespace ASCII_art
         {
             InitializeComponent();            
         }
+
         public BitmapImage bmi;
         public WriteableBitmap wbm;
         public WriteableBitmap wbmSave;
         public BitmapImage bmiSave;       
         private double winWidth, winHeight;
-        private int fontWidth = 11;
-        private int fontHeight = 15;
-        private string fontName;
-        private int fontSize;
+        private int fontWidth = 12;
+        private int fontHeight = 18;
+        private string fontName = "Consolas";
+        private int fontSize = 12;
         private Dictionary<double, string> dictKey = new Dictionary<double, string>();
-
+        private string[] alphabet = {"1","2","3","4","5","6","7","8","9","0",
+                    "~","!","@","#","$","%","^","&","*","(",")","+","|","=","[","]"," ",
+                    "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S",
+                    "T","U","V","W","X","Y","Z"," ","_","a","b","c","d","e","f","g","h","i","j","k",
+                    "l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"};  
 
         private void btnLoad_Click(object sender, RoutedEventArgs e)
         {
@@ -77,16 +82,11 @@ namespace ASCII_art
         private void btnConvert_Click(object sender, RoutedEventArgs e)
         {
             List<double> rowWeight = new List<double>();
-            winWidth = imgPicture.Width; winHeight = imgPicture.Height;
-            
+            winWidth = imgPicture.Width; winHeight = imgPicture.Height;           
            
             DrawingVisual vis = new DrawingVisual();
             DrawingContext dc = vis.RenderOpen();
-            //
-            fontHeight = 15;
-            fontWidth = 11;
-            fontName = "CourierNew";
-            FontSize = 11;
+            int add = 0;
 
             for (int j = 0; j < wbm.PixelHeight; j += fontHeight) 
             {
@@ -97,15 +97,22 @@ namespace ASCII_art
 
                 StringBuilder sb = new StringBuilder();
                 string result;
+                
+                
                 for (int k = 0; k < rowWeight.Count; k++)
                 {
-                    dictKey.TryGetValue(rowWeight[k], out result); //
+                    dictKey.TryGetValue(rowWeight[k], out result);
+                    result = alphabet[add];
                     sb.Append(result);
+                    //sb.Append(alphabet[add]);
+                    if (add < 75)
+                        add++;
                 }
                 dc.DrawText(new FormattedText(sb.ToString(), CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface(fontName),
-                    11, System.Windows.Media.Brushes.Black), new System.Windows.Point(0, j));
+                    fontSize, System.Windows.Media.Brushes.Black), new System.Windows.Point(0, j));
+
                 rowWeight.Clear();
-                sb.Clear(); //9*7*255^3
+                sb.Clear();
             }            
             
             //
@@ -137,32 +144,33 @@ namespace ASCII_art
             BitmapImage bmiTemp;
             WriteableBitmap wbmTemp;  
             OpenFileDialog op = new OpenFileDialog();
-            op.Title = "Select a picture";
+            op.Title = "Select an alphabet";
 
             if (op.ShowDialog() == true)
             {
+                Console.WriteLine(op.FileName);
                 bmiTemp = new BitmapImage(new Uri(op.FileName));
                 wbmTemp = new WriteableBitmap(bmiTemp);
 
-                string[] alphabet = {"_", "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t",
-            "u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T"
-            ,"U","V","W","Y","Z","!","@","#","$","%","^","&","*","(",")","+","-","~"};
-
                 int alphabetIndex = 0;
-                for (int j = 0; j < wbmTemp.PixelHeight; j += fontHeight)
+                for (int j = 0; j < wbmTemp.PixelHeight; j = j + fontHeight)
                 {
                     for (int i = 0; i < wbmTemp.PixelWidth; i += fontWidth)
                     {
-                        if (!dictKey.ContainsKey(GetColorBox(wbm, fontWidth, fontHeight, i, j)))
+                        try
                         {
-                            dictKey.Add(GetColorBox(wbm, fontWidth, fontHeight, i, j), alphabet[alphabetIndex]);
-                            if(alphabetIndex < 64)
-                                alphabetIndex++;
-                            Console.WriteLine(GetColorBox(wbm, fontWidth, fontHeight, i, j));                            
-                            Console.WriteLine(alphabet[alphabetIndex]);
-                            
+                            if (!dictKey.ContainsKey(GetColorBox(wbm, fontWidth, fontHeight, i, j)))
+                            {
+                                dictKey.Add(GetColorBox(wbm, fontWidth, fontHeight, i, j), alphabet[alphabetIndex]);
+                                Console.WriteLine(GetColorBox(wbm, fontWidth, fontHeight, i, j));
+                                Console.WriteLine(alphabet[alphabetIndex]);
+                            }
                         }
+                        catch (System.IndexOutOfRangeException e)  // CS0168
+                        {}
 
+                        alphabetIndex++;                        
+                           
                     }
 
                 }
@@ -173,7 +181,9 @@ namespace ASCII_art
 
         public double GetColorBox(WriteableBitmap wbm, int fontWidth, int fontHeight, int startIndexX, int startIndexY)
         {
-            List<int> rowWeight = new List<int>();
+            List<int> red = new List<int>();
+            List<int> green = new List<int>();
+            List<int> blue = new List<int>();            
 
             for (int i = startIndexX; i < startIndexX + fontWidth; i++)
             {
@@ -181,18 +191,28 @@ namespace ASCII_art
                 {
                     Color c = new Color();
                     c = GetPixel(wbm, i, j);
-                    int val = c.R + c.G + c.B;
-                    rowWeight.Add(val);
+                    
+                    red.Add(c.R);
+                    green.Add(c.G);
+                    blue.Add(c.B); 
                 }
             }
 
-            int sum = 0;
-            for (int i = 0; i < rowWeight.Count;i++)
+            int sumRed = 0, sumBlue = 0, sumGreen = 0; 
+            for (int i = 0; i < red.Count;i++)
             {
-                sum += rowWeight[i];                
+                sumRed += red[i];
+                sumGreen += green[i];
+                sumBlue += blue[i];
             }
 
-            return (double) sum / (fontWidth * fontHeight * Math.Pow(255,3));
+            double sum = sumRed + sumGreen + sumBlue;
+            double totalWeight = fontHeight * fontWidth * 3 * 255;
+
+            //Console.WriteLine(sumRed + sumGreen + sumBlue);
+            double result = sum/totalWeight;
+            //Console.WriteLine("Result: " + result);
+            return Math.Round(result,3);
         }
         
 
@@ -215,7 +235,7 @@ namespace ASCII_art
                                        pbuff[loc + 1], pbuff[loc]);
             }
             return c;
-        }
+        }       
 
     }
 }
