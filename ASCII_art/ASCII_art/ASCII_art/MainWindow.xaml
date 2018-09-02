@@ -11,11 +11,14 @@
         <Button Name="btnLoad" Content="Load" HorizontalAlignment="Left" Height="71" Margin="639,10,0,0" VerticalAlignment="Top" Width="141" FontFamily="Stencil" FontSize="36" Click="btnLoad_Click"/>
         <Button Name="btnSave" Content="Save" HorizontalAlignment="Left" Height="71" Margin="639,86,0,0" VerticalAlignment="Top" Width="141" FontFamily="Stencil" FontSize="36" RenderTransformOrigin="1.504,-1.544" Click="btnSave_Click"/>
         <Image Name="imgPicture" HorizontalAlignment="Left" Height="356" Margin="10,10,0,0" VerticalAlignment="Top" Width="584"/>
-        <ComboBox Name="cmbFont" HorizontalAlignment="Left" Margin="639,219,0,0" VerticalAlignment="Top" Width="141" Height="54" >
-            <Label Content="TimesNewRoman"/>
+        <ComboBox Name="cmbFont" HorizontalAlignment="Left" Margin="639,219,0,0" VerticalAlignment="Top" Width="141" Height="54" FontFamily="Consolas" FontSize="24">
+            <Label Content="Consolas"/>
             <Label Content="OldEnglishText"/>
         </ComboBox>
-        <ComboBox Name="cmbSize" HorizontalAlignment="Left" Margin="639,312,0,0" VerticalAlignment="Top" Width="141" Height="54"/>
+        <ComboBox Name="cmbSize" HorizontalAlignment="Left" Margin="639,312,0,0" VerticalAlignment="Top" Width="141" Height="54" FontFamily="Consolas" FontSize="30" >
+            <Label Content="12"/>
+            <Label Content="10"/>
+        </ComboBox>
         <Label Name="lblFont" Content="Font" HorizontalAlignment="Left" Height="37" Margin="639,177,0,0" VerticalAlignment="Top" Width="141" FontFamily="Stencil" FontSize="30"/>
         <Label Name="lblSize" Content="Size" HorizontalAlignment="Left" Height="37" Margin="639,270,0,0" VerticalAlignment="Top" Width="141" FontFamily="Stencil" FontSize="30"/>
         <Button Name="btnSubmit" Content="Convert" HorizontalAlignment="Left" Height="40" Margin="639,371,0,0" VerticalAlignment="Top" Width="141" FontFamily="Stencil" FontSize="30" Click="btnConvert_Click"/>

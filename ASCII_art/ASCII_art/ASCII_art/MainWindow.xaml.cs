@@ -36,16 +36,19 @@ namespace ASCII_art
         public WriteableBitmap wbmSave;
         public BitmapImage bmiSave;       
         private double winWidth, winHeight;
-        private int fontWidth = 12;
-        private int fontHeight = 18;
+        private int fontWidth = 7;
+        private int fontHeight = 15;
         private string fontName = "Consolas";
-        private int fontSize = 12;
-        private Dictionary<double, string> dictKey = new Dictionary<double, string>();
-        private string[] alphabet = {"1","2","3","4","5","6","7","8","9","0",
-                    "~","!","@","#","$","%","^","&","*","(",")","+","|","=","[","]"," ",
-                    "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S",
-                    "T","U","V","W","X","Y","Z"," ","_","a","b","c","d","e","f","g","h","i","j","k",
-                    "l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"};  
+        private int fontSize = 8;
+        //private Dictionary<double, string> dictKey = new Dictionary<double, string>();
+        private string[] alphabet = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S",
+                    "T","U","V","W","X","Y","Z","a","b","c","d","e","f","g","h","i","j","k",
+                    "l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","~","!","@",
+            "#","$","%","^","&","*","(",")","_","+","|","[","]","{","}",";",":","<",">","?","="
+                ,"-"," " };           
+                     
+        public List<double> fontWeight = new List<double>();
+        public List<string> fontAlpha = new List<string>();
 
         private void btnLoad_Click(object sender, RoutedEventArgs e)
         {
@@ -66,8 +69,10 @@ namespace ASCII_art
         {
             // Displays a SaveFileDialog so the user can save the Image  
             // assigned to btnSave.  
-            SaveFileDialog saveFileDialog1 = new SaveFileDialog();            
-            saveFileDialog1.Title = "Save an Image File";
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog
+            {
+                Title = "Save an Image File"
+            };
             saveFileDialog1.ShowDialog();           
 
             BitmapEncoder encoder = new PngBitmapEncoder();
@@ -79,65 +84,62 @@ namespace ASCII_art
             }
         }
 
+
         private void btnConvert_Click(object sender, RoutedEventArgs e)
         {
-            List<double> rowWeight = new List<double>();
-            winWidth = imgPicture.Width; winHeight = imgPicture.Height;           
-           
-            DrawingVisual vis = new DrawingVisual();
-            DrawingContext dc = vis.RenderOpen();
-            int add = 0;
+            //fontName = cmbFont.Text;
+            //fontSize = Int32.Parse(cmbSize.Text);
 
-            for (int j = 0; j < wbm.PixelHeight; j += fontHeight) 
+            List<double> rowWeight = new List<double>();
+            winWidth = imgPicture.Width; winHeight = imgPicture.Height;
+
+            DrawingVisual vis = new DrawingVisual();
+            DrawingContext dc = vis.RenderOpen();            
+
+            for (int j = 0; j <= wbm.PixelHeight - fontHeight; j += fontHeight)
             {
-                for (int i = 0; i < wbm.PixelWidth; i += fontWidth)
+                for (int i = 0; i <= wbm.PixelWidth - fontWidth; i += fontWidth)
                 {
                     rowWeight.Add(GetColorBox(wbm, fontWidth, fontHeight, i, j));
                 }
 
                 StringBuilder sb = new StringBuilder();
                 string result;
-                
-                
                 for (int k = 0; k < rowWeight.Count; k++)
                 {
-                    dictKey.TryGetValue(rowWeight[k], out result);
-                    result = alphabet[add];
-                    sb.Append(result);
-                    //sb.Append(alphabet[add]);
-                    if (add < 75)
-                        add++;
+                    try
+                    {
+                        result = fontAlpha[fontWeight.IndexOf(rowWeight[k])];
+                        sb.Append(result);
+                        
+                        //System.Console.WriteLine(rowWeight[k]);
+                        //System.Console.WriteLine(result);
+
+                    }
+                    catch (System.ArgumentOutOfRangeException exc)
+                    {
+                        sb.Append("@");
+                    }       
+                    
                 }
                 dc.DrawText(new FormattedText(sb.ToString(), CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface(fontName),
                     fontSize, System.Windows.Media.Brushes.Black), new System.Windows.Point(0, j));
 
                 rowWeight.Clear();
                 sb.Clear();
-            }            
-            
+            }
+
             //
             dc.Close();
-            RenderTargetBitmap bmp = new RenderTargetBitmap((int)winWidth, (int)winHeight, 96, 96, PixelFormats.Pbgra32);
+            RenderTargetBitmap bmp = new RenderTargetBitmap((int)imgPicture.Width, (int)imgPicture.Height, 96, 96, PixelFormats.Pbgra32);
             bmp.Render(vis);
             imgPicture.Source = bmp;
+            BitmapImage bitmapImage = saveFormattedBmp(bmp);
 
-            var renderTargetBitmap = bmp;
-            var bitmapImage = new BitmapImage();
-            var bitmapEncoder = new PngBitmapEncoder();
-            bitmapEncoder.Frames.Add(BitmapFrame.Create(renderTargetBitmap));
-
-            using (var stream = new MemoryStream())
-            {
-                bitmapEncoder.Save(stream);
-                stream.Seek(0, SeekOrigin.Begin);
-
-                bitmapImage.BeginInit();
-                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                bitmapImage.StreamSource = stream;
-                bitmapImage.EndInit();
-            }
-            bmiSave = bitmapImage;           
+            bmiSave = bitmapImage;
         }
+
+        
 
         public void MakeFontDictionary ()
         {
@@ -153,27 +155,19 @@ namespace ASCII_art
                 wbmTemp = new WriteableBitmap(bmiTemp);
 
                 int alphabetIndex = 0;
-                for (int j = 0; j < wbmTemp.PixelHeight; j = j + fontHeight)
+                for (int j = 0; j < wbmTemp.PixelHeight; j += fontHeight)
                 {
                     for (int i = 0; i < wbmTemp.PixelWidth; i += fontWidth)
                     {
-                        try
-                        {
-                            if (!dictKey.ContainsKey(GetColorBox(wbm, fontWidth, fontHeight, i, j)))
-                            {
-                                dictKey.Add(GetColorBox(wbm, fontWidth, fontHeight, i, j), alphabet[alphabetIndex]);
-                                Console.WriteLine(GetColorBox(wbm, fontWidth, fontHeight, i, j));
-                                Console.WriteLine(alphabet[alphabetIndex]);
-                            }
-                        }
-                        catch (System.IndexOutOfRangeException e)  // CS0168
-                        {}
-
-                        alphabetIndex++;                        
+                        fontAlpha.Add(alphabet[alphabetIndex]);                        
+                        fontWeight.Add(GetColorBox(wbmTemp, fontWidth, fontHeight, i, j));
+                        System.Console.WriteLine("start: " + i + " end: " + j + " Alphabet:" + alphabet[alphabetIndex] + " Value : " + GetColorBox(wbmTemp, fontWidth, fontHeight, i, j) + " Index: " + alphabetIndex);
+                                                
+                        alphabetIndex++;                                                                     
                            
                     }
 
-                }
+                }                
 
             }            
 
@@ -185,16 +179,16 @@ namespace ASCII_art
             List<int> green = new List<int>();
             List<int> blue = new List<int>();            
 
-            for (int i = startIndexX; i < startIndexX + fontWidth; i++)
+            for (int j = startIndexY; j <= startIndexY + fontHeight; j++)
             {
-                for (int j = startIndexY; j < startIndexY + fontHeight; j++)
+                for (int i = startIndexX; i <= startIndexX + fontWidth; i++)
                 {
                     Color c = new Color();
                     c = GetPixel(wbm, i, j);
                     
                     red.Add(c.R);
                     green.Add(c.G);
-                    blue.Add(c.B); 
+                    blue.Add(c.B);
                 }
             }
 
@@ -211,10 +205,10 @@ namespace ASCII_art
 
             //Console.WriteLine(sumRed + sumGreen + sumBlue);
             double result = sum/totalWeight;
-            //Console.WriteLine("Result: " + result);
-            return Math.Round(result,3);
-        }
-        
+            //Console.WriteLine("start: " + startIndexX + " end: " + startIndexY);
+            //Console.WriteLine("Result: " + Math.Round(result, 3));
+            return Math.Round(result,2);
+        }        
 
         public Color GetPixel(WriteableBitmap wbm, int x, int y)
         {
@@ -235,7 +229,28 @@ namespace ASCII_art
                                        pbuff[loc + 1], pbuff[loc]);
             }
             return c;
-        }       
+        }
+
+        private static BitmapImage saveFormattedBmp(RenderTargetBitmap bmp)
+        {
+            var renderTargetBitmap = bmp;
+            var bitmapImage = new BitmapImage();
+            var bitmapEncoder = new PngBitmapEncoder();
+            bitmapEncoder.Frames.Add(BitmapFrame.Create(renderTargetBitmap));
+
+            using (var stream = new MemoryStream())
+            {
+                bitmapEncoder.Save(stream);
+                stream.Seek(0, SeekOrigin.Begin);
+
+                bitmapImage.BeginInit();
+                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapImage.StreamSource = stream;
+                bitmapImage.EndInit();
+            }
+
+            return bitmapImage;
+        }
 
     }
 }
