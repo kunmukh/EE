@@ -5,21 +5,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ASCII_art"
         mc:Ignorable="d"
-        Title="ASCII Art-Kunal Mukherjee" Height="450" Width="800" WindowStartupLocation="CenterScreen">
+        Title="ASCII Art-Kunal Mukherjee" Height="640.5" Width="1058" WindowStartupLocation="CenterScreen">
 
-    <Grid Margin="0,0,3.6,-1">
-        <Button Name="btnLoad" Content="Load" HorizontalAlignment="Left" Height="71" Margin="639,10,0,0" VerticalAlignment="Top" Width="141" FontFamily="Stencil" FontSize="36" Click="btnLoad_Click"/>
-        <Button Name="btnSave" Content="Save" HorizontalAlignment="Left" Height="71" Margin="639,86,0,0" VerticalAlignment="Top" Width="141" FontFamily="Stencil" FontSize="36" RenderTransformOrigin="1.504,-1.544" Click="btnSave_Click"/>
-        <Image Name="imgPicture" HorizontalAlignment="Left" Height="356" Margin="10,10,0,0" VerticalAlignment="Top" Width="584"/>
-        <ComboBox Name="cmbFont" HorizontalAlignment="Left" Margin="639,219,0,0" VerticalAlignment="Top" Width="141" Height="54" FontFamily="Consolas" FontSize="24">
+    <Grid Margin="0,0,-8,-9">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="647*"/>
+            <ColumnDefinition Width="20*"/>
+            <ColumnDefinition Width="277*"/>
+        </Grid.ColumnDefinitions>
+        <Button Name="btnLoad" Content="Load" HorizontalAlignment="Left" Height="71" Margin="123,10,0,0" VerticalAlignment="Top" Width="140" FontFamily="Stencil" FontSize="36" Click="btnLoad_Click" Grid.Column="2"/>
+        <Button Name="btnSave" Content="Save" HorizontalAlignment="Left" Height="71" Margin="122,86,0,0" VerticalAlignment="Top" Width="141" FontFamily="Stencil" FontSize="36" RenderTransformOrigin="1.504,-1.544" Click="btnSave_Click" Grid.Column="2"/>
+        <Image Name="imgPicture" HorizontalAlignment="Left" Height="493" Margin="109,86,0,0" VerticalAlignment="Top" Width="638" Grid.ColumnSpan="2"/>
+        <ComboBox Name="cmbFont" HorizontalAlignment="Left" Margin="122,221,0,0" VerticalAlignment="Top" Width="141" Height="54" FontFamily="Consolas" FontSize="24" Grid.Column="2">
             <Label Content="Consolas"/>
         </ComboBox>
-        <ComboBox Name="cmbSize" HorizontalAlignment="Left" Margin="639,312,0,0" VerticalAlignment="Top" Width="141" Height="54" FontFamily="Consolas" FontSize="30" >
+        <ComboBox Name="cmbSize" HorizontalAlignment="Left" Margin="122,317,0,0" VerticalAlignment="Top" Width="141" Height="54" FontFamily="Consolas" FontSize="30" Grid.Column="2" >
             <Label Content="8"/>
         </ComboBox>
-        <Label Name="lblFont" Content="Font" HorizontalAlignment="Left" Height="37" Margin="639,177,0,0" VerticalAlignment="Top" Width="141" FontFamily="Stencil" FontSize="30"/>
-        <Label Name="lblSize" Content="Size" HorizontalAlignment="Left" Height="37" Margin="639,270,0,0" VerticalAlignment="Top" Width="141" FontFamily="Stencil" FontSize="30"/>
-        <Button Name="btnSubmit" Content="Convert" HorizontalAlignment="Left" Height="40" Margin="453,366,0,0" VerticalAlignment="Top" Width="141" FontFamily="Stencil" FontSize="30" Click="btnConvert_Click"/>
-        <Button Name="btnDone" Content="Done" HorizontalAlignment="Left" Height="40" Margin="639,371,0,0" VerticalAlignment="Top" Width="141" FontFamily="Stencil" FontSize="30" Click="btnDone_Click"/>
+        <Label Name="lblFont" Content="Font" HorizontalAlignment="Left" Height="37" Margin="122,184,0,0" VerticalAlignment="Top" Width="141" FontFamily="Stencil" FontSize="30" Grid.Column="2"/>
+        <Label Name="lblSize" Content="Size" HorizontalAlignment="Left" Height="37" Margin="122,285,0,0" VerticalAlignment="Top" Width="141" FontFamily="Stencil" FontSize="30" Grid.Column="2"/>
+        <Button Name="btnSubmit" Content="Convert" HorizontalAlignment="Left" Height="40" Margin="123,448,0,0" VerticalAlignment="Top" Width="142" FontFamily="Stencil" FontSize="30" Click="btnConvert_Click" Grid.Column="2"/>
+        <Button Name="btnDone" Content="Done" HorizontalAlignment="Left" Height="40" Margin="123,390,0,0" VerticalAlignment="Top" Width="141" FontFamily="Stencil" FontSize="30" Click="btnDone_Click" Grid.Column="2"/>
     </Grid>
 </Window>
