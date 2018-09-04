@@ -37,20 +37,20 @@ namespace ASCII_art
         public BitmapImage bmiSave;       
         private double winWidth, winHeight;
 
-        private string fontName = "";
-        private int fontWidth = 0;
-        private int fontHeight = 0;        
-        private int fontSize = 0;
+        private string fontName    = "";
+        private int    fontWidth   = 0;
+        private int    fontHeight  = 0;        
+        private int    fontSize    = 0;
         
         private string[] alphabet = {" ","!","\"","$","%","&","\'","(",")","^","+",",","-",".","/",
                                       "0","1","2","3","4","5","6","7","8","9",":",";","<","=",">","?",
-                                       "@","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S",
-                                        "T","U","V","W","X","Y","Z","[","\\","]","^"," ","a","b","c","d","e","f","g","h","i","j","k",
-                                        "l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","{","|","}","~"};
+                                      "@","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S",
+                                       "T","U","V","W","X","Y","Z","[","\\","]","^"," ","a","b","c","d","e","f","g","h","i","j","k",
+                                       "l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","{","|","}","~"};
 
         public List<double> fontWeight = new List<double>();
-        public List<string> fontAlpha = new List<string>();
-        public List<double> rowWeight = new List<double>();
+        public List<string> fontAlpha = new  List<string>();
+        public List<double> rowWeight = new  List<double>();
 
         public Boolean isFontDictDone = false;
 
@@ -121,8 +121,10 @@ namespace ASCII_art
 
                     }
                     catch (System.ArgumentOutOfRangeException exc)
-                    {                                                
-                        sb.Append(" ");  
+                    {
+                        double closest = fontWeight.Aggregate((x, y) => Math.Abs(x - rowWeight[k]) < Math.Abs(y - rowWeight[k]) ? x : y);
+                        result = fontAlpha[fontWeight.IndexOf(closest)];
+                        sb.Append(result);                        
                     }       
                     
                 }
