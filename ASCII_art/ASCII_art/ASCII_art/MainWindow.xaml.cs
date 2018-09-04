@@ -53,7 +53,6 @@ namespace ASCII_art
         public List<double> rowWeight = new  List<double>();
 
         public Boolean isFontDictDone = false;
-
         private Dictionary<int, int> dictConsolas = new Dictionary<int, int>();
 
         private void btnLoad_Click(object sender, RoutedEventArgs e)
@@ -92,7 +91,6 @@ namespace ASCII_art
                 encoder.Save(fileStream);
             }
         }
-
 
         private void btnConvert_Click(object sender, RoutedEventArgs e)
         {
@@ -143,9 +141,7 @@ namespace ASCII_art
             BitmapImage bitmapImage = saveFormattedBmp(bmp);
 
             bmiSave = bitmapImage;
-        }
-
-        
+        }        
 
         public void MakeFontArray ()
         {
@@ -297,8 +293,7 @@ namespace ASCII_art
                 dictConsolas.Add(8, 6);
                 isFontDictDone = true;
             }
-        }
-        
+        }        
 
     }
 }
