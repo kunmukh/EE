@@ -54,6 +54,9 @@ namespace ASCII_art
 
         public Boolean isFontDictDone = false;
         private Dictionary<int, int> dictConsolas = new Dictionary<int, int>();
+        private Dictionary<int, int> dictConurierNew = new Dictionary<int, int>();
+        private Dictionary<int, int> dictLucidaConsole = new Dictionary<int, int>();
+        
 
         private void btnLoad_Click(object sender, RoutedEventArgs e)
         {
@@ -266,6 +269,9 @@ namespace ASCII_art
 
         private void btnDone_Click(object sender, RoutedEventArgs e)
         {
+            fontAlpha.Clear();
+            fontWeight.Clear();
+
             if (cmbFont.Text == "")
             {
                 cmbFont.Text = "Consolas";
@@ -283,14 +289,33 @@ namespace ASCII_art
             {
                 dictConsolas.TryGetValue(fontHeight, out fontWidth);
             }
+            if (fontName == "Courier New")
+            {
+                dictConurierNew.TryGetValue(fontHeight, out fontWidth);
+            }
+            if (fontName == "Lucida Console")
+            {
+                dictLucidaConsole.TryGetValue(fontHeight, out fontWidth);
+            }
             MakeFontArray();
-        }        
+        }
+
+        private void btnInfo_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
 
         public void makeFontDict()
         {
             if (isFontDictDone == false)
             {
                 dictConsolas.Add(8, 6);
+                dictConsolas.Add(10, 8);
+                dictConurierNew.Add(8, 10);
+                dictConurierNew.Add(10,13);
+                dictLucidaConsole.Add(8, 12);
+                dictLucidaConsole.Add(10, 12);
+
                 isFontDictDone = true;
             }
         }        
