@@ -53,6 +53,7 @@ namespace ASCII_art
         public List<double> rowWeight = new  List<double>();
 
         public Boolean isFontDictDone = false;
+        public Boolean isDone = false;
         private Dictionary<int, int> dictConsolas = new Dictionary<int, int>();
         private Dictionary<int, int> dictConurierNew = new Dictionary<int, int>();
         private Dictionary<int, int> dictLucidaConsole = new Dictionary<int, int>();
@@ -73,6 +74,7 @@ namespace ASCII_art
             }
 
             makeFontDict();
+            isDone = false;
 
         }
 
@@ -97,54 +99,60 @@ namespace ASCII_art
 
         private void btnConvert_Click(object sender, RoutedEventArgs e)
         {
-            winWidth = imgPicture.Width;
-            winHeight = imgPicture.Height;
-
-            DrawingVisual vis = new DrawingVisual();
-            DrawingContext dc = vis.RenderOpen();            
-
-            //Generates the picture 
-            for (int j = 0; j < bmi.PixelHeight; j += fontHeight)
+            if (isDone)
             {
-                for (int i = 0; i < bmi.PixelWidth; i += fontWidth)
-                {
-                    rowWeight.Add(GetColorBox(wbm, fontWidth, fontHeight, i, j));
-                }
+                winWidth = imgPicture.Width;
+                winHeight = imgPicture.Height;
 
-                StringBuilder sb = new StringBuilder();
-                string result;
+                DrawingVisual vis = new DrawingVisual();
+                DrawingContext dc = vis.RenderOpen();
 
-                for (int k = 0; k < rowWeight.Count; k++)
+                //Generates the picture 
+                for (int j = 0; j < bmi.PixelHeight; j += fontHeight)
                 {
-                    try
+                    for (int i = 0; i < bmi.PixelWidth; i += fontWidth)
                     {
-                        result = fontAlpha[fontWeight.IndexOf(rowWeight[k])];
-                        sb.Append(result);                       
+                        rowWeight.Add(GetColorBox(wbm, fontWidth, fontHeight, i, j));
+                    }
+
+                    StringBuilder sb = new StringBuilder();
+                    string result;
+
+                    for (int k = 0; k < rowWeight.Count; k++)
+                    {
+                        try
+                        {
+                            result = fontAlpha[fontWeight.IndexOf(rowWeight[k])];
+                            sb.Append(result);
+
+                        }
+                        catch (System.ArgumentOutOfRangeException exc)
+                        {
+                            //get the closest match of weight
+                            double closest = fontWeight.Aggregate((x, y) => Math.Abs(x - rowWeight[k]) < Math.Abs(y - rowWeight[k]) ? x : y);
+                            result = fontAlpha[fontWeight.IndexOf(closest)];
+                            sb.Append(result);
+                        }
 
                     }
-                    catch (System.ArgumentOutOfRangeException exc)
-                    {
-                        double closest = fontWeight.Aggregate((x, y) => Math.Abs(x - rowWeight[k]) < Math.Abs(y - rowWeight[k]) ? x : y);
-                        result = fontAlpha[fontWeight.IndexOf(closest)];
-                        sb.Append(result);                        
-                    }       
-                    
+                    //write the string on screen
+                    dc.DrawText(new FormattedText(sb.ToString(), CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface(fontName),
+                        fontSize, System.Windows.Media.Brushes.Black), new System.Windows.Point(0, j));
+
+                    rowWeight.Clear();
+                    sb.Clear();
                 }
-                dc.DrawText(new FormattedText(sb.ToString(), CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface(fontName),
-                    fontSize, System.Windows.Media.Brushes.Black), new System.Windows.Point(0, j));
 
-                rowWeight.Clear();
-                sb.Clear();
+                //finish rendering and show the image
+                dc.Close();
+                RenderTargetBitmap bmp = new RenderTargetBitmap((int)imgPicture.Width, (int)imgPicture.Height, 96, 96, PixelFormats.Pbgra32);
+                bmp.Render(vis);
+                imgPicture.Source = bmp;
+                BitmapImage bitmapImage = saveFormattedBmp(bmp);
+
+                bmiSave = bitmapImage;
             }
-
-            //
-            dc.Close();
-            RenderTargetBitmap bmp = new RenderTargetBitmap((int)imgPicture.Width, (int)imgPicture.Height, 96, 96, PixelFormats.Pbgra32);
-            bmp.Render(vis);
-            imgPicture.Source = bmp;
-            BitmapImage bitmapImage = saveFormattedBmp(bmp);
-
-            bmiSave = bitmapImage;
+            
         }        
 
         public void MakeFontArray ()
@@ -219,6 +227,7 @@ namespace ASCII_art
                 sumBlue += blue[i];    
             }
 
+            //calculate the total weight of the box
             double sum = sumRed + sumGreen + sumBlue;
             double totalWeight = fontHeight * fontWidth * 3 * 255;
 
@@ -273,6 +282,7 @@ namespace ASCII_art
 
         private void btnDone_Click(object sender, RoutedEventArgs e)
         {
+            //Create the font weight, so that it can be used to replace images
             fontAlpha.Clear();
             fontWeight.Clear();
 
@@ -302,6 +312,8 @@ namespace ASCII_art
                 dictLucidaConsole.TryGetValue(fontHeight, out fontWidth);
             }
             MakeFontArray();
+
+            isDone = true;
         }          
 
         private void btnInfo_MouseLeave(object sender, MouseEventArgs e)
@@ -311,7 +323,7 @@ namespace ASCII_art
 
         private void btnInfo_MouseEnter(object sender, MouseEventArgs e)
         {
-            lblInfo.Content = "Kunal Mukherjee 9/5/18 Proj 1";
+            lblInfo.Content = "Kunal Mukherjee 9/5/18 Proj 1" + "\n" + "ASCII Art";
         }
 
         private void btnHelp_MouseLeave(object sender, MouseEventArgs e)
@@ -328,6 +340,7 @@ namespace ASCII_art
 
         public void makeFontDict()
         {
+            //create a font disctionary
             if (isFontDictDone == false)
             {
                 dictConsolas.Add(8, 6);

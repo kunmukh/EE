@@ -26,7 +26,7 @@
             <Label Content="10"/>
         </ComboBox>
         <Label Name="lblFont" Content="Font" HorizontalAlignment="Left" Height="37" Margin="122,184,0,0" VerticalAlignment="Top" Width="141" FontFamily="Stencil" FontSize="30" Grid.Column="2"/>
-        <Label Name="lblSize" Content="Size" HorizontalAlignment="Left" Height="37" Margin="122,285,0,0" VerticalAlignment="Top" Width="141" FontFamily="Stencil" FontSize="30" Grid.Column="2"/>
+        <Label Name="lblSize" Content="Size" HorizontalAlignment="Left" Height="37" Margin="122,275,0,0" VerticalAlignment="Top" Width="141" FontFamily="Stencil" FontSize="30" Grid.Column="2"/>
         <Button Name="btnSubmit" Content="Convert" HorizontalAlignment="Left" Height="40" Margin="123,448,0,0" VerticalAlignment="Top" Width="142" FontFamily="Stencil" FontSize="30" Click="btnConvert_Click" Grid.Column="2"/>
         <Button Name="btnDone" Content="Done" HorizontalAlignment="Left" Height="40" Margin="123,390,0,0" VerticalAlignment="Top" Width="141" FontFamily="Stencil" FontSize="30" Click="btnDone_Click" Grid.Column="2"/>
         <Button Name="btnInfo" Content="Info" HorizontalAlignment="Left" Height="40" Margin="123,507,0,0" VerticalAlignment="Top" Width="142" FontFamily="Stencil" FontSize="30" Grid.Column="2" MouseLeave="btnInfo_MouseLeave" MouseEnter="btnInfo_MouseEnter"/>
