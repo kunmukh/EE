@@ -103,6 +103,7 @@ namespace ASCII_art
             DrawingVisual vis = new DrawingVisual();
             DrawingContext dc = vis.RenderOpen();            
 
+            //Generates the picture 
             for (int j = 0; j < bmi.PixelHeight; j += fontHeight)
             {
                 for (int i = 0; i < bmi.PixelWidth; i += fontWidth)
@@ -148,6 +149,7 @@ namespace ASCII_art
 
         public void MakeFontArray ()
         {
+            //Select the font array
             BitmapImage bmiTemp;
             WriteableBitmap wbmTemp;
             OpenFileDialog op = new OpenFileDialog
@@ -191,6 +193,8 @@ namespace ASCII_art
 
         public double GetColorBox(WriteableBitmap wbmColor, int fontWidth, int fontHeight, int startIndexX, int startIndexY)
         {
+            //find the color weight of a specific size of box, that will be replaced by a box
+
             List<byte> red = new List<byte>();
             List<byte> green = new List<byte>();
             List<byte> blue = new List<byte>();            
@@ -298,11 +302,28 @@ namespace ASCII_art
                 dictLucidaConsole.TryGetValue(fontHeight, out fontWidth);
             }
             MakeFontArray();
+        }          
+
+        private void btnInfo_MouseLeave(object sender, MouseEventArgs e)
+        {
+            lblInfo.Content = "";
         }
 
-        private void btnInfo_Click(object sender, RoutedEventArgs e)
+        private void btnInfo_MouseEnter(object sender, MouseEventArgs e)
         {
+            lblInfo.Content = "Kunal Mukherjee 9/5/18 Proj 1";
+        }
 
+        private void btnHelp_MouseLeave(object sender, MouseEventArgs e)
+        {
+            lblHelp.Content = "";
+        }
+
+        private void btnHelp_MouseEnter(object sender, MouseEventArgs e)
+        {
+            lblHelp.Content = "1> Load an BMP image" + "\n" + "2> Select the Font Name you want" +
+                "\n" + "3> Select the Font Size you want" + "\n" + "4> Press the DONE button" +"\n" + "    and select a bmp font file" +
+                "\n" + "5> Save the image" + "\n" + "6> Select a different picture OR a diff font";
         }
 
         public void makeFontDict()
