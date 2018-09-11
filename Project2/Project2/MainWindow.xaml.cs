@@ -36,11 +36,11 @@ namespace Project2
         private void mnuOpenFile_Click(object sender, RoutedEventArgs e)
         {
             // Change to the directory where the functions are located
-            matlab.Execute(@"cd c:\Users\kunmu\Documents\Kunal\UE courses\EE-356\EE-356\Project2\MLFunctions");
+            matlab.Execute(@"cd C:\Users\kunmu\Documents\Kunal\MLFunctions");
 
             OpenFileDialog op = new OpenFileDialog
             {
-                Title = "Select a picture"
+                Title = "Select a .wav file"
             };
             if (op.ShowDialog() == true)
             {

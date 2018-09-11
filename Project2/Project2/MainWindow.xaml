@@ -8,7 +8,7 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Menu Height="40" HorizontalAlignment="Left" Margin="10,10,0,0" Name="menu1" VerticalAlignment="Top" Width="98">
-            <MenuItem Header="File" x:Name="mnuFile" FontSize="24" FontFamily="Sitka Heading">
+            <MenuItem Header="File" x:Name="mnuFile" FontSize="24" FontFamily="Sitka Heading" Width="98" Height="40">
                 <MenuItem x:Name="mnuOpenFile" Header="OpenFile" Click="mnuOpenFile_Click" />
             </MenuItem>
         </Menu>
