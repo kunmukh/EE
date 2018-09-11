@@ -23,6 +23,12 @@ namespace Project2
         public MainWindow()
         {
             InitializeComponent();
+
+            MLApp.MLApp matlab = new MLApp.MLApp();
+            // Change to the directory where the functions are located
+            matlab.Execute(@"cd c:\Users\kunmu\Documents\Kunal\UE courses\EE-356\EE-356\Project2\MLFunctions");
         }
+
+        
     }
 }
