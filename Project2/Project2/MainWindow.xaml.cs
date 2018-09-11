@@ -56,7 +56,7 @@ namespace Project2
             fs = (double)res1[0];
             ch = (double)res1[1];
             totSamp = (double)res1[2];
-            dur = (double)res1[3];
+            dur = Math.Round((double)res1[3],3);
             bits = (double)res1[4];
 
             lblSampleFrequency.Content = fs.ToString();

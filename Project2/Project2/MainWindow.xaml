@@ -13,14 +13,16 @@
             </MenuItem>
         </Menu>
         <Label Name="lblSampleFrequency" Content="" HorizontalAlignment="Left" Height="40" Margin="655,10,0,0" VerticalAlignment="Top" Width="129" FontSize="24" FontFamily="Sitka Banner"></Label>
-        <TextBox HorizontalAlignment="Left" Height="31" Margin="639,61,0,0" TextWrapping="Wrap" Text="Sample Frequency" VerticalAlignment="Top" Width="145" FontSize="16"/>
+        <Label HorizontalAlignment="Left" Height="31" Margin="639,61,0,0" Content="Sample Frequency" VerticalAlignment="Top" Width="145" FontSize="16"></Label>        
         <Label Name="lblNumChannel" Content="" HorizontalAlignment="Left" Height="40" Margin="655,97,0,0" VerticalAlignment="Top" Width="129" FontSize="24" FontFamily="Sitka Banner"></Label>
-        <TextBox HorizontalAlignment="Left" Height="31" Margin="638,142,0,0" TextWrapping="Wrap" Text="No. of Channel" VerticalAlignment="Top" Width="145" FontSize="16"/>
+        <Label HorizontalAlignment="Left" Height="31" Margin="638,142,0,0" Content="No. of Channel" VerticalAlignment="Top" Width="145" FontSize="16"></Label>
         <Label Name="lblNumSample" Content="" HorizontalAlignment="Left" Height="40" Margin="655,178,0,0" VerticalAlignment="Top" Width="129" FontSize="24" FontFamily="Sitka Banner"></Label>
-        <TextBox HorizontalAlignment="Left" Height="31" Margin="639,218,0,0" TextWrapping="Wrap" Text="No. of Samples" VerticalAlignment="Top" Width="145" FontSize="16"/>
+        <Label HorizontalAlignment="Left" Height="31" Margin="639,218,0,0" Content="No. of Samples" VerticalAlignment="Top" Width="145" FontSize="16"></Label>
         <Label Name="lblBitSample" Content="" HorizontalAlignment="Left" Height="40" Margin="649,254,0,0" VerticalAlignment="Top" Width="129" FontSize="24" FontFamily="Sitka Banner"></Label>
-        <TextBox HorizontalAlignment="Left" Height="31" Margin="639,299,0,0" TextWrapping="Wrap" Text="Bits per Sample" VerticalAlignment="Top" Width="145" FontSize="16"/>
+        <Label HorizontalAlignment="Left" Height="31" Margin="639,299,0,0" Content="Bits per Sample" VerticalAlignment="Top" Width="145" FontSize="16"></Label>
         <Label Name="lblDuration" Content="" HorizontalAlignment="Left" Height="40" Margin="654,335,0,0" VerticalAlignment="Top" Width="129" FontSize="24" FontFamily="Sitka Banner"></Label>
-        <TextBox HorizontalAlignment="Left" Height="31" Margin="638,380,0,0" TextWrapping="Wrap" Text="Duration (sec)" VerticalAlignment="Top" Width="145" FontSize="16"/>
+        <Label HorizontalAlignment="Left" Height="31" Margin="638,380,0,0" Content="Duration (sec)" VerticalAlignment="Top" Width="145" FontSize="16"></Label>
+        
+        <Label HorizontalAlignment="Left" Height="31" Margin="487,19,0,0" Content="Enter Value to Change" VerticalAlignment="Top" Width="145" FontSize="16"></Label>
     </Grid>
 </Window>
