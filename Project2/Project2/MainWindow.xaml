@@ -9,8 +9,18 @@
     <Grid>
         <Menu Height="40" HorizontalAlignment="Left" Margin="10,10,0,0" Name="menu1" VerticalAlignment="Top" Width="98">
             <MenuItem Header="File" x:Name="mnuFile" FontSize="24" FontFamily="Sitka Heading">
-                <MenuItem x:Name="mnuOpenFile" Header="OpenFile" Click="mnuOpenFile_Click" />                
-            </MenuItem>           
+                <MenuItem x:Name="mnuOpenFile" Header="OpenFile" Click="mnuOpenFile_Click" />
+            </MenuItem>
         </Menu>
+        <Label Name="lblSampleFrequency" Content="" HorizontalAlignment="Left" Height="40" Margin="655,10,0,0" VerticalAlignment="Top" Width="129" FontSize="24" FontFamily="Sitka Banner"></Label>
+        <TextBox HorizontalAlignment="Left" Height="31" Margin="639,61,0,0" TextWrapping="Wrap" Text="Sample Frequency" VerticalAlignment="Top" Width="145" FontSize="16"/>
+        <Label Name="lblNumChannel" Content="" HorizontalAlignment="Left" Height="40" Margin="655,97,0,0" VerticalAlignment="Top" Width="129" FontSize="24" FontFamily="Sitka Banner"></Label>
+        <TextBox HorizontalAlignment="Left" Height="31" Margin="638,142,0,0" TextWrapping="Wrap" Text="No. of Channel" VerticalAlignment="Top" Width="145" FontSize="16"/>
+        <Label Name="lblNumSample" Content="" HorizontalAlignment="Left" Height="40" Margin="655,178,0,0" VerticalAlignment="Top" Width="129" FontSize="24" FontFamily="Sitka Banner"></Label>
+        <TextBox HorizontalAlignment="Left" Height="31" Margin="639,218,0,0" TextWrapping="Wrap" Text="No. of Samples" VerticalAlignment="Top" Width="145" FontSize="16"/>
+        <Label Name="lblBitSample" Content="" HorizontalAlignment="Left" Height="40" Margin="649,254,0,0" VerticalAlignment="Top" Width="129" FontSize="24" FontFamily="Sitka Banner"></Label>
+        <TextBox HorizontalAlignment="Left" Height="31" Margin="639,299,0,0" TextWrapping="Wrap" Text="Bits per Sample" VerticalAlignment="Top" Width="145" FontSize="16"/>
+        <Label Name="lblDuration" Content="" HorizontalAlignment="Left" Height="40" Margin="654,335,0,0" VerticalAlignment="Top" Width="129" FontSize="24" FontFamily="Sitka Banner"></Label>
+        <TextBox HorizontalAlignment="Left" Height="31" Margin="638,380,0,0" TextWrapping="Wrap" Text="Duration (sec)" VerticalAlignment="Top" Width="145" FontSize="16"/>
     </Grid>
 </Window>

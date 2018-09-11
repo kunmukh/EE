@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,12 +24,46 @@ namespace Project2
         public MainWindow()
         {
             InitializeComponent();
-
-            MLApp.MLApp matlab = new MLApp.MLApp();
-            // Change to the directory where the functions are located
-            matlab.Execute(@"cd c:\Users\kunmu\Documents\Kunal\UE courses\EE-356\EE-356\Project2\MLFunctions");
         }
 
-        
+        public double fs;
+        public double ch;
+        public double totSamp;
+        public double dur;
+        public double bits;
+        public MLApp.MLApp matlab = new MLApp.MLApp();
+
+        private void mnuOpenFile_Click(object sender, RoutedEventArgs e)
+        {
+            // Change to the directory where the functions are located
+            matlab.Execute(@"cd c:\Users\kunmu\Documents\Kunal\UE courses\EE-356\EE-356\Project2\MLFunctions");
+
+            OpenFileDialog op = new OpenFileDialog
+            {
+                Title = "Select a picture"
+            };
+            if (op.ShowDialog() == true)
+            {
+                waveInformation(op.FileName);
+            }
+        }
+
+        private void waveInformation(String fileName)
+        {
+            object result1 = null;
+            matlab.Feval("MLWavInfo", 5, out result1, fileName);
+            object[] res1 = result1 as object[];
+            fs = (double)res1[0];
+            ch = (double)res1[1];
+            totSamp = (double)res1[2];
+            dur = (double)res1[3];
+            bits = (double)res1[4];
+
+            lblSampleFrequency.Content = fs.ToString();
+            lblNumChannel.Content = ch.ToString();
+            lblNumSample.Content = totSamp.ToString();
+            lblBitSample.Content = bits.ToString();
+            lblDuration.Content = dur.ToString();
+        }
     }
 }
