@@ -13,7 +13,7 @@
             </MenuItem>
         </Menu>
         <Label Name="lblSampleFrequency" Content="" HorizontalAlignment="Left" Height="40" Margin="655,10,0,0" VerticalAlignment="Top" Width="129" FontSize="24" FontFamily="Sitka Banner"></Label>
-        <Label HorizontalAlignment="Left" Height="31" Margin="639,61,0,0" Content="Sample Frequency" VerticalAlignment="Top" Width="145" FontSize="16"></Label>        
+        <Label HorizontalAlignment="Left" Height="31" Margin="639,61,0,0" Content="Sample Frequency" VerticalAlignment="Top" Width="145" FontSize="16"></Label>
         <Label Name="lblNumChannel" Content="" HorizontalAlignment="Left" Height="40" Margin="655,97,0,0" VerticalAlignment="Top" Width="129" FontSize="24" FontFamily="Sitka Banner"></Label>
         <Label HorizontalAlignment="Left" Height="31" Margin="638,142,0,0" Content="No. of Channel" VerticalAlignment="Top" Width="145" FontSize="16"></Label>
         <Label Name="lblNumSample" Content="" HorizontalAlignment="Left" Height="40" Margin="655,178,0,0" VerticalAlignment="Top" Width="129" FontSize="24" FontFamily="Sitka Banner"></Label>
@@ -22,7 +22,21 @@
         <Label HorizontalAlignment="Left" Height="31" Margin="639,299,0,0" Content="Bits per Sample" VerticalAlignment="Top" Width="145" FontSize="16"></Label>
         <Label Name="lblDuration" Content="" HorizontalAlignment="Left" Height="40" Margin="654,335,0,0" VerticalAlignment="Top" Width="129" FontSize="24" FontFamily="Sitka Banner"></Label>
         <Label HorizontalAlignment="Left" Height="31" Margin="638,380,0,0" Content="Duration (sec)" VerticalAlignment="Top" Width="145" FontSize="16"></Label>
+
+        <Label HorizontalAlignment="Left" Height="45" Margin="470,19,0,0" Content="Enter Value to Change" VerticalAlignment="Top" Width="180" FontSize="16"></Label>
+        <TextBox Name="txtbxSampleFrequency" HorizontalAlignment="Left" Height="27" Margin="481,97,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="147" FontSize="16"/>
+        <Label HorizontalAlignment="Left" Height="31" Margin="481,61,0,0" Content="Sample Frequency" VerticalAlignment="Top" Width="145" FontSize="16"></Label>
+        <Label HorizontalAlignment="Left" Height="31" Margin="481,129,0,0" Content="Filter Type" VerticalAlignment="Top" Width="145" FontSize="16"></Label>
+        <ComboBox HorizontalAlignment="Left" Height="26" Margin="481,165,0,0" VerticalAlignment="Top" Width="145">
+            <Label HorizontalAlignment="Left" Height="31" Content="Low-Pass" VerticalAlignment="Top" Width="145" FontSize="16"/>
+            <Label HorizontalAlignment="Left" Height="31" Content="High-Pass" VerticalAlignment="Top" Width="145" FontSize="16"/>
+        </ComboBox>
+        <Label HorizontalAlignment="Left" Height="31" Margin="481,196,0,0" Content="Cut-Off Frequence" VerticalAlignment="Top" Width="145" FontSize="16"></Label>
+        <TextBox Name="txtbxCutOffFreq" HorizontalAlignment="Left" Height="27" Margin="481,236,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="147" FontSize="16"/>
+        <TextBox Name="txtbxNewName" HorizontalAlignment="Left" Height="27" Margin="481,281,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="147" FontSize="16" RenderTransformOrigin="0.521,1.889"/>
+        <Button Content="Modify" HorizontalAlignment="Left" Height="34" Margin="481,313,0,0" VerticalAlignment="Top" Width="145"  FontSize="20"/>
+        <Button Content="Play" HorizontalAlignment="Left" Height="34" Margin="481,355,0,0" VerticalAlignment="Top" Width="145"  FontSize="20"/>
         
-        <Label HorizontalAlignment="Left" Height="31" Margin="487,19,0,0" Content="Enter Value to Change" VerticalAlignment="Top" Width="145" FontSize="16"></Label>
+        
     </Grid>
 </Window>
