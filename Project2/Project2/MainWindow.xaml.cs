@@ -75,6 +75,7 @@ namespace Project2
         {
             object p = null;
             matlab.Feval("MLPlayWavFile", 0, out p, fname);
+            waveInformation(fname);
         }
 
         private void btnModify_Click(object sender, RoutedEventArgs e)
@@ -90,8 +91,7 @@ namespace Project2
             else
             {
                 filter = 1;
-            }
-            
+            }            
 
             fs = Convert.ToInt32(txtbxSampleFrequency.Text);
             fc = Convert.ToDouble(txtbxCutOffFreq.Text);
