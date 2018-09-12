@@ -29,19 +29,19 @@
         <Label HorizontalAlignment="Left" Height="31" Margin="625.129,380,0,0" Content="Duration (sec)" VerticalAlignment="Top" Width="145" FontSize="16" Grid.Column="1"></Label>
 
         <Label HorizontalAlignment="Left" Height="45" Margin="457.129,19,0,0" Content="Enter Value to Change" VerticalAlignment="Top" Width="180" FontSize="16" Grid.Column="1"></Label>
-        <TextBox Name="txtbxSampleFrequency" HorizontalAlignment="Left" Height="27" Margin="468.129,97,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="147" FontSize="16" Grid.Column="1"/>
+        <TextBox Name="txtbxSampleFrequency" HorizontalAlignment="Left" Height="27" Margin="468.129,97,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="147" FontSize="16" Grid.Column="1" DataContextChanged="txtbxSampleFrequency_DataContextChanged"/>
         <Label HorizontalAlignment="Left" Height="31" Margin="468.129,61,0,0" Content="Sample Frequency" VerticalAlignment="Top" Width="145" FontSize="16" Grid.Column="1"></Label>
         <Label HorizontalAlignment="Left" Height="31" Margin="468.129,129,0,0" Content="Filter Type" VerticalAlignment="Top" Width="145" FontSize="16" Grid.Column="1"></Label>
-        <ComboBox HorizontalAlignment="Left" Height="26" Margin="468.129,165,0,0" VerticalAlignment="Top" Width="145" Grid.Column="1">
+        <ComboBox Name="cmbFilterType" HorizontalAlignment="Left" Height="26" Margin="468.129,165,0,0" VerticalAlignment="Top" Width="145" Grid.Column="1" DataContextChanged="cmbFilterType_DataContextChanged">
             <Label HorizontalAlignment="Left" Height="31" Content="Low-Pass" VerticalAlignment="Top" Width="145" FontSize="16"/>
             <Label HorizontalAlignment="Left" Height="31" Content="High-Pass" VerticalAlignment="Top" Width="145" FontSize="16"/>
         </ComboBox>
         <Label HorizontalAlignment="Left" Height="31" Margin="468.129,196,0,0" Content="Cut-Off Frequence" VerticalAlignment="Top" Width="145" FontSize="16" Grid.Column="1"></Label>
-        <TextBox Name="txtbxCutOffFreq" HorizontalAlignment="Left" Height="27" Margin="468.129,236,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="147" FontSize="16" Grid.Column="1"/>
+        <TextBox Name="txtbxCutOffFreq" HorizontalAlignment="Left" Height="27" Margin="468.129,236,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="147" FontSize="16" Grid.Column="1" DataContextChanged="txtbxCutOffFreq_DataContextChanged"/>
         <Label HorizontalAlignment="Left" Height="31" Margin="468.129,263,0,0" Content="New Name" VerticalAlignment="Top" Width="145" FontSize="16" RenderTransformOrigin="0.481,2.747" Grid.Column="1"></Label>
-        <TextBox Name="txtbxNewName" HorizontalAlignment="Left" Height="27" Margin="470.129,299,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="147" FontSize="16" RenderTransformOrigin="0.521,1.889" Grid.Column="1"/>
-        <Button Name="btnModify" Content="Modify" HorizontalAlignment="Left" Height="34" Margin="470.129,335,0,0" VerticalAlignment="Top" Width="145"  FontSize="20" Grid.Column="1"/>
-        <Button Name="btnPlay" Content="Play" HorizontalAlignment="Left" Height="34" Margin="470.2,399,0,0" VerticalAlignment="Top" Width="145"  FontSize="20" Grid.Column="1"/>
+        <TextBox Name="txtbxNewName" HorizontalAlignment="Left" Height="27" Margin="470.129,299,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="147" FontSize="16" RenderTransformOrigin="0.521,1.889" Grid.Column="1" DataContextChanged="txtbxNewName_DataContextChanged"/>
+        <Button Name="btnModify" Content="Modify" HorizontalAlignment="Left" Height="34" Margin="470.129,335,0,0" VerticalAlignment="Top" Width="145"  FontSize="20" Grid.Column="1" Click="btnModify_Click"/>
+        <Button Name="btnPlay" Content="Play" HorizontalAlignment="Left" Height="34" Margin="470.2,399,0,0" VerticalAlignment="Top" Width="145"  FontSize="20" Grid.Column="1" Click="btnPlay_Click"/>
         <Label Content="Time Start:" HorizontalAlignment="Left" Height="42" Margin="10,207,0,0" VerticalAlignment="Top" Width="98" FontSize="16" Grid.ColumnSpan="2"/>
         <Label Content="Frequency Start:" HorizontalAlignment="Left" Height="42" Margin="10,398,0,0" VerticalAlignment="Top" Width="137" FontSize="16" Grid.ColumnSpan="2"/>
         <Label Content="End:" HorizontalAlignment="Left" Height="31" Margin="247.129,218,0,0" VerticalAlignment="Top" Width="60"  FontSize="16" Grid.Column="1"/>

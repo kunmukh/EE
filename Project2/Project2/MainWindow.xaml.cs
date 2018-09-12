@@ -26,12 +26,16 @@ namespace Project2
             InitializeComponent();
         }
 
-        public double fs;
-        public double ch;
-        public double totSamp;
-        public double dur;
-        public double bits;
+        public double fs = 0;
+        public double fc = 0;
+        public double ch = 0;
+        public double totSamp = 0;
+        public double dur = 0;
+        public double bits = 0;
         public MLApp.MLApp matlab = new MLApp.MLApp();
+        public string fname = "";
+        public string fnameOut = "";
+        public int filter = 0;
 
         private void mnuOpenFile_Click(object sender, RoutedEventArgs e)
         {
@@ -44,7 +48,8 @@ namespace Project2
             };
             if (op.ShowDialog() == true)
             {
-                waveInformation(op.FileName);
+                fname = op.FileName;
+                waveInformation(fname);
             }
         }
 
@@ -64,6 +69,48 @@ namespace Project2
             lblNumSample.Content = totSamp.ToString();
             lblBitSample.Content = bits.ToString();
             lblDuration.Content = dur.ToString();
+        }
+
+        private void btnPlay_Click(object sender, RoutedEventArgs e)
+        {
+            object p = null;
+            matlab.Feval("MLPlayWavFile", 0, out p, fname);
+        }
+
+        private void btnModify_Click(object sender, RoutedEventArgs e)
+        {
+            object dummy;                        
+            
+            string wavIn = fname;
+            string wavOut = fnameOut;
+            matlab.Feval("MLFilter", 0, out dummy, wavIn, wavOut, filter , fc);
+
+            fname = wavOut;
+        }
+
+        private void txtbxSampleFrequency_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            fs = Convert.ToInt32(txtbxSampleFrequency.Text);
+        }
+
+        private void cmbFilterType_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            filter = Convert.ToInt32(cmbFilterType.Text);
+        }
+
+        private void txtbxCutOffFreq_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            fc = Convert.ToDouble(txtbxCutOffFreq.Text);
+
+            if (!(((fs / 10) <= fc) && (fc <= 4 * (fs / 10))))
+            {
+                fc = fs / 5;
+            }
+        }
+
+        private void txtbxNewName_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            fnameOut = txtbxNewName.Text + ".wav";
         }
     }
 }
