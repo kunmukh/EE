@@ -50,7 +50,10 @@
         <TextBox Name="txtbxTimeEnd" HorizontalAlignment="Left" Height="31" Margin="291.129,218,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="96" FontSize="16" Grid.Column="1"/>
         <TextBox Name="txtbxFreqStart" HorizontalAlignment="Left" Height="31" Margin="139.2,402,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="82" FontSize="16" RenderTransformOrigin="0.811,0.426" Grid.Column="1"/>
         <TextBox Name="txtbxFreqEnd" HorizontalAlignment="Left" Height="31" Margin="291.2,402,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="96" FontSize="16" Grid.Column="1"/>
-        <Button Name="btnPlotTime" Content="Plot" HorizontalAlignment="Left" Height="34" Margin="392.129,215,0,0" VerticalAlignment="Top" Width="56"  FontSize="20" Grid.Column="1"/>
-        <Button Name="btnPlotFreq" Content="Plot" HorizontalAlignment="Left" Height="34" Margin="392.2,399,0,0" VerticalAlignment="Top" Width="56"  FontSize="20" RenderTransformOrigin="0.67,0.734" Grid.Column="1"/>
+        <Button Name="btnPlotTime" Content="Plot" HorizontalAlignment="Left" Height="34" Margin="392.129,215,0,0" VerticalAlignment="Top" Width="56"  FontSize="20" Grid.Column="1" Click="btnPlotTime_Click"/>
+        <Button Name="btnPlotFreq" Content="Plot" HorizontalAlignment="Left" Height="34" Margin="392.2,399,0,0" VerticalAlignment="Top" Width="56"  FontSize="20" RenderTransformOrigin="0.67,0.734" Grid.Column="1" Click="btnPlotFreq_Click"/>
+
+        <Canvas x:Name="cnvChartT" HorizontalAlignment="Left" Height="151" Width="377" Margin="10.2,040,0,0"  VerticalAlignment="Top"  Loaded="cnvChartT_Loaded" Grid.Column="1"/>
+        <Canvas x:Name="cnvChartF" HorizontalAlignment="Left" Height="151" Width="377" Margin="10.2,242,0,0"  VerticalAlignment="Top"  Loaded="cnvChartF_Loaded" Grid.Column="1"/>   
     </Grid>
 </Window>

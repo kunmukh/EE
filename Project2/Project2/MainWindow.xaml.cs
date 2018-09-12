@@ -13,6 +13,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Forms;
+using System.Windows.Forms.Integration;
+using System.Windows.Forms.DataVisualization.Charting;
+using System.Drawing;
+using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
 namespace Project2
 {
@@ -36,6 +41,7 @@ namespace Project2
         public string fname = "";
         public string fnameOut = @"C:\Users\kunmu\Documents\Kunal\EE\FilteredWav.wav";
         public int filter = 0;
+        private Chart chtSin = new Chart();
 
         private void mnuOpenFile_Click(object sender, RoutedEventArgs e)
         {
@@ -61,7 +67,7 @@ namespace Project2
             fs = (double)res1[0];
             ch = (double)res1[1];
             totSamp = (double)res1[2];
-            dur = Math.Round((double)res1[3],3);
+            dur = Math.Round((double)res1[3], 3);
             bits = (double)res1[4];
 
             lblSampleFrequency.Content = fs.ToString();
@@ -80,9 +86,9 @@ namespace Project2
 
         private void btnModify_Click(object sender, RoutedEventArgs e)
         {
-            object dummy;                        
-            
-            string wavIn = fname;            
+            object dummy;
+
+            string wavIn = fname;
             string wavOut = fnameOut;
             if (cmbFilterType.Text.Equals("Low-Pass"))
             {
@@ -91,7 +97,7 @@ namespace Project2
             else
             {
                 filter = 1;
-            }            
+            }
 
             fs = Convert.ToInt32(txtbxSampleFrequency.Text);
             fc = Convert.ToDouble(txtbxCutOffFreq.Text);
@@ -101,10 +107,54 @@ namespace Project2
                 fc = fs / 5;
             }
 
-            matlab.Feval("MLFilter", 0, out dummy, wavIn, wavOut, filter , fc);
+            matlab.Feval("MLFilter", 0, out dummy, wavIn, wavOut, filter, fc);
 
             fname = wavOut;
-        }            
-        
+        }
+
+        private void cnvChartT_Loaded(object sender, RoutedEventArgs e)
+        {
+            {
+                System.Windows.Forms.Integration.WindowsFormsHost host =
+                    new System.Windows.Forms.Integration.WindowsFormsHost();
+                host.Child = chtSin;
+                // Add the chart to the canvas so it can be displayed.
+                this.cnvChartT.Children.Add(host);
+
+            }
+        }
+
+        private void cnvChartF_Loaded(object sender, RoutedEventArgs e)
+        {
+            int i = 0;
+        }
+
+            private void btnPlotTime_Click(object sender, RoutedEventArgs e)
+        {
+            double t, y, tIncr;
+            chtSin.ChartAreas.Add("Default");
+            // Add a series with some data points.
+            chtSin.Width = 377;
+            chtSin.Height = 151;
+            chtSin.Location = new System.Drawing.Point(9, 40);
+            Series sinSeries = new Series();
+            sinSeries.ChartType = SeriesChartType.Line;
+            tIncr = 4 * Math.PI / 500;
+            for (t = 0; t < 4 * Math.PI; t += tIncr)
+            {
+                y = Math.Sin(2 * Math.PI * t);
+                sinSeries.Points.AddXY(t, y);
+            }
+            chtSin.Series.Add(sinSeries);
+            chtSin.ChartAreas[0].AxisX.Title = "Time";
+            chtSin.ChartAreas[0].AxisX.LabelStyle.Format = "{0.00}";
+            chtSin.ChartAreas[0].AxisY.Title = "Volts";
+            chtSin.ChartAreas[0].AxisY.LabelStyle.Format = "{0.00}";
+        }
+
+        private void btnPlotFreq_Click(object sender, RoutedEventArgs e)
+        {
+            int k = 0;
+        }
     }
 }
