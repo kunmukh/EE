@@ -207,7 +207,7 @@ namespace Project2
             {
                 y = fResp[rowVal, 0];
                 x = t;
-                rowVal+=100;
+                rowVal += (int)tIncr;
                 timeSeries.Points.AddXY(x, y);
             }
             chtFreq.Series.Clear();
