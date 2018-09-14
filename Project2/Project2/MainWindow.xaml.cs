@@ -61,7 +61,7 @@ namespace Project2
             {
                 fname = op.FileName;
                 waveInformation(fname);
-            }                        
+            }            
         }
 
         private void waveInformation(String fileName)
@@ -159,6 +159,7 @@ namespace Project2
                 rowVal++;
                 timeSeries.Points.AddXY(t, y);
             }
+            chtTime.Series.Clear();
             chtTime.Series.Add(timeSeries);
             chtTime.ChartAreas[0].AxisX.Title = "Time";
             chtTime.ChartAreas[0].AxisX.LabelStyle.Format = "{0.00}";
@@ -209,7 +210,7 @@ namespace Project2
                 rowVal+=100;
                 timeSeries.Points.AddXY(x, y);
             }
-
+            chtFreq.Series.Clear();
             chtFreq.Series.Add(timeSeries);
             chtFreq.ChartAreas[0].AxisX.Title = "Frequency";
             chtFreq.ChartAreas[0].AxisX.LabelStyle.Format = "{0.00}";
