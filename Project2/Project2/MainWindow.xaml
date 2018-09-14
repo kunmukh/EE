@@ -42,18 +42,18 @@
         <TextBox Name="txtbxNewName" HorizontalAlignment="Left" Height="27" Margin="470.129,299,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="147" FontSize="16" RenderTransformOrigin="0.521,1.889" Grid.Column="1"/>
         <Button Name="btnModify" Content="Modify" HorizontalAlignment="Left" Height="34" Margin="470.129,335,0,0" VerticalAlignment="Top" Width="145"  FontSize="20" Grid.Column="1" Click="btnModify_Click"/>
         <Button Name="btnPlay" Content="Play" HorizontalAlignment="Left" Height="34" Margin="470.2,399,0,0" VerticalAlignment="Top" Width="145"  FontSize="20" Grid.Column="1" Click="btnPlay_Click"/>
-        <Label Content="Time Start:" HorizontalAlignment="Left" Height="42" Margin="10,207,0,0" VerticalAlignment="Top" Width="98" FontSize="16" Grid.ColumnSpan="2"/>
+        <Label Content="Time Start:" HorizontalAlignment="Left" Height="42" Margin="10,207,0,0" VerticalAlignment="Top" Width="98" FontSize="16" Grid.ColumnSpan="2" RenderTransformOrigin="0.526,0.738"/>
         <Label Content="Frequency Start:" HorizontalAlignment="Left" Height="42" Margin="10,398,0,0" VerticalAlignment="Top" Width="137" FontSize="16" Grid.ColumnSpan="2"/>
-        <Label Content="End:" HorizontalAlignment="Left" Height="31" Margin="247.129,218,0,0" VerticalAlignment="Top" Width="60"  FontSize="16" Grid.Column="1"/>
+        <Label Content="End:" HorizontalAlignment="Left" Height="31" Margin="247,207,0,0" VerticalAlignment="Top" Width="60"  FontSize="16" Grid.Column="1"/>
         <Label Content="End:" HorizontalAlignment="Left" Height="31" Margin="247.2,398,0,0" VerticalAlignment="Top" Width="60"  FontSize="16" Grid.Column="1"/>
-        <TextBox Name="txtbxTimeStart" HorizontalAlignment="Left" Height="31" Margin="139.129,218,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="82" FontSize="16" Grid.Column="1"/>
-        <TextBox Name="txtbxTimeEnd" HorizontalAlignment="Left" Height="31" Margin="291.129,218,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="96" FontSize="16" Grid.Column="1"/>
+        <TextBox Name="txtbxTimeStart" HorizontalAlignment="Left" Height="31" Margin="139,207,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="82" FontSize="16" Grid.Column="1"/>
+        <TextBox Name="txtbxTimeEnd" HorizontalAlignment="Left" Height="31" Margin="291,207,0,0" TextWrapping="Wrap" Text="10.0" VerticalAlignment="Top" Width="96" FontSize="16" Grid.Column="1"/>
         <TextBox Name="txtbxFreqStart" HorizontalAlignment="Left" Height="31" Margin="139.2,402,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="82" FontSize="16" RenderTransformOrigin="0.811,0.426" Grid.Column="1"/>
-        <TextBox Name="txtbxFreqEnd" HorizontalAlignment="Left" Height="31" Margin="291.2,402,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="96" FontSize="16" Grid.Column="1"/>
-        <Button Name="btnPlotTime" Content="Plot" HorizontalAlignment="Left" Height="34" Margin="392.129,215,0,0" VerticalAlignment="Top" Width="56"  FontSize="20" Grid.Column="1" Click="btnPlotTime_Click"/>
+        <TextBox Name="txtbxFreqEnd" HorizontalAlignment="Left" Height="31" Margin="291.2,402,0,0" TextWrapping="Wrap" Text="10.0" VerticalAlignment="Top" Width="96" FontSize="16" Grid.Column="1"/>
+        <Button Name="btnPlotTime" Content="Plot" HorizontalAlignment="Left" Height="34" Margin="392,207,0,0" VerticalAlignment="Top" Width="56"  FontSize="20" Grid.Column="1" Click="btnPlotTime_Click"/>
         <Button Name="btnPlotFreq" Content="Plot" HorizontalAlignment="Left" Height="34" Margin="392.2,399,0,0" VerticalAlignment="Top" Width="56"  FontSize="20" RenderTransformOrigin="0.67,0.734" Grid.Column="1" Click="btnPlotFreq_Click"/>
 
-        <Canvas x:Name="cnvChartT" HorizontalAlignment="Left" Height="151" Width="377" Margin="10.2,040,0,0"  VerticalAlignment="Top"  Loaded="cnvChartT_Loaded" Grid.Column="1"/>
-        <Canvas x:Name="cnvChartF" HorizontalAlignment="Left" Height="151" Width="377" Margin="10.2,242,0,0"  VerticalAlignment="Top"  Loaded="cnvChartF_Loaded" Grid.Column="1"/>   
+        <Canvas x:Name="cnvChartT" HorizontalAlignment="Left" Height="151" Width="390" Margin="10,45,0,0"  VerticalAlignment="Top"  Loaded="cnvChartT_Loaded" Grid.Column="1"/>
+        <Canvas x:Name="cnvChartF" HorizontalAlignment="Left" Height="151" Width="390" Margin="10,242,0,0"  VerticalAlignment="Top"  Loaded="cnvChartF_Loaded" Grid.Column="1"/>
     </Grid>
 </Window>
