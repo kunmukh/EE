@@ -71,7 +71,7 @@
         <Canvas x:Name="cnvChartF" HorizontalAlignment="Left" Height="151" Width="390" Margin="10,242,0,0"  VerticalAlignment="Top"  Loaded="cnvChartF_Loaded" Grid.Column="1"/>
         <Button  Name="btnInfor" Content="Info" HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Grid.Column="1" Margin="86,10,0,0" Height="30" FontSize="20" MouseEnter="btnInfo_MouseEnter" MouseLeave="btnInfo_MouseLeave"/>
         <Button  x:Name="btnExit" Content="Exit" HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Grid.Column="1" Margin="181,10,0,0" Height="30" FontSize="20" Click="btnExit_Click"/>
-        <Label Name="lblInfo" Content="" HorizontalAlignment="Left" Height="319" Margin="84,74,0,0" VerticalAlignment="Top" Width="267" FontSize="8" FontFamily="Stencil" Grid.Column="3"/>
+        <Label Name="lblInfo" Content="" HorizontalAlignment="Left" Height="319" Margin="84,74,0,0" VerticalAlignment="Top" Width="267" FontSize="14" FontFamily="Stencil" Grid.Column="3"/>
 
     </Grid>
 </Window>

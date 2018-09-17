@@ -48,6 +48,7 @@ namespace Project2
         public double freqStart = 0;
         public double freqEnd = 0;
 
+        //Open a file and inittialize a mathlab file
         private void mnuOpenFile_Click(object sender, RoutedEventArgs e)
         {
             // Change to the directory where the functions are located
@@ -63,7 +64,7 @@ namespace Project2
                 waveInformation(fname);
             }            
         }
-
+        //generates the wave information
         private void waveInformation(String fileName)
         {
             object result1 = null;
@@ -76,7 +77,7 @@ namespace Project2
             bits = (double)res1[4];
             lblUpdate();
         }
-
+        //helper function to update the label
         private void lblUpdate()
         {
             lblSampleFrequency.Content = fs.ToString();
@@ -85,14 +86,15 @@ namespace Project2
             lblBitSample.Content = bits.ToString();
             lblDuration.Content = dur.ToString();
         }
-
+        //plays the song
         private void btnPlay_Click(object sender, RoutedEventArgs e)
         {
             object p = null;
             matlab.Feval("MLPlayWavFile", 0, out p, fname);
             waveInformation(fname);
         }
-
+        //modifies the file
+        //takes the sample frequency, cutoff frequence, filter type and name
         private void btnModify_Click(object sender, RoutedEventArgs e)
         {
             object dummy;
@@ -121,7 +123,7 @@ namespace Project2
             fname = wavOut;
             lblUpdate();
         }
-
+        //loads up the time plot 
         private void cnvChartT_Loaded(object sender, RoutedEventArgs e)
         {
             {
@@ -133,7 +135,7 @@ namespace Project2
 
             }
         }
-
+        //populates the plot with the current graph
         private void btnPlotTime_Click(object sender, RoutedEventArgs e)
         {
             chtTime.ChartAreas.Clear();
@@ -268,27 +270,33 @@ namespace Project2
             chtFreq.ChartAreas[0].AxisY.Title = "Amplitude";
             chtFreq.ChartAreas[0].AxisY.LabelStyle.Format = "{0.00}";                      
         }
-
+        //exits the program
         private void btnExit_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
-
+        //displays the program info for user help
         private void btnInfo_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {           
             lblInfo.Content = "KunaL Mukherjee Project 2" + "\n"
-                + "1> Plot the wav file in time and frequency" + "\n"
-                + " (two plots) using the forms charting tool." + "\n"
-                + "2> to modify either the time axis or the"
-                + "\n" + "frequency axis by enter new start and stop values" + "\n"
-                + "3> Filter the wave by selecting the changable parameter";
+                + "1> Plot the wav file" + "\n" +
+                "in time and frequency" + "\n"
+                + "(two plots) using the "
+                + "\n" + "forms charting tool." + "\n"
+                + "2> to modify either the" + "\n" 
+                + "time axis or the"
+                + "\n" + "frequency axis by enter " + "\n" 
+                + " new start and stop values" + "\n"
+                + "3> Filter the wave by " + "\n" +
+                "selecting the changable " + "\n" +
+                "parameter";
         }
 
         private void btnInfo_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
             lblInfo.Content = "";
         }
-
+        //changes the color of the time and freq plot background
         private void mnuTimeRed_Click(object sender, RoutedEventArgs e)
         {
             chtTime.ChartAreas[0].BackColor = System.Drawing.Color.Red;
