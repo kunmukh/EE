@@ -74,7 +74,11 @@ namespace Project2
             totSamp = (double)res1[2];
             dur = Math.Round((double)res1[3], 3);
             bits = (double)res1[4];
+            lblUpdate();
+        }
 
+        private void lblUpdate()
+        {
             lblSampleFrequency.Content = fs.ToString();
             lblNumChannel.Content = ch.ToString();
             lblNumSample.Content = totSamp.ToString();
@@ -115,6 +119,7 @@ namespace Project2
             matlab.Feval("MLFilter", 0, out dummy, wavIn, wavOut, filter, fc);
 
             fname = wavOut;
+            lblUpdate();
         }
 
         private void cnvChartT_Loaded(object sender, RoutedEventArgs e)
@@ -133,6 +138,15 @@ namespace Project2
         {
             chtTime.ChartAreas.Clear();
             chtTime.ChartAreas.Add("Default");
+            if (Convert.ToDouble(txtbxTimeEnd.Text) == 0)
+            {
+                txtbxTimeEnd.Text = (dur).ToString();
+            }
+            if (Convert.ToDouble(txtbxTimeStart.Text) < 0)
+            {
+                txtbxTimeStart.Text = (0).ToString();
+            }
+
 
             object result = null;
             matlab.Feval("MLReadWavFile", 2, out result, fname);
@@ -140,25 +154,42 @@ namespace Project2
             double[,] d = (double[,])res[0];
             fs = (double)res[1];
 
-            double t, y, tIncr;
-
+            double r, x, y, sampStart, sampStop;
+            int t;
             // Add a series with some data points.
-            chtTime.Width = 390;
-            chtTime.Height = 151;
+            chtTime.Width = 390;// 1000;
+            chtTime.Height = 151;// 340;
             chtTime.Location = new System.Drawing.Point(0, 0);
             Series timeSeries = new Series();
 
             timeSeries.ChartType = SeriesChartType.Line;
-            tIncr = 1;
+
             timeStart = Convert.ToDouble(txtbxTimeStart.Text);
             timeEnd = Convert.ToDouble(txtbxTimeEnd.Text);
-            int rowVal = 0;
-            for (t = timeStart; t < timeEnd; t += tIncr)
+
+            r = dur / totSamp;
+            sampStart = timeStart * (totSamp / dur);
+            sampStop = timeEnd * (totSamp / dur);
+
+            for (t = (int)sampStart; t < sampStop; t++)
             {
-                y = d[rowVal, 0];
-                rowVal++;
-                timeSeries.Points.AddXY(t, y);
+                x = t * r;
+                if (x < dur)
+                {
+                    try
+                    {
+                        y = d[t, 0];
+                        timeSeries.Points.AddXY(x, y);
+                    }catch (IndexOutOfRangeException) { }     
+                    
+                }
+                else
+                {
+                    timeSeries.Points.AddXY(x, 0);
+                }
+
             }
+
             chtTime.Series.Clear();
             chtTime.Series.Add(timeSeries);
             chtTime.ChartAreas[0].AxisX.Title = "Time";
@@ -174,13 +205,35 @@ namespace Project2
             host.Child = chtFreq;
             // Add the chart to the canvas so it can be displayed.
             this.cnvChartF.Children.Add(host);
-        }
-            
+        }            
 
         private void btnPlotFreq_Click(object sender, RoutedEventArgs e)
         {
             chtFreq.ChartAreas.Clear();
             chtFreq.ChartAreas.Add("Default");
+            if (Convert.ToDouble(txtbxFreqEnd.Text) == 0)
+            {
+                txtbxFreqEnd.Text = (fs).ToString();
+            }
+            if (Convert.ToDouble(txtbxFreqStart.Text) < 0)
+            {
+                txtbxFreqStart.Text = (0).ToString();
+                freqStart = Convert.ToDouble(0);
+            }
+            else
+            {
+                freqStart = Convert.ToDouble(txtbxFreqStart.Text);
+            }
+            if (Convert.ToDouble(txtbxFreqEnd.Text) > (fs/2))
+            {
+
+                txtbxFreqEnd.Text = (fs/2).ToString();
+                freqEnd = fs / 2;
+            }
+            else
+            {
+                freqEnd = Convert.ToDouble(txtbxFreqEnd.Text);
+            }            
 
             object result2 = null;
             matlab.Feval("MLFreqResp", 2, out result2, fname);
@@ -191,17 +244,15 @@ namespace Project2
             double t, x, y, tIncr;
 
             // Add a series with some data points.
-            chtFreq.Width = 390;
-            chtFreq.Height = 151;
-            chtFreq.Location = new System.Drawing.Point(0, 10);
+            chtFreq.Width = 390;// 1000;
+            chtFreq.Height = 151;// 340;
+            chtFreq.Location = new System.Drawing.Point(0, 0);
             Series timeSeries = new Series();
 
             timeSeries.ChartType = SeriesChartType.Line;
 
-            tIncr = 500;
-            freqStart = Convert.ToDouble(txtbxFreqStart.Text);
-            freqEnd = fs/2;
-            txtbxFreqEnd.Text = (fs / 2).ToString();
+            tIncr = 500;   
+            
             int rowVal = 1;
             for (t = freqStart; t < freqEnd; t += tIncr)
             {
@@ -215,7 +266,52 @@ namespace Project2
             chtFreq.ChartAreas[0].AxisX.Title = "Frequency";
             chtFreq.ChartAreas[0].AxisX.LabelStyle.Format = "{0.00}";
             chtFreq.ChartAreas[0].AxisY.Title = "Amplitude";
-            chtFreq.ChartAreas[0].AxisY.LabelStyle.Format = "{0.00}";
+            chtFreq.ChartAreas[0].AxisY.LabelStyle.Format = "{0.00}";                      
+        }
+
+        private void btnExit_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void btnInfo_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {           
+            lblInfo.Content = "KunaL Mukherjee Project 2" + "\n"
+                + "1> Plot the wav file in time and frequency" + "\n"
+                + " (two plots) using the forms charting tool." + "\n"
+                + "2> to modify either the time axis or the"
+                + "\n" + "frequency axis by enter new start and stop values" + "\n"
+                + "3> Filter the wave by selecting the changable parameter";
+        }
+
+        private void btnInfo_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            lblInfo.Content = "";
+        }
+
+        private void mnuTimeRed_Click(object sender, RoutedEventArgs e)
+        {
+            chtTime.ChartAreas[0].BackColor = System.Drawing.Color.Red;
+        }
+        private void mnuTimeGreen_Click(object sender, RoutedEventArgs e)
+        {
+            chtTime.ChartAreas[0].BackColor = System.Drawing.Color.Green;
+        }
+        private void mnuTimeBlue_Click(object sender, RoutedEventArgs e)
+        {
+            chtTime.ChartAreas[0].BackColor = System.Drawing.Color.Blue;
+        }
+        private void mnuFreqRed_Click(object sender, RoutedEventArgs e)
+        {
+            chtFreq.ChartAreas[0].BackColor = System.Drawing.Color.Red;
+        }
+        private void mnuFreqGreen_Click(object sender, RoutedEventArgs e)
+        {
+            chtFreq.ChartAreas[0].BackColor = System.Drawing.Color.Green;
+        }
+        private void mnuFreqBlue_Click(object sender, RoutedEventArgs e)
+        {
+            chtFreq.ChartAreas[0].BackColor = System.Drawing.Color.Blue;
         }
     }
 }
