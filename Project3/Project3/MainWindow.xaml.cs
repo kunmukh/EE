@@ -24,9 +24,20 @@ namespace Project3
         {
             InitializeComponent();
             makeInitialGen();
+
+            StringBuilder lblOutput = new StringBuilder();
+            for (int i = 0; i < rowNum; i++)
+            {
+                for (int j = 0; j < colNum; j++)
+                {                    
+                    lblOutput.Append(OldGenarray[i, j] + " ");
+                }                
+                lblOutput.Append("\n");
+            }
+            lblHourglass.Content = lblOutput;
         }
-        private static int rowNum = 16;
-        private static int colNum = 8;
+        private static int rowNum = 18;
+        private static int colNum = 10;
         private Slot[,] OldGenarray = new Slot[rowNum, colNum];
         private Slot[,] NewGenarray = new Slot[rowNum, colNum];
 
@@ -54,143 +65,170 @@ namespace Project3
                 }
             }
 
+            //setup the edge
+            for (int j = 0; j < colNum; j++)
+            {
+                OldGenarray[0, j].setEdgeTrue();
+                OldGenarray[rowNum - 1, j].setEdgeTrue();
+
+                NewGenarray[0, j].setEdgeTrue();
+                NewGenarray[rowNum - 1, j].setEdgeTrue();
+            }
+
+            for (int i = 0; i < rowNum; i++)
+            {
+                OldGenarray[i, 0].setEdgeTrue();
+                OldGenarray[i, colNum - 1].setEdgeTrue();
+
+                NewGenarray[i, 0].setEdgeTrue();
+                NewGenarray[i, colNum - 1].setEdgeTrue();
+            }
+
         }
 
         private void createStaticslots()
         {
-            OldGenarray[5, 0].setStatic();
-            OldGenarray[6, 0].setStatic();
-            OldGenarray[7, 0].setStatic();
-            OldGenarray[8, 0].setStatic();
-            OldGenarray[9, 0].setStatic();
-            OldGenarray[10, 0].setStatic();
-
             OldGenarray[6, 1].setStatic();
             OldGenarray[7, 1].setStatic();
             OldGenarray[8, 1].setStatic();
             OldGenarray[9, 1].setStatic();
+            OldGenarray[10, 1].setStatic();
+            OldGenarray[11, 1].setStatic();
 
             OldGenarray[7, 2].setStatic();
             OldGenarray[8, 2].setStatic();
+            OldGenarray[9, 2].setStatic();
+            OldGenarray[10,2].setStatic();           
 
-            OldGenarray[7, 5].setStatic();
-            OldGenarray[8, 5].setStatic();
+            OldGenarray[8, 3].setStatic();
+            OldGenarray[9, 3].setStatic();
 
-            OldGenarray[6, 6].setStatic();
-            OldGenarray[7, 6].setStatic();
             OldGenarray[8, 6].setStatic();
             OldGenarray[9, 6].setStatic();
 
-            OldGenarray[5, 7].setStatic();
-            OldGenarray[6, 7].setStatic();
             OldGenarray[7, 7].setStatic();
             OldGenarray[8, 7].setStatic();
             OldGenarray[9, 7].setStatic();
             OldGenarray[10, 7].setStatic();
 
-            NewGenarray[5, 0].setStatic();
-            NewGenarray[6, 0].setStatic();
-            NewGenarray[7, 0].setStatic();
-            NewGenarray[8, 0].setStatic();
-            NewGenarray[9, 0].setStatic();
-            NewGenarray[10, 0].setStatic();
+            OldGenarray[6, 8].setStatic();
+            OldGenarray[7, 8].setStatic();
+            OldGenarray[8, 8].setStatic();
+            OldGenarray[9, 8].setStatic();
+            OldGenarray[10, 8].setStatic();
+            OldGenarray[11, 8].setStatic();
+            //
 
             NewGenarray[6, 1].setStatic();
             NewGenarray[7, 1].setStatic();
             NewGenarray[8, 1].setStatic();
             NewGenarray[9, 1].setStatic();
+            NewGenarray[10, 1].setStatic();
+            NewGenarray[11, 1].setStatic();
 
             NewGenarray[7, 2].setStatic();
             NewGenarray[8, 2].setStatic();
+            NewGenarray[9, 2].setStatic();
+            NewGenarray[10, 2].setStatic();
 
-            NewGenarray[7, 5].setStatic();
-            NewGenarray[8, 5].setStatic();
+            NewGenarray[8, 3].setStatic();
+            NewGenarray[9, 3].setStatic();
 
-            NewGenarray[6, 6].setStatic();
-            NewGenarray[7, 6].setStatic();
             NewGenarray[8, 6].setStatic();
             NewGenarray[9, 6].setStatic();
 
-            NewGenarray[5, 7].setStatic();
-            NewGenarray[6, 7].setStatic();
             NewGenarray[7, 7].setStatic();
             NewGenarray[8, 7].setStatic();
             NewGenarray[9, 7].setStatic();
             NewGenarray[10, 7].setStatic();
+
+            NewGenarray[6, 8].setStatic();
+            NewGenarray[7, 8].setStatic();
+            NewGenarray[8, 8].setStatic();
+            NewGenarray[9, 8].setStatic();
+            NewGenarray[10, 8].setStatic();
+            NewGenarray[11, 8].setStatic();
+
+            
         }        
 
         private void moveSand()
         {
-            for (int i = 0; i < rowNum; i++)
+            for (int j = colNum - 1; j >= 0; j--)//int j = colNum - 1; j >= 0; j--
             {
-                for (int j = 0; j < colNum; j++)
+                for (int i = rowNum - 1; i >= 0; i--)//int i = rowNum - 1; i >= 0; i--
                 {
-                    if (!OldGenarray[i,j].isStatic() && !OldGenarray[i,j].isEmpty())
-                    {
-                        try
-                        {
-                            if (OldGenarray[i + 1, j].isEmpty())
+                    if (!OldGenarray[i,j].isEmpty() && !OldGenarray[i, j].isStatic() && !OldGenarray[i, j].isEdge())
+                    {                        
+                            if (OldGenarray[i, j + 1].isEmpty())
                             {
-                                if (!NewGenarray[i + 1, j].isStatic())
+                                if (!OldGenarray[i, j + 1].isStatic() && OldGenarray[i, j + 1].isEmpty() && !OldGenarray[i, j + 1].isEdge())
                                 {
-                                    NewGenarray[i + 1, j].setEmptyFalse();
-                                    NewGenarray[i, j].setEmptyTrue();
+                                    NewGenarray[i, j + 1].setEmptyFalse();
+                                    OldGenarray[i, j].setEmptyTrue();
                                 }                                
                             }
-                            else if (OldGenarray[i + 1, j - 1].isEmpty())
+                            if (OldGenarray[i - 1, j + 1].isEmpty())
                             {
-                                if (!NewGenarray[i + 1, j-1].isStatic())
+                                if (!OldGenarray[i - 1, j + 1].isStatic() && OldGenarray[i - 1, j + 1].isEmpty() && !OldGenarray[i - 1, j + 1].isEdge())
                                 {
-                                    NewGenarray[i + 1, j - 1].setEmptyFalse();
-                                    NewGenarray[i, j].setEmptyTrue();
+                                    NewGenarray[i - 1, j + 1].setEmptyFalse();
+                                    OldGenarray[i, j].setEmptyTrue();
                                 }                               
                             }
-                            else if (OldGenarray[i - 1, j - 1].isEmpty())
+                            if (OldGenarray[i + 1, j + 1].isEmpty())
                             {
-                                if (!NewGenarray[i - 1, j - 1].isStatic())
+                                if (!OldGenarray[i + 1, j + 1].isStatic() && OldGenarray[i + 1, j + 1].isEmpty() && !OldGenarray[i + 1, j + 1].isEdge())
                                 {
-                                    NewGenarray[i - 1, j - 1].setEmptyFalse();
-                                    NewGenarray[i, j].setEmptyTrue();
+                                    NewGenarray[i + 1, j + 1].setEmptyFalse();
+                                    OldGenarray[i, j].setEmptyTrue();
                                 }                                
                             }
                             else
                             {
-                                NewGenarray[i, j].setEmptyFalse();
+                                NewGenarray[i, j].setSlot(OldGenarray[i, j]);
                             }
-                        }catch (IndexOutOfRangeException e)
-                        {
-                            NewGenarray[i, j].setEmptyFalse();
-                        }
-                        
+
+                    }
+                    else
+                    {
+                        NewGenarray[i, j].setSlot(OldGenarray[i, j]);
                     }
                 }               
             }
         }
-        
 
-        private void btnStart_Click(object sender, RoutedEventArgs e)
+        private void changeGeneration()
         {
             for (int i = 0; i < rowNum; i++)
             {
                 for (int j = 0; j < colNum; j++)
                 {
-                    Console.Write(OldGenarray[i,j] + " ");
+                    OldGenarray[i, j].setSlot(NewGenarray[i, j]);
                 }
-                Console.Write("\n");
             }
+        }        
+
+        private void btnStart_Click(object sender, RoutedEventArgs e)
+        {
 
             moveSand();
-            Console.WriteLine("\n\n\n");
+
+            StringBuilder Output = new StringBuilder();
 
             for (int i = 0; i < rowNum; i++)
             {
                 for (int j = 0; j < colNum; j++)
                 {
-                    Console.Write(NewGenarray[i, j] + " ");
-                }
-                Console.Write("\n");
+                    
+                    Output.Append(NewGenarray[i, j] + " ");
+                }                
+                Output.Append("\n");
             }
 
+            lblHourglass.Content = Output;
+
+            changeGeneration();
         }
     }
 
@@ -199,11 +237,13 @@ namespace Project3
         // Auto-implemented readonly property:
         public bool Empty { get; set; }
         public bool Static { get; set; }
+        public bool Edge { get; set; }
 
         public Slot()
         {
             Empty = true;
             Static = false;
+            Edge = false;
         }
 
         public void setEmptyFalse()
@@ -214,6 +254,11 @@ namespace Project3
         public void setEmptyTrue()
         {
             Empty = true;
+        }
+
+        public Boolean getEmpty()
+        {
+            return Empty;
         }
 
         public bool isEmpty()
@@ -231,16 +276,44 @@ namespace Project3
             Static = true;
         }
 
+        public Boolean getStatic()
+        {
+            return Static;
+        }
+
+        public void setEdgeTrue()
+        {
+            Edge = true;
+        }
+
+        public bool isEdge()
+        {
+            return Edge;
+        }
+
+        public Boolean getEdge()
+        {
+            return Edge;
+        }
+
         public override string ToString()
         {
             if (Static)
                 return "X";
+            else if (Edge)
+                return "!";
             else if (Empty)
-                return ".";
+                return ".";            
             else
                 return "O";
         }
 
+        internal void setSlot(Slot slot)
+        {
+            Static = slot.getStatic();
+            Empty = slot.getEmpty();
+            Edge = slot.getEdge();
+        }
     }
            
 }
