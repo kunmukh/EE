@@ -20,9 +20,16 @@ namespace Project3
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        private static int rowNum = 18;
+        private static int colNum = 10;
+        private Slot[,] OldGenarray = new Slot[rowNum, colNum];
+        private Slot[,] NewGenarray = new Slot[rowNum, colNum];
+
         public MainWindow()
         {
             InitializeComponent();
+            //make the initial generation
             makeInitialGen();
 
             StringBuilder lblOutput = new StringBuilder();
@@ -35,14 +42,11 @@ namespace Project3
                 lblOutput.Append("\n");
             }
             lblHourglass.Content = lblOutput;
-        }
-        private static int rowNum = 18;
-        private static int colNum = 10;
-        private Slot[,] OldGenarray = new Slot[rowNum, colNum];
-        private Slot[,] NewGenarray = new Slot[rowNum, colNum];
+        }        
 
         public void makeInitialGen()
         {
+            //Setting up the initial grid
             for (int i = 0; i < rowNum; i++)
             {
                 for (int j = 0; j < colNum; j++)
@@ -52,8 +56,32 @@ namespace Project3
                 }
             }
 
-            createStaticslots();
+            firstGenMaker();
+        }
 
+        private void firstGenMaker()
+        {
+            //setup the edge
+            for (int j = 0; j < colNum; j++)
+            {
+                OldGenarray[0, j].setEdgeTrue();
+                OldGenarray[rowNum - 1, j].setEdgeTrue();
+            }
+
+            for (int i = 0; i < rowNum; i++)
+            {
+                OldGenarray[i, 0].setEdgeTrue();
+                OldGenarray[i, colNum - 1].setEdgeTrue();
+            }
+
+            //Static slot for hourglass
+            createStaticslots();
+            resetSand();
+        }
+
+        private void resetSand()
+        {
+            //Filling up the upper side of glass
             for (int i = 1; i < 8; i++)
             {
                 for (int j = 1; j < colNum; j++)
@@ -64,31 +92,6 @@ namespace Project3
                     }
                 }
             }
-
-            //OldGenarray[1, colNum-2].setEmptyFalse();
-            //OldGenarray[6,7].setEmptyFalse();
-            //OldGenarray[1, 1].setEmptyFalse();
-            //OldGenarray[2, 1].setEmptyFalse();
-
-            //setup the edge
-            for (int j = 0; j < colNum; j++)
-            {
-                OldGenarray[0, j].setEdgeTrue();
-                OldGenarray[rowNum - 1, j].setEdgeTrue();
-
-                NewGenarray[0, j].setEdgeTrue();
-                NewGenarray[rowNum - 1, j].setEdgeTrue();
-            }
-
-            for (int i = 0; i < rowNum; i++)
-            {
-                OldGenarray[i, 0].setEdgeTrue();
-                OldGenarray[i, colNum - 1].setEdgeTrue();
-
-                NewGenarray[i, 0].setEdgeTrue();
-                NewGenarray[i, colNum - 1].setEdgeTrue();
-            }
-
         }
 
         private void createStaticslots()
@@ -227,7 +230,6 @@ namespace Project3
 
         private void btnStart_Click(object sender, RoutedEventArgs e)
         {
-
             moveSand();
 
             StringBuilder Output = new StringBuilder();
@@ -243,7 +245,25 @@ namespace Project3
 
             lblHourglass.Content = Output;
 
-            changeGeneration();
+            changeGeneration();            
+        }
+
+        private void btnReset_Click(object sender, RoutedEventArgs e)
+        {
+            makeInitialGen();
+
+            StringBuilder Output = new StringBuilder();
+
+            for (int i = 0; i < rowNum; i++)
+            {
+                for (int j = 0; j < colNum; j++)
+                {
+                    Output.Append(OldGenarray[i, j] + " ");
+                }
+                Output.Append("\n");
+            }
+
+            lblHourglass.Content = Output;
         }
     }
 

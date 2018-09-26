@@ -7,7 +7,8 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Button Name="btnStart" Content="Button" HorizontalAlignment="Left" Height="45" Margin="249,365,0,0" VerticalAlignment="Top" Width="221" Click="btnStart_Click"/>
+        <Button Name="btnStart" Content="Start" HorizontalAlignment="Left" Height="45" Margin="249,365,0,0" VerticalAlignment="Top" Width="221" Click="btnStart_Click"/>
+        <Button Name="btnReset" Content="Reset" HorizontalAlignment="Left" Height="45" Margin="10,365,0,0" VerticalAlignment="Top" Width="221" Click="btnReset_Click"/>
         <Label Name="lblHourglass"  Content="" HorizontalAlignment="Left" Height="304" Margin="193,10,0,0" VerticalAlignment="Top" Width="311" FontSize="12" FontFamily="Consolas"/>
 
     </Grid>
