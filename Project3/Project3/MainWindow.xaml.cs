@@ -45,7 +45,8 @@ namespace Project3
                 }
                 lblOutput.Append("\n");
             }
-            lblHourglass.Content = lblOutput;            
+            lblHourglass.Content = lblOutput;
+            paintHourGlass();
         }
 
         private void DoWorkMethod(object sender, EventArgs e)
@@ -85,6 +86,8 @@ namespace Project3
 
             lblHourglass.Content = Output;
 
+            paintHourGlass();
+
             changeGeneration();
 
         }
@@ -105,6 +108,7 @@ namespace Project3
             }
 
             lblHourglass.Content = Output;
+            paintHourGlass();
         }
 
         public void makeInitialGen()
@@ -155,6 +159,8 @@ namespace Project3
                     }
                 }
             }
+
+            paintHourGlass();
         }
 
         private void createStaticslots()
@@ -256,6 +262,61 @@ namespace Project3
                     OldGenarray[i, j].setSlot(NewGenarray[i, j]);
                 }
             }
+        }
+
+        private void paintHourGlass()
+        {
+            Pen[] penArray = new Pen[3];
+            penArray[0] = new Pen(Brushes.Black, 1);
+            penArray[1] = new Pen(Brushes.Blue, 1);
+            penArray[2] = new Pen(Brushes.Red, 1);
+
+            Brush[] brushArray = new Brush[3];
+            brushArray[0] = new SolidColorBrush(Color.FromArgb(255, 0, 0, 0));
+            brushArray[1] = new SolidColorBrush(Color.FromArgb(255, 0, 0, 255));
+            brushArray[2] = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
+
+            DrawingVisual vis = new DrawingVisual();
+            DrawingContext dc = vis.RenderOpen();
+
+            int gapx = 50,gapy= 50;
+            Brush b = new SolidColorBrush();
+            Pen p = new Pen();
+            for (int i = 0; i < rowNum; i++)
+            {
+                for (int j = 0; j < colNum; j++)
+                {
+                    if (NewGenarray[i,j].isEdge())
+                    {
+                       p = penArray[0];
+                       b = brushArray[0];
+                       dc.DrawEllipse(b, p, new Point(gapx, gapy), 25, 25);
+                    }
+                    else if (NewGenarray[i, j].isStatic())
+                    {
+                        p = penArray[1];
+                        b = brushArray[1];
+                        dc.DrawEllipse(b, p, new Point(gapx, gapy), 25, 25);
+                    }
+                    else if (NewGenarray[i, j].isMovable() && !NewGenarray[i,j].isEmpty())
+                    {
+                        p = penArray[2];
+                        b = brushArray[2];
+                        dc.DrawEllipse(b, p, new Point(gapx, gapy), 25, 25);
+                    }
+                                       
+                    gapx += 50;
+                }
+
+                gapy += 50;
+                gapx = 50;
+            }
+
+
+            dc.Close();
+            RenderTargetBitmap bmp = new RenderTargetBitmap(1000, 1000, 96, 96, PixelFormats.Pbgra32);
+            bmp.Render(vis);
+            imgPlot.Source = bmp;
         }
         
     }
