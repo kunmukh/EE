@@ -29,6 +29,7 @@ namespace Project3
         private Slot[,] NewGenarray = new Slot[rowNum, colNum];
         System.Windows.Threading.DispatcherTimer tmr1;
         private int sandSpeed = 125;
+        private bool forever = false;
 
         public MainWindow()
         {
@@ -89,6 +90,20 @@ namespace Project3
             paintHourGlass();
 
             changeGeneration();
+
+            if (forever)
+            {
+                if (NewGenarray[10, 6].isEmpty())
+                {
+                    if (!NewGenarray[11, 7].isEmpty())
+                    {
+                        if (!NewGenarray[12, 8].isEmpty())
+                        {
+                            btnReset.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+                        }
+                    }
+                }
+            }                      
 
         }
 
@@ -286,19 +301,19 @@ namespace Project3
             {
                 for (int j = 0; j < colNum; j++)
                 {
-                    if (NewGenarray[i,j].isEdge())
+                    if (OldGenarray[i,j].isEdge())
                     {
                        p = penArray[0];
                        b = brushArray[0];
                        dc.DrawEllipse(b, p, new Point(gapx, gapy), 25, 25);
                     }
-                    else if (NewGenarray[i, j].isStatic())
+                    else if (OldGenarray[i, j].isStatic())
                     {
                         p = penArray[1];
                         b = brushArray[1];
                         dc.DrawEllipse(b, p, new Point(gapx, gapy), 25, 25);
                     }
-                    else if (NewGenarray[i, j].isMovable() && !NewGenarray[i,j].isEmpty())
+                    else if (OldGenarray[i, j].isMovable() && !OldGenarray[i,j].isEmpty())
                     {
                         p = penArray[2];
                         b = brushArray[2];
@@ -318,7 +333,16 @@ namespace Project3
             bmp.Render(vis);
             imgPlot.Source = bmp;
         }
-        
+
+        private void btnFrvStart_Click(object sender, RoutedEventArgs e)
+        {
+            forever = true;
+        }
+
+        private void btnFrvEnd_Click(object sender, RoutedEventArgs e)
+        {
+            forever = false;
+        }
     }
 
     public class Slot
