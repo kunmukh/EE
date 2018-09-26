@@ -36,7 +36,7 @@ namespace Project3
             }
             lblHourglass.Content = lblOutput;
         }
-        private static int rowNum = 20;
+        private static int rowNum = 18;
         private static int colNum = 10;
         private Slot[,] OldGenarray = new Slot[rowNum, colNum];
         private Slot[,] NewGenarray = new Slot[rowNum, colNum];
@@ -54,7 +54,7 @@ namespace Project3
 
             createStaticslots();
 
-            /*for (int i = 1; i < 8; i++)
+            for (int i = 1; i < 8; i++)
             {
                 for (int j = 1; j < colNum; j++)
                 {
@@ -63,9 +63,10 @@ namespace Project3
                         OldGenarray[i, j].setEmptyFalse();
                     }
                 }
-            }*/
+            }
 
-            OldGenarray[1, colNum-2].setEmptyFalse();
+            //OldGenarray[1, colNum-2].setEmptyFalse();
+            //OldGenarray[6,7].setEmptyFalse();
             //OldGenarray[1, 1].setEmptyFalse();
             //OldGenarray[2, 1].setEmptyFalse();
 
@@ -158,42 +159,55 @@ namespace Project3
 
         private void moveSand()
         {
-            for (int j = colNum - 2; j >= 1; j--)//int j = colNum - 1; j >= 0; j--
+            for (int i = rowNum - 1; i >= 0; i--)//int j = colNum - 1; j >= 0; j--
             {
-                for (int i = rowNum - 2; i >= 1; i--)//int i = rowNum - 1; i >= 0; i--
+                for (int j = colNum - 1; j >= 0; j--)//int i = rowNum - 1; i >= 0; i--
                 {
                     if (!OldGenarray[i, j].isEmpty() && OldGenarray[i, j].isMovable())
                     {
                         if (OldGenarray[i + 1, j].isEmpty() && OldGenarray[i + 1, j].isMovable())
                         {
+                            int ni = i + 1;int nj = j;
                             Console.WriteLine("Enter1 \n");
+                            Console.WriteLine("i: " + i + " j: " + j);
+                            Console.WriteLine("new_i: " + ni + " new_j: " + nj);
                             NewGenarray[i + 1, j].setEmptyFalse();
+                            OldGenarray[i + 1, j].setEmptyFalse();
                             NewGenarray[i, j].setEmptyTrue();
                             OldGenarray[i, j].setEmptyTrue();                            
                         }
                         else if (OldGenarray[i + 1, j - 1].isEmpty() && OldGenarray[i + 1, j - 1].isMovable())
                         {
+                            int ni = i + 1; int nj = j - 1;
                             Console.WriteLine("Enter2 \n");
+                            Console.WriteLine("i: " + i + " j: " + j);
+                            Console.WriteLine("new_i: " + ni + " new_j: " + nj + "\n");
                             NewGenarray[i + 1, j - 1] = new Slot();
                             NewGenarray[i + 1, j - 1].setEmptyFalse();
+                            OldGenarray[i + 1, j - 1].setEmptyFalse();
                             NewGenarray[i, j].setEmptyTrue();
                             OldGenarray[i, j].setEmptyTrue();                            
                         }
                         else if (OldGenarray[i + 1, j + 1].isEmpty() && OldGenarray[i + 1, j + 1].isMovable())
                         {
+                            int ni = i + 1; int nj = j + 1;
                             Console.WriteLine("Enter3 \n");
+                            Console.WriteLine("i: " + i + "j : " + j);
+                            Console.WriteLine("new_i: " + ni + " new_j: " + nj);
                             NewGenarray[i + 1, j + 1].setEmptyFalse();
+                            OldGenarray[i + 1, j + 1].setEmptyFalse();
                             NewGenarray[i, j].setEmptyTrue();
                             OldGenarray[i, j].setEmptyTrue();
                         }
                         else 
                         {
-                            Console.WriteLine("Enter4 \n");
+                            //Console.WriteLine("Enter4 \n");
                             NewGenarray[i, j].setSlot(OldGenarray[i, j]);                            
                         }
                     }
                     else
                     {
+                        //Console.WriteLine("eei: " + i + " j : " + j);
                         NewGenarray[i, j].setSlot(OldGenarray[i, j]);
                     }
                 }
