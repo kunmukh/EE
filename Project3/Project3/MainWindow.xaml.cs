@@ -27,7 +27,8 @@ namespace Project3
         private static int colNum = 10;
         private Slot[,] OldGenarray = new Slot[rowNum, colNum];
         private Slot[,] NewGenarray = new Slot[rowNum, colNum];
-        static BackgroundWorker bw = new BackgroundWorker();
+        System.Windows.Threading.DispatcherTimer tmr1;
+        private int sandSpeed = 125;
 
         public MainWindow()
         {
@@ -44,11 +45,67 @@ namespace Project3
                 }
                 lblOutput.Append("\n");
             }
-            lblHourglass.Content = lblOutput;
+            lblHourglass.Content = lblOutput;            
+        }
 
-            bw.DoWork += DoWorkMethod;  //Add method to worker
-            bw.RunWorkerAsync("Message to Worker");
-        }        
+        private void DoWorkMethod(object sender, EventArgs e)
+        {
+            btnStart.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+            
+        }
+
+        private void btnTimer_Click(object sender, RoutedEventArgs e)
+        {        
+
+            tmr1 = new System.Windows.Threading.DispatcherTimer();
+            tmr1.Tick += new EventHandler(DoWorkMethod);
+            tmr1.Interval = new System.TimeSpan(0, 0, 0, 0, sandSpeed); //1 sec
+            tmr1.Start();
+        }
+
+        private void btnTimerEnd_Click(object sender, RoutedEventArgs e)
+        {
+            tmr1.Stop();
+        }
+
+        private void btnStart_Click(object sender, RoutedEventArgs e)
+        {
+            moveSand();
+
+            StringBuilder Output = new StringBuilder();
+
+            for (int i = 0; i < rowNum; i++)
+            {
+                for (int j = 0; j < colNum; j++)
+                {
+                    Output.Append(NewGenarray[i, j] + " ");
+                }
+                Output.Append("\n");
+            }
+
+            lblHourglass.Content = Output;
+
+            changeGeneration();
+
+        }
+
+        private void btnReset_Click(object sender, RoutedEventArgs e)
+        {
+            makeInitialGen();
+
+            StringBuilder Output = new StringBuilder();
+
+            for (int i = 0; i < rowNum; i++)
+            {
+                for (int j = 0; j < colNum; j++)
+                {
+                    Output.Append(OldGenarray[i, j] + " ");
+                }
+                Output.Append("\n");
+            }
+
+            lblHourglass.Content = Output;
+        }
 
         public void makeInitialGen()
         {
@@ -131,39 +188,6 @@ namespace Project3
             OldGenarray[9, 8].setStatic();
             OldGenarray[10, 8].setStatic();
             OldGenarray[11, 8].setStatic();
-            //
-
-            /*NewGenarray[6, 1].setStatic();
-            NewGenarray[7, 1].setStatic();
-            NewGenarray[8, 1].setStatic();
-            NewGenarray[9, 1].setStatic();
-            NewGenarray[10, 1].setStatic();
-            NewGenarray[11, 1].setStatic();
-
-            NewGenarray[7, 2].setStatic();
-            NewGenarray[8, 2].setStatic();
-            NewGenarray[9, 2].setStatic();
-            NewGenarray[10, 2].setStatic();
-
-            NewGenarray[8, 3].setStatic();
-            NewGenarray[9, 3].setStatic();
-
-            NewGenarray[8, 6].setStatic();
-            NewGenarray[9, 6].setStatic();
-
-            NewGenarray[7, 7].setStatic();
-            NewGenarray[8, 7].setStatic();
-            NewGenarray[9, 7].setStatic();
-            NewGenarray[10, 7].setStatic();
-
-            NewGenarray[6, 8].setStatic();
-            NewGenarray[7, 8].setStatic();
-            NewGenarray[8, 8].setStatic();
-            NewGenarray[9, 8].setStatic();
-            NewGenarray[10, 8].setStatic();
-            NewGenarray[11, 8].setStatic();*/
-
-
         }
 
         private void moveSand()
@@ -233,53 +257,7 @@ namespace Project3
                 }
             }
         }
-
-        private void btnStart_Click(object sender, RoutedEventArgs e)
-        {
-            moveSand();
-
-            StringBuilder Output = new StringBuilder();
-
-            for (int i = 0; i < rowNum; i++)
-            {
-                for (int j = 0; j < colNum; j++)
-                {
-                    Output.Append(NewGenarray[i, j] + " ");
-                }
-                Output.Append("\n");
-            }
-
-            lblHourglass.Content = Output;
-
-            changeGeneration();          
-
-        }
-
-        private void DoWorkMethod(object sender, DoWorkEventArgs e)
-        {
-            btnStart.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
-            lblBgWorker.Content = e.Argument + " Done";            
-            Thread.Sleep(50);
-
-        }   
-
-        private void btnReset_Click(object sender, RoutedEventArgs e)
-        {
-            makeInitialGen();
-
-            StringBuilder Output = new StringBuilder();
-
-            for (int i = 0; i < rowNum; i++)
-            {
-                for (int j = 0; j < colNum; j++)
-                {
-                    Output.Append(OldGenarray[i, j] + " ");
-                }
-                Output.Append("\n");
-            }
-
-            lblHourglass.Content = Output;
-        }
+        
     }
 
     public class Slot
