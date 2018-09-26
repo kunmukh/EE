@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -25,6 +27,7 @@ namespace Project3
         private static int colNum = 10;
         private Slot[,] OldGenarray = new Slot[rowNum, colNum];
         private Slot[,] NewGenarray = new Slot[rowNum, colNum];
+        static BackgroundWorker bw = new BackgroundWorker();
 
         public MainWindow()
         {
@@ -42,6 +45,9 @@ namespace Project3
                 lblOutput.Append("\n");
             }
             lblHourglass.Content = lblOutput;
+
+            bw.DoWork += DoWorkMethod;  //Add method to worker
+            bw.RunWorkerAsync("Message to Worker");
         }        
 
         public void makeInitialGen()
@@ -245,8 +251,17 @@ namespace Project3
 
             lblHourglass.Content = Output;
 
-            changeGeneration();            
+            changeGeneration();          
+
         }
+
+        private void DoWorkMethod(object sender, DoWorkEventArgs e)
+        {
+            btnStart.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+            lblBgWorker.Content = e.Argument + " Done";            
+            Thread.Sleep(50);
+
+        }   
 
         private void btnReset_Click(object sender, RoutedEventArgs e)
         {
