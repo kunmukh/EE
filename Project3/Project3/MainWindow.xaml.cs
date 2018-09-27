@@ -30,6 +30,7 @@ namespace Project3
         System.Windows.Threading.DispatcherTimer tmr1;
         private int sandSpeed = 125;
         private bool forever = false;
+        private int sandSize = 25;
 
         public MainWindow()
         {
@@ -294,7 +295,7 @@ namespace Project3
             DrawingVisual vis = new DrawingVisual();
             DrawingContext dc = vis.RenderOpen();
 
-            int gapx = 50,gapy= 50;
+            int gapx = 2*sandSize,gapy= 2 *sandSize;
             Brush b = new SolidColorBrush();
             Pen p = new Pen();
             for (int i = 0; i < rowNum; i++)
@@ -305,26 +306,31 @@ namespace Project3
                     {
                        p = penArray[0];
                        b = brushArray[0];
-                       dc.DrawEllipse(b, p, new Point(gapx, gapy), 25, 25);
+                       dc.DrawEllipse(b, p, new Point(gapx, gapy), sandSize, sandSize);
                     }
                     else if (OldGenarray[i, j].isStatic())
                     {
                         p = penArray[1];
                         b = brushArray[1];
-                        dc.DrawEllipse(b, p, new Point(gapx, gapy), 25, 25);
+                        dc.DrawEllipse(b, p, new Point(gapx, gapy), sandSize, sandSize);
                     }
                     else if (OldGenarray[i, j].isMovable() && !OldGenarray[i,j].isEmpty())
                     {
                         p = penArray[2];
                         b = brushArray[2];
-                        dc.DrawEllipse(b, p, new Point(gapx, gapy), 25, 25);
+                        
+                        if(i >= 9)
+                        {
+                            b = new SolidColorBrush(Color.FromArgb(255, 255, 255, 0));
+                        }
+                        dc.DrawEllipse(b, p, new Point(gapx, gapy), sandSize, sandSize);
                     }
                                        
-                    gapx += 50;
+                    gapx += 2 * sandSize;
                 }
 
-                gapy += 50;
-                gapx = 50;
+                gapy += 2 * sandSize;
+                gapx = 2 * sandSize;
             }
 
 
@@ -342,6 +348,13 @@ namespace Project3
         private void btnFrvEnd_Click(object sender, RoutedEventArgs e)
         {
             forever = false;
+        }
+
+        private void btnSand_Click(object sender, RoutedEventArgs e)
+        {
+            sandSize = Convert.ToInt32(txtbxSandSize.Text);
+            sandSpeed = Convert.ToInt32(txtbxTimeiter.Text);
+                
         }
     }
 

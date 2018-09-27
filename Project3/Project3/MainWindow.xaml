@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Project3"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="MainWindow" Height="450" Width="1019.661" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <Grid Margin="0,0,-6.4,0">
         <Button Name="btnStart" Content="Start" HorizontalAlignment="Left" Height="45" Margin="111,365,0,0" VerticalAlignment="Top" Width="110" Click="btnStart_Click"/>
         <Button Name="btnReset" Content="Reset" HorizontalAlignment="Left" Height="45" Margin="10,365,0,0" VerticalAlignment="Top" Width="96" Click="btnReset_Click"/>
         <Button Name="btnFrvStart" Content="Forever Start" HorizontalAlignment="Left" Height="45" Margin="254,365,0,0" VerticalAlignment="Top" Width="96" RenderTransformOrigin="0.467,0.417" Click="btnFrvStart_Click"/>
@@ -15,8 +15,13 @@
         <Button Name="btnTimerEnd" Content="Timer End" HorizontalAlignment="Left" Height="45" Margin="631,365,0,0" VerticalAlignment="Top" Width="113" Click="btnTimerEnd_Click"/>
         <Label Name="lblHourglass"  Content="" HorizontalAlignment="Left" Height="297" Margin="29,28,0,0" VerticalAlignment="Top" Width="311" FontSize="12" FontFamily="Consolas"/>
         <Label Name="lblBgWorker" Content="" HorizontalAlignment="Left" Margin="340,330,0,0" VerticalAlignment="Top" Height="30" Width="130" FontSize="12" FontFamily="Consolas" RenderTransformOrigin="-1.715,1.209"/>
-        <Border BorderThickness="3" BorderBrush="Black" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.429,0.401" Margin="413,28,49.6,95" Width="331" Height="297">
+        <Border BorderThickness="3" BorderBrush="Black" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.429,0.401" Margin="374,33,315,90" Width="331" Height="297">
             <Image x:Name="imgPlot" HorizontalAlignment="Right" Height="327" Margin="0,-3.2,7,-32.6" VerticalAlignment="Top" Width="308" RenderTransformOrigin="1.219,-0.119"/>
         </Border>
+        <TextBox Name="txtbxSandSize" Text="25" HorizontalAlignment="Left" Height="46" Margin="738,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="138" FontSize="20"/>
+        <Label Content="Sand Size" HorizontalAlignment="Left" Margin="738,84,0,0" VerticalAlignment="Top" Width="138" Height="46" FontSize="20" FontFamily="Sitka Small"/>
+        <TextBox Name="txtbxTimeiter" Text="125" HorizontalAlignment="Left" Height="46" Margin="738,150,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="138" FontSize="20"/>
+        <Label Content="Sand Speed (msec)" HorizontalAlignment="Left" Margin="738,201,0,0" VerticalAlignment="Top" Width="202" Height="46" FontSize="20" FontFamily="Sitka Small"/>
+        <Button Name="btnSand" Content="Done" HorizontalAlignment="Left" Margin="762,252,0,0" VerticalAlignment="Top" Width="95" Height="42" FontFamily="Rockwell Extra Bold" FontSize="20" Click="btnSand_Click"/>
     </Grid>
 </Window>
