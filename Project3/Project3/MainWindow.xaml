@@ -20,7 +20,7 @@
         </Border>
         <TextBox Name="txtbxSandSize" Text="25" HorizontalAlignment="Left" Height="46" Margin="738,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="138" FontSize="20"/>
         <Label Content="Sand Size" HorizontalAlignment="Left" Margin="738,84,0,0" VerticalAlignment="Top" Width="138" Height="46" FontSize="20" FontFamily="Sitka Small"/>
-        <TextBox Name="txtbxTimeiter" Text="125" HorizontalAlignment="Left" Height="46" Margin="738,150,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="138" FontSize="20"/>
+        <TextBox Name="txtbxTimeiter" Text="100" HorizontalAlignment="Left" Height="46" Margin="738,150,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="138" FontSize="20"/>
         <Label Content="Sand Speed (msec)" HorizontalAlignment="Left" Margin="738,201,0,0" VerticalAlignment="Top" Width="202" Height="46" FontSize="20" FontFamily="Sitka Small"/>
         <Button Name="btnSand" Content="Done" HorizontalAlignment="Left" Margin="762,252,0,0" VerticalAlignment="Top" Width="95" Height="42" FontFamily="Rockwell Extra Bold" FontSize="20" Click="btnSand_Click"/>
     </Grid>

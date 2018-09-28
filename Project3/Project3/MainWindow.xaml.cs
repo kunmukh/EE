@@ -28,7 +28,7 @@ namespace Project3
         private Slot[,] OldGenarray = new Slot[rowNum, colNum];
         private Slot[,] NewGenarray = new Slot[rowNum, colNum];
         System.Windows.Threading.DispatcherTimer tmr1;
-        private int sandSpeed = 125;
+        private int sandSpeed = 100;
         private bool forever = false;
         private int sandSize = 25;
 
@@ -354,6 +354,9 @@ namespace Project3
         {
             sandSize = Convert.ToInt32(txtbxSandSize.Text);
             sandSpeed = Convert.ToInt32(txtbxTimeiter.Text);
+
+            tmr1.Stop();
+            tmr1.Start();
                 
         }
     }
