@@ -22,7 +22,7 @@ namespace Project3
     /// </summary>
     public partial class MainWindow : Window
     {
-
+        //sets the global variables
         private static int rowNum = 18;
         private static int colNum = 10;
         private static Slot[,] OldGenarray = new Slot[rowNum, colNum];
@@ -53,14 +53,8 @@ namespace Project3
             lblHourglass.Content = lblOutput;
             //paint the hour glass
             paintHourGlass();                                 
-        }         
-
-        private void DoWorkMethod(object sender, EventArgs e)
-        {
-            btnStart.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
-            
-        }
-
+        }                 
+        //starts the time
         private void btnTimer_Click(object sender, RoutedEventArgs e)
         {        
 
@@ -69,17 +63,18 @@ namespace Project3
             tmr1.Interval = new System.TimeSpan(0, 0, 0, 0, sandSpeed); //1 sec
             tmr1.Start();
         }
-
+        //ends the timer
         private void btnTimerEnd_Click(object sender, RoutedEventArgs e)
         {
             tmr1.Stop();
         }
-
+        //does the sand move on the current Gen 0
         private void btnStart_Click(object sender, RoutedEventArgs e)
         {
             //move the sand
             moveSand();
             m.WaitOne();
+            //paints the Gen 1 CURRENT
             StringBuilder Output = new StringBuilder();
             for (int i = 0; i < rowNum; i++)
             {
@@ -89,7 +84,7 @@ namespace Project3
                 }
                 Output.Append("\n");
             }
-            m.ReleaseMutex();
+            m.ReleaseMutex(); // release the mutex
             lblHourglass.Content = Output;
 
             //paint the hour glass
@@ -97,6 +92,7 @@ namespace Project3
 
             changeGeneration();
 
+            //does the forver loop as it resets the sand
             if (forever)
             {
                 if (NewGenarray[10, 6].isEmpty())
@@ -112,9 +108,10 @@ namespace Project3
             }                      
 
         }
-
+        //reset the generations
         private void btnReset_Click(object sender, RoutedEventArgs e)
         {
+            //makes the inital generation
             makeInitialGen();
 
             StringBuilder Output = new StringBuilder();
@@ -132,7 +129,34 @@ namespace Project3
             //paint the hour glass
             paintHourGlass();            
         }
+        //starts the forver loop, calls the timer in loop
+        private void btnFrvStart_Click(object sender, RoutedEventArgs e)
+        {
+            forever = true;
+        }
+        //ends the timer
+        private void btnFrvEnd_Click(object sender, RoutedEventArgs e)
+        {
+            forever = false;
+        }
+        //cnages the sand number or speed
+        private void btnSand_Click(object sender, RoutedEventArgs e)
+        {
+            sandSize = Convert.ToInt32(txtbxSandSize.Text);
+            sandSpeed = Convert.ToInt32(txtbxTimeiter.Text);
 
+            tmr1.Stop();
+            tmr1.Start();
+
+        }
+        //does the thread work of using move on current Gen 0
+        private void DoWorkMethod(object sender, EventArgs e)
+        {
+            btnStart.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        }
+
+        //make an intitial gen
         public void makeInitialGen()
         {
             //Setting up the initial grid
@@ -147,7 +171,7 @@ namespace Project3
 
             firstGenMaker();
         }
-
+        //make the first gen
         private void firstGenMaker()
         {
             //setup the edge
@@ -167,7 +191,7 @@ namespace Project3
             createStaticslots();
             resetSand();
         }
-
+        //reset the sand after one whole iterationis done
         private void resetSand()
         {
             //Filling up the upper side of glass
@@ -185,7 +209,7 @@ namespace Project3
             //paint the hour glass
             paintHourGlass();            
         }
-
+        //create the static slot like edges and the wall
         private void createStaticslots()
         {
             OldGenarray[6, 1].setStatic();
@@ -218,7 +242,9 @@ namespace Project3
             OldGenarray[10, 8].setStatic();
             OldGenarray[11, 8].setStatic();
         }
-
+        //main program that moves the sand
+        //goes through each row and colum and follows the 
+        //algorithms as discussed inclass
         private void moveSand()
         {
             m.WaitOne();
@@ -265,7 +291,7 @@ namespace Project3
             }
             m.ReleaseMutex();            
         }
-
+        //cnages the array so that gen 1-> gen 0
         private void changeGeneration()
         {
             for (int i = 0; i < rowNum; i++)
@@ -276,7 +302,7 @@ namespace Project3
                 }
             }
         }
-
+        //paints the hour glass, after each iteration is called
         public void paintHourGlass()
         {
             Pen[] penArray = new Pen[3];
@@ -337,28 +363,11 @@ namespace Project3
             imgPlot.Source = bmp;
 
         }
-
-        private void btnFrvStart_Click(object sender, RoutedEventArgs e)
-        {
-            forever = true;
-        }
-
-        private void btnFrvEnd_Click(object sender, RoutedEventArgs e)
-        {
-            forever = false;
-        }
-
-        private void btnSand_Click(object sender, RoutedEventArgs e)
-        {
-            sandSize = Convert.ToInt32(txtbxSandSize.Text);
-            sandSpeed = Convert.ToInt32(txtbxTimeiter.Text);
-
-            tmr1.Stop();
-            tmr1.Start();
-                
-        }
+        
     }
 
+    //A new class is added in the terms of Slot
+    //the class has the attributes of empty, static or edge
     public class Slot
     {
         // Auto-implemented readonly property:
