@@ -25,20 +25,23 @@ namespace Project3
 
         private static int rowNum = 18;
         private static int colNum = 10;
-        private Slot[,] OldGenarray = new Slot[rowNum, colNum];
-        private Slot[,] NewGenarray = new Slot[rowNum, colNum];
+        private static Slot[,] OldGenarray = new Slot[rowNum, colNum];
+        private static Slot[,] NewGenarray = new Slot[rowNum, colNum];
         System.Windows.Threading.DispatcherTimer tmr1;
         private int sandSpeed = 100;
         private bool forever = false;
         private int sandSize = 25;
+        private static Mutex m = new Mutex();
 
         public MainWindow()
         {
             InitializeComponent();
-            //make the initial generation
+            //thread
+            Thread mSand = new Thread(moveSand);
+            //make the initial generation    
             makeInitialGen();
 
-            StringBuilder lblOutput = new StringBuilder();
+            StringBuilder lblOutput = new StringBuilder();            
             for (int i = 0; i < rowNum; i++)
             {
                 for (int j = 0; j < colNum; j++)
@@ -48,8 +51,9 @@ namespace Project3
                 lblOutput.Append("\n");
             }
             lblHourglass.Content = lblOutput;
-            paintHourGlass();
-        }
+            //paint the hour glass
+            paintHourGlass();                                 
+        }         
 
         private void DoWorkMethod(object sender, EventArgs e)
         {
@@ -73,22 +77,23 @@ namespace Project3
 
         private void btnStart_Click(object sender, RoutedEventArgs e)
         {
+            //move the sand
             moveSand();
-
+            m.WaitOne();
             StringBuilder Output = new StringBuilder();
-
             for (int i = 0; i < rowNum; i++)
             {
                 for (int j = 0; j < colNum; j++)
-                {
+                {                    
                     Output.Append(NewGenarray[i, j] + " ");
                 }
                 Output.Append("\n");
             }
-
+            m.ReleaseMutex();
             lblHourglass.Content = Output;
 
-            paintHourGlass();
+            //paint the hour glass
+            paintHourGlass();            
 
             changeGeneration();
 
@@ -124,7 +129,8 @@ namespace Project3
             }
 
             lblHourglass.Content = Output;
-            paintHourGlass();
+            //paint the hour glass
+            paintHourGlass();            
         }
 
         public void makeInitialGen()
@@ -176,7 +182,8 @@ namespace Project3
                 }
             }
 
-            paintHourGlass();
+            //paint the hour glass
+            paintHourGlass();            
         }
 
         private void createStaticslots()
@@ -214,6 +221,7 @@ namespace Project3
 
         private void moveSand()
         {
+            m.WaitOne();
             for (int i = rowNum - 1; i >= 0; i--)//int j = colNum - 1; j >= 0; j--
             {
                 for (int j = colNum - 1; j >= 0; j--)//int i = rowNum - 1; i >= 0; i--
@@ -222,51 +230,40 @@ namespace Project3
                     {
                         if (OldGenarray[i + 1, j].isEmpty() && OldGenarray[i + 1, j].isMovable())
                         {
-                            int ni = i + 1;int nj = j;
-                            Console.WriteLine("Enter1 \n");
-                            Console.WriteLine("i: " + i + " j: " + j);
-                            Console.WriteLine("new_i: " + ni + " new_j: " + nj);
                             NewGenarray[i + 1, j].setEmptyFalse();
-                            OldGenarray[i + 1, j].setEmptyFalse();
                             NewGenarray[i, j].setEmptyTrue();
-                            OldGenarray[i, j].setEmptyTrue();                            
+
+                            OldGenarray[i + 1, j].setEmptyFalse();
+                            OldGenarray[i, j].setEmptyTrue();
                         }
                         else if (OldGenarray[i + 1, j - 1].isEmpty() && OldGenarray[i + 1, j - 1].isMovable())
                         {
-                            int ni = i + 1; int nj = j - 1;
-                            Console.WriteLine("Enter2 \n");
-                            Console.WriteLine("i: " + i + " j: " + j);
-                            Console.WriteLine("new_i: " + ni + " new_j: " + nj + "\n");
-                            NewGenarray[i + 1, j - 1] = new Slot();
                             NewGenarray[i + 1, j - 1].setEmptyFalse();
-                            OldGenarray[i + 1, j - 1].setEmptyFalse();
                             NewGenarray[i, j].setEmptyTrue();
-                            OldGenarray[i, j].setEmptyTrue();                            
+
+                            OldGenarray[i + 1, j - 1].setEmptyFalse();
+                            OldGenarray[i, j].setEmptyTrue();
                         }
                         else if (OldGenarray[i + 1, j + 1].isEmpty() && OldGenarray[i + 1, j + 1].isMovable())
                         {
-                            int ni = i + 1; int nj = j + 1;
-                            Console.WriteLine("Enter3 \n");
-                            Console.WriteLine("i: " + i + "j : " + j);
-                            Console.WriteLine("new_i: " + ni + " new_j: " + nj);
                             NewGenarray[i + 1, j + 1].setEmptyFalse();
-                            OldGenarray[i + 1, j + 1].setEmptyFalse();
                             NewGenarray[i, j].setEmptyTrue();
+
+                            OldGenarray[i + 1, j + 1].setEmptyFalse();
                             OldGenarray[i, j].setEmptyTrue();
                         }
-                        else 
+                        else
                         {
-                            //Console.WriteLine("Enter4 \n");
-                            NewGenarray[i, j].setSlot(OldGenarray[i, j]);                            
+                            NewGenarray[i, j].setSlot(OldGenarray[i, j]);
                         }
                     }
                     else
                     {
-                        //Console.WriteLine("eei: " + i + " j : " + j);
                         NewGenarray[i, j].setSlot(OldGenarray[i, j]);
                     }
                 }
             }
+            m.ReleaseMutex();            
         }
 
         private void changeGeneration()
@@ -280,7 +277,7 @@ namespace Project3
             }
         }
 
-        private void paintHourGlass()
+        public void paintHourGlass()
         {
             Pen[] penArray = new Pen[3];
             penArray[0] = new Pen(Brushes.Black, 1);
@@ -338,6 +335,7 @@ namespace Project3
             RenderTargetBitmap bmp = new RenderTargetBitmap(1000, 1000, 96, 96, PixelFormats.Pbgra32);
             bmp.Render(vis);
             imgPlot.Source = bmp;
+
         }
 
         private void btnFrvStart_Click(object sender, RoutedEventArgs e)
@@ -457,6 +455,6 @@ namespace Project3
             else
                 return true;
         }
-    }
+    }    
 
 }
