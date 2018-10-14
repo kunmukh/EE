@@ -143,19 +143,31 @@ namespace Project4
             DrawingVisual vis = new DrawingVisual();
             DrawingContext dc = vis.RenderOpen();
 
-            int gapx = 2 * coinSize, gapy = 2 * coinSize, numCol = 0;
+            //draw the square
+            int gapx = 0, gapy = 0, numCol = 0;
             Brush b = new SolidColorBrush();
             Pen p = new Pen();
             for (int i = 0; i < numCells; i++)
             {
-                if (grid[i].isEmpty())
-                {
-                    p = penArray[2];
-                    b = brushArray[2];
-                    dc.DrawEllipse(b, p, new Point(gapx, gapy), coinSize, coinSize);
+                p = penArray[2];
+                b = brushArray[2];
+                dc.DrawRectangle(b, p, new Rect(gapx, gapy, 2 * coinSize, 2 * coinSize));
 
+                gapx += 2 * coinSize;
+                numCol++;
+
+                if (numCol % 8 == 0)
+                {
+                    gapy += 2 * coinSize;
+                    gapx = 0;
                 }
-                else if ((!grid[i].isEmpty()) && (grid[i].getCoin().getColor() == 2))
+            }
+
+            //draw the rectangle
+            gapx = coinSize; gapy = coinSize; numCol = 0;           
+            for (int i = 0; i < numCells; i++)
+            {
+                if ((!grid[i].isEmpty()) && (grid[i].getCoin().getColor() == 2))
                 {
                     p = penArray[0];
                     b = brushArray[0];
@@ -169,15 +181,17 @@ namespace Project4
                     dc.DrawEllipse(b, p, new Point(gapx, gapy), coinSize, coinSize);
                 }
 
+                
+
                 gapx += 2 * coinSize;
                 numCol++;
 
                 if (numCol % 8 == 0)
                 {
                     gapy += 2 * coinSize;
-                    gapx = 2 * coinSize;
+                    gapx = coinSize;
                 }
-            }
+            }            
 
                 dc.Close();
                 RenderTargetBitmap bmp = new RenderTargetBitmap(1080, 1080, 96, 96, PixelFormats.Pbgra32);
@@ -188,6 +202,20 @@ namespace Project4
 
         private void imgGame_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
+            var point = e.GetPosition(imgGame);
+            lblXMouse.Content = point.X.ToString();
+            lblYMouse.Content = point.Y.ToString();
+
+            int x, y;
+            x = (int)point.X;
+            y = (int)point.Y;
+
+            int rowSel = y / 35;
+            int colSel = x / 35;
+
+            int index = (rowSel * 8) + colSel;   
+
+            lblIndex.Content = index.ToString();
 
         }
 
