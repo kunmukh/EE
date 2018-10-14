@@ -5,8 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Project4"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" WindowStartupLocation="CenterScreen">
-    <Grid>
-        
+        Title="MainWindow" Height="482.585" Width="678.225" WindowStartupLocation="CenterScreen">
+    <Grid Margin="0,0,33.2,-0.2">
+        <Label Name="lblCell" Content="Cell" HorizontalAlignment="Left" Height="62" Margin="504,30,0,0" VerticalAlignment="Top" Width="125" FontSize="36" FontFamily="Yu Gothic UI Semibold"/>
+        <Label Name="lblCoin" Content="Coin" HorizontalAlignment="Left" Height="62" Margin="504,181,0,0" VerticalAlignment="Top" Width="125" FontSize="36" FontFamily="Yu Gothic UI Semibold"/>
+        <TextBox Name="txtCell" HorizontalAlignment="Left" Height="57" Margin="504,108,0,0" TextWrapping="Wrap" Text="16" VerticalAlignment="Top" Width="125" FontSize="36" FontFamily="Yu Gothic UI Semibold" TextAlignment="Center"/>
+        <TextBox Name="txtCoin" HorizontalAlignment="Left" Height="57" Margin="504,258,0,0" TextWrapping="Wrap" Text="8" VerticalAlignment="Top" Width="125" FontSize="36" FontFamily="Yu Gothic UI Semibold" TextAlignment="Center"/>
+        <Button Name="btnStart" Content="Start" HorizontalAlignment="Left" Margin="504,338,0,0" VerticalAlignment="Top" Width="115" Height="53" FontSize="36" FontFamily="Yu Gothic UI Semibold" Click="btnStart_Click"/>
+        <Image Name="imgGame" HorizontalAlignment="Left" Height="311" Margin="25,22,0,0" VerticalAlignment="Top" Width="410" MouseLeftButtonUp="imgGame_MouseLeftButtonUp" MouseRightButtonUp="imgGame_MouseRightButtonUp"/>
+        <Label Name="lbltemp" HorizontalAlignment="Left" Height="95" Margin="25,338,0,0" VerticalAlignment="Top" Width="209" FontFamily="Consolas"/>
+
     </Grid>
 </Window>

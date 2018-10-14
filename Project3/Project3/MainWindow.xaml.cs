@@ -312,7 +312,7 @@ namespace Project3
 
             Brush[] brushArray = new Brush[3];
             brushArray[0] = new SolidColorBrush(Color.FromArgb(255, 0, 0, 0));
-            brushArray[1] = new SolidColorBrush(Color.FromArgb(255, 0, 0, 255));
+            brushArray[1] = new SolidColorBrush(Color.FromArgb(255, 255, 223, 0));
             brushArray[2] = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
 
             DrawingVisual vis = new DrawingVisual();
