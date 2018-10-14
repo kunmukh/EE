@@ -246,9 +246,13 @@ namespace Project4
                 }
                 else
                 {
-                    grid[startIndex].setEmpty(true);
-                    printGrid();
-                    playerChange();
+                    if (!grid[startIndex].isEmpty())
+                    {
+                        grid[startIndex].setEmpty(true);
+                        printGrid();
+                        playerChange();
+                    }
+                        
                 }
                 
             }
@@ -293,6 +297,12 @@ namespace Project4
                 return false;
             }
 
+            if(grid[start].isEmpty())
+            {
+                warningMessage(8);
+                return false;
+            }
+
             lblXMouse.Content = start.ToString();
             lblYMouse.Content = end.ToString();
 
@@ -319,7 +329,8 @@ namespace Project4
                                 "Player 1 Turn",
                                 "Player 2 Turn",
                                 "Player 1 Wins!!! Game END",
-                                "Player 2 wins!!! Game END"};
+                                "Player 2 wins!!! Game END",
+                                "The starting Position is EMPTY!!!"};
 
             MessageBox.Show(message[choice], "The GAME Notification", MessageBoxButton.OK, MessageBoxImage.Information);
         }
