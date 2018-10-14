@@ -25,6 +25,9 @@ namespace Project4
         private bool isWin = false;
         private List<Cell> grid = new List<Cell>();
         private int coinSize = 60;
+        private int startIndex = 0;
+        private int endIndex = 0;
+        private int currentPlayer = 1;
 
         public MainWindow()
         {
@@ -68,6 +71,9 @@ namespace Project4
 
             //disable the start game
             btnStart.IsEnabled = false;
+
+            warningMessage(0);
+            warningMessage(4);
         }
 
         public void putCoinIn()
@@ -202,9 +208,8 @@ namespace Project4
 
         private void imgGame_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            var point = e.GetPosition(imgGame);
-            lblXMouse.Content = point.X.ToString();
-            lblYMouse.Content = point.Y.ToString();
+            //finding the x, y corordinate of the mouse 
+            var point = e.GetPosition(imgGame);           
 
             int x, y;
             x = (int)point.X;
@@ -216,13 +221,125 @@ namespace Project4
             int index = (rowSel * 8) + colSel;   
 
             lblIndex.Content = index.ToString();
+            //add the start Index
+            startIndex = index;
+            
+            if(grid[startIndex].isLast())
+            {
 
+                if(grid[startIndex].getCoin().getColor() == 2)
+                {
+                    if (currentPlayer == 1)
+                    {
+                        grid[startIndex].setEmpty(true);
+                        printGrid();
+                        warningMessage(6);
+                    }                        
+                    else
+                    {
+                        grid[startIndex].setEmpty(true);
+                        printGrid();
+                        warningMessage(7);
+                    }
+
+                    btnStart.IsEnabled = true;
+                }
+                else
+                {
+                    grid[startIndex].setEmpty(true);
+                    printGrid();
+                    playerChange();
+                }
+                
+            }
+
+            printGrid();
         }
 
         private void imgGame_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
+            //finding the x, y corordinate of the mouse 
+            var point = e.GetPosition(imgGame);
+            lblXMouse.Content = point.X.ToString();
+            lblYMouse.Content = point.Y.ToString();
 
+            int x, y;
+            x = (int)point.X;
+            y = (int)point.Y;
+
+            int rowSel = y / 35;
+            int colSel = x / 35;
+
+            int index = (rowSel * 8) + colSel;
+
+            lblIndex.Content = index.ToString();
+            endIndex = index;
+
+            if (logic(startIndex, endIndex))
+            {
+                printGrid();
+                playerChange();
+            }
+            
+            printGrid();
         }
+
+        public bool logic(int start, int end)
+        {
+            //this check works
+            if (start < end)
+            {
+                warningMessage(2);
+                return false;
+            }
+
+            lblXMouse.Content = start.ToString();
+            lblYMouse.Content = end.ToString();
+
+            for (int i = start - 1; i >= end; i--)
+            {
+                if (!grid[i].isEmpty())
+                {
+                    warningMessage(3);
+                    return false;
+                }
+            }
+
+            grid[end].setCoinColor(grid[start].getCoin());
+            grid[start].setEmpty(true);
+            return true;
+        }
+
+        public void warningMessage(int choice)
+        {
+            String[] message = { "The game has started",
+                                "You have won the Game!!!",
+                                "You cannot go backwards",
+                                "You cannot jump over coins",
+                                "Player 1 Turn",
+                                "Player 2 Turn",
+                                "Player 1 Wins!!! Game END",
+                                "Player 2 wins!!! Game END"};
+
+            MessageBox.Show(message[choice], "The GAME Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        public void playerChange()
+        {
+            if (currentPlayer == 1)
+            {
+                currentPlayer = 2;
+                warningMessage(5);
+            }
+            else
+            {
+                currentPlayer = 1;
+                warningMessage(4);
+            }
+                
+        }
+
+
     }
 
     //class cell that has the attribute of being last, empty
@@ -283,6 +400,12 @@ namespace Project4
         public Coin getCoin()
         {
             return _c;
+        }
+
+        public void setCoinColor(Coin co)
+        {
+            _Empty = false;
+            _c.setColor(co.getColor());
         }
 
         public override string ToString()
