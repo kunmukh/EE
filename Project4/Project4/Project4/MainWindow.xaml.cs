@@ -244,7 +244,7 @@ namespace Project4
             //add the start Index
             startIndex = index;
             
-            if(grid[startIndex].isLast())
+            if(startIndex < numCells && grid[startIndex].isLast())
             {
 
                 if(grid[startIndex].getCoin().getColor() == 2)
@@ -298,7 +298,8 @@ namespace Project4
             
             endIndex = index;
 
-            if (logic(startIndex, endIndex))
+
+            if (endIndex < numCells && logic(startIndex, endIndex))
             {               
                 printGrid();
                 playerChange();
