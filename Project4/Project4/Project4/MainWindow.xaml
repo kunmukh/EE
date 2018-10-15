@@ -12,12 +12,11 @@
         <TextBox Name="txtCell" HorizontalAlignment="Left" Height="57" Margin="504,108,0,0" TextWrapping="Wrap" Text="16" VerticalAlignment="Top" Width="125" FontSize="36" FontFamily="Yu Gothic UI Semibold" TextAlignment="Center"/>
         <TextBox Name="txtCoin" HorizontalAlignment="Left" Height="57" Margin="504,258,0,0" TextWrapping="Wrap" Text="8" VerticalAlignment="Top" Width="125" FontSize="36" FontFamily="Yu Gothic UI Semibold" TextAlignment="Center"/>
         <Button Name="btnStart" Content="Start" HorizontalAlignment="Left" Margin="504,338,0,0" VerticalAlignment="Top" Width="115" Height="53" FontSize="36" FontFamily="Yu Gothic UI Semibold" Click="btnStart_Click"/>
-        <Image Name="imgGame" HorizontalAlignment="Left" Height="311" Margin="25,22,0,0" VerticalAlignment="Top" Width="410" MouseLeftButtonUp="imgGame_MouseLeftButtonUp" MouseRightButtonUp="imgGame_MouseRightButtonUp"></Image>
+        <Image Name="imgGame" HorizontalAlignment="Left" Height="311" Margin="25,22,0,0" VerticalAlignment="Top" Width="410" MouseLeftButtonUp="imgGame_MouseLeftButtonUp" MouseRightButtonUp="imgGame_MouseRightButtonUp"/>
         <Canvas Name="cnv1"   HorizontalAlignment="Left" Height="311" Margin="25,22,0,0" VerticalAlignment="Top" Width="410" ></Canvas>
         <Label Name="lbltemp" HorizontalAlignment="Left" Height="95" Margin="25,338,0,0" VerticalAlignment="Top" Width="209" FontFamily="Consolas"/>
-        <Label Name="lblXMouse" Content="" HorizontalAlignment="Left" Height="32" Margin="312,359,0,0" VerticalAlignment="Top" Width="174"/>
-        <Label Name="lblYMouse" Content="" HorizontalAlignment="Left" Height="32" Margin="312,411,0,0" VerticalAlignment="Top" Width="174"/>
-        <Label Name ="lblIndex" Content="" HorizontalAlignment="Left" Height="32" Margin="504,411,0,0" VerticalAlignment="Top" Width="105"/>
+        <Button Name="btnAbout" Content="About" HorizontalAlignment="Left" Height="36" Margin="504,406,0,0" VerticalAlignment="Top" Width="115" FontSize="25" FontFamily="Yu Gothic UI Semibold" Click="btnAbout_Click"/>
+        <Button Name="btnHelp" Content="Help" HorizontalAlignment="Left" Height="36" Margin="375,406,0,0" VerticalAlignment="Top" Width="115" FontSize="25" FontFamily="Yu Gothic UI Semibold" Click="btnHelp_Click"/>
 
     </Grid>
 </Window>

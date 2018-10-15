@@ -30,7 +30,7 @@ namespace Project4
         private int endIndex = 0;
         private int currentPlayer = 1;
         private TranslateTransform animatedTranslateTransform;
-
+       
         public MainWindow()
         {
             InitializeComponent();
@@ -51,6 +51,8 @@ namespace Project4
 
         private void btnStart_Click(object sender, RoutedEventArgs e)
         {
+
+            cnv1.Children.Clear();
             //select the number of cells
             if ((Convert.ToInt32(txtCell.Text) >= 16) && (Convert.ToInt32(txtCell.Text) <= 48))
             {
@@ -149,6 +151,8 @@ namespace Project4
 
         public void printGrid()
         {
+            printGridConsole();
+
             Pen[] penArray = new Pen[3];
             penArray[0] = new Pen(Brushes.Black, 1);
             penArray[1] = new Pen(Brushes.Black, 1);
@@ -223,6 +227,9 @@ namespace Project4
 
         private void imgGame_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
+
+            cnv1.Children.Clear();
+
             //finding the x, y corordinate of the mouse 
             var point = e.GetPosition(imgGame);           
 
@@ -233,9 +240,7 @@ namespace Project4
             int rowSel = y / 35;
             int colSel = x / 35;
 
-            int index = (rowSel * 8) + colSel;   
-
-            lblIndex.Content = index.ToString();
+            int index = (rowSel * 8) + colSel;              
             //add the start Index
             startIndex = index;
             
@@ -248,12 +253,14 @@ namespace Project4
                     {
                         grid[startIndex].setEmpty(true);
                         printGrid();
+                        doWinningAnimation(0);
                         warningMessage(6);
                     }                        
                     else
                     {
                         grid[startIndex].setEmpty(true);
                         printGrid();
+                        doWinningAnimation(1);
                         warningMessage(7);
                     }
 
@@ -278,9 +285,7 @@ namespace Project4
         private void imgGame_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
             //finding the x, y corordinate of the mouse 
-            var point = e.GetPosition(imgGame);
-            lblXMouse.Content = point.X.ToString();
-            lblYMouse.Content = point.Y.ToString();
+            var point = e.GetPosition(imgGame);           
 
             int x, y;
             x = (int)point.X;
@@ -290,12 +295,11 @@ namespace Project4
             int colSel = x / 35;
 
             int index = (rowSel * 8) + colSel;
-
-            lblIndex.Content = index.ToString();
+            
             endIndex = index;
 
             if (logic(startIndex, endIndex))
-            {
+            {               
                 printGrid();
                 playerChange();
             }
@@ -316,10 +320,7 @@ namespace Project4
             {
                 warningMessage(8);
                 return false;
-            }
-
-            lblXMouse.Content = start.ToString();
-            lblYMouse.Content = end.ToString();
+            }           
 
             for (int i = start - 1; i >= end; i--)
             {
@@ -332,11 +333,10 @@ namespace Project4
 
             grid[end].setCoinColor(grid[start].getCoin());
             grid[start].setEmpty(true);
-
-            //*/testing
-            doAnimation(start, end, grid[start].getCoin().getColor());
+                     
+            doAnimation(start, end, grid[start].getCoin().getColor());           
             return true;
-        }
+        }       
 
         public void warningMessage(int choice)
         {
@@ -454,17 +454,16 @@ namespace Project4
             pathAnimationStoryboard.Children.Add(translateYAnimation);
             // Start the animations.
             pathAnimationStoryboard.Begin(cnv1,true);
-
-
-            //TODO: Thread.Sleep(5000);
-            //cnv1.Children.RemoveAt(0);
         }
 
         private void LoadPathPoints(PolyBezierSegment pBezierSegment, Point start, Point end)
         {
             double incrx = (end.X - start.X) / 20;
             double incry = (end.Y - start.Y) / 20;
-            
+            Random rnd = new Random();
+            int chance = rnd.Next(0, 200);
+            int yval = rnd.Next(0, 200);
+
             double x, y;
             x = start.X; y = start.Y;
             for (int i = 0; i < 21; i++)
@@ -472,11 +471,112 @@ namespace Project4
                 pBezierSegment.Points.Add(new Point(x, y));
                 x += incrx;                
                 y += incry;
-                
+
+                if ((chance % 2 == 0) && (i < 15))
+                    pBezierSegment.Points.Add(new Point(x+0.1, rnd.Next(0, 200)));
+                chance = rnd.Next(0, 200);
+
             }
         }
 
+        public void doWinningAnimation(int choice)
+        {
+            String[] messg = {"Player 1 Wins!!! Game END",
+                                "Player 2 wins!!! Game END" };
 
+            SolidColorBrush bluBrush;
+            
+            bluBrush = new SolidColorBrush(Color.FromRgb(255, 223, 0));
+
+            TextBox txtb = new TextBox();
+            txtb.Height = 50;
+            txtb.Width = 200;
+            txtb.Text = messg[choice];
+            txtb.Background = new SolidColorBrush(Colors.Orange);
+            txtb.Foreground = new SolidColorBrush(Colors.Black);
+            txtb.FontSize = 32;
+
+            cnv1.Children.Add(txtb);
+
+            txtb.RenderTransform = animatedTranslateTransform;
+
+            ///*start
+            // Create the animation path.
+            PathGeometry animationPath = new PathGeometry();
+            PathFigure pFigure = new PathFigure();
+
+            PolyBezierSegment pBezierSegment = new PolyBezierSegment();
+
+            Point start = new Point((startIndex % 8) * 35, (startIndex / 8) * 35);
+            Point end = new Point((endIndex % 8) * 35, (endIndex / 8) * 35);
+            pFigure.StartPoint = new Point((startIndex % 8) * 35, (startIndex / 8) * 35);
+
+            Console.WriteLine("Point start: " + start + " Point end: " + end);
+            LoadPathPoints(pBezierSegment, start, end);
+            pFigure.Segments.Add(pBezierSegment);
+            animationPath.Figures.Add(pFigure);
+
+            // Freeze the PathGeometry for performance benefits.
+            animationPath.Freeze();
+            // Create a DoubleAnimationUsingPath to move the
+            // rectangle horizontally along the path by animating 
+            // its TranslateTransform.
+            DoubleAnimationUsingPath translateXAnimation =
+                new DoubleAnimationUsingPath();
+            translateXAnimation.PathGeometry = animationPath;
+            translateXAnimation.Duration = TimeSpan.FromSeconds(5);
+
+            // Set the Source property to X. This makes
+            // the animation generate horizontal offset values from
+            // the path information. 
+            translateXAnimation.Source = PathAnimationSource.X;
+
+            // Set the animation to target the X property
+            // of the TranslateTransform named "AnimatedTranslateTransform".
+            Storyboard.SetTargetName(translateXAnimation, "AnimatedTranslateTransform");
+            Storyboard.SetTargetProperty(translateXAnimation,
+                new PropertyPath(TranslateTransform.XProperty));
+            // Create a DoubleAnimationUsingPath to move the
+            // rectangle vertically along the path by animating 
+            // its TranslateTransform.
+            DoubleAnimationUsingPath translateYAnimation =
+                new DoubleAnimationUsingPath();
+            translateYAnimation.PathGeometry = animationPath;
+            translateYAnimation.Duration = TimeSpan.FromSeconds(5);
+
+            // Set the Source property to Y. This makes
+            // the animation generate vertical offset values from
+            // the path information. 
+            translateYAnimation.Source = PathAnimationSource.Y;
+
+            // Set the animation to target the Y property
+            // of the TranslateTransform named "AnimatedTranslateTransform".
+            Storyboard.SetTargetName(translateYAnimation, "AnimatedTranslateTransform");
+            Storyboard.SetTargetProperty(translateYAnimation,
+                new PropertyPath(TranslateTransform.YProperty));
+
+            // Create a Storyboard to contain and apply the animations.
+            Storyboard pathAnimationStoryboard = new Storyboard();
+
+            pathAnimationStoryboard.Children.Add(translateXAnimation);
+            pathAnimationStoryboard.Children.Add(translateYAnimation);
+            // Start the animations.
+            pathAnimationStoryboard.Begin(cnv1, true);
+        }
+
+        private void btnAbout_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Kunal Mukherjee EE-356 10/14/18 Gold Button", "The CREATOR INFO", MessageBoxButton.OK, MessageBoxImage.Hand);
+        }
+
+        private void btnHelp_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("1.There are two players who take turns.\n2.For each turn a player must either take the button on the far left or " +
+                "move some other button some number of squares to the left.\n" + 
+                "3.Players cannot jump other buttons when moving a single button to the left and" + 
+                "neither can two buttons occupy the same square.\n" + "4.Play continues until someone takes the gold button which can only be taken when\n"+
+                "it is on the far left.", "The GAME RULES", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+        }
     }
 
     //class cell that has the attribute of being last, empty
