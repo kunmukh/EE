@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace Project4
@@ -80,21 +75,23 @@ namespace Project4
 
             grid.Insert(0, new Cell(true, true, 0));
 
-            putCoinIn();
+            //puts the coin in
+            putCoinIn();            
 
-            printGridConsole();
-
+            //prints the grid
             printGrid();
 
             //disable the start game
             btnStart.IsEnabled = false;
 
+            //shows the warning messages
             warningMessage(0);
             warningMessage(4);
         }
 
         public void putCoinIn()
         {
+            //pus the coin in random position
             int tempNumCoin = numCoin;
             Random rnd = new Random();
             int index = rnd.Next(0, numCells - 1);
@@ -104,6 +101,7 @@ namespace Project4
             {
                 while (!emptyCellFound)
                 {
+                    //get the index of a random cell
                     index = rnd.Next(0, numCells - 1);
                     if (grid[index].isEmpty())
                     {
@@ -121,6 +119,7 @@ namespace Project4
             emptyCellFound = false;
             while (!emptyCellFound)
             {
+                //put the gold coin in the last 25% of the grid places
                 index = rnd.Next((int)(0.75 * (numCells - 1)), numCells - 1);
                 if (grid[index].isEmpty())
                 {
@@ -188,18 +187,18 @@ namespace Project4
                 }
             }
 
-            //draw the rectangle
+            //draw the ellpise
             gapx = coinSize; gapy = coinSize; numCol = 0;           
             for (int i = 0; i < numCells; i++)
             {
-                if ((!grid[i].isEmpty()) && (grid[i].getCoin().getColor() == 2))
+                if ((!grid[i].isEmpty()) && (grid[i].getCoin().getColor() == 2)) //if it is gold
                 {
                     p = penArray[0];
                     b = brushArray[0];
                     dc.DrawEllipse(b, p, new Point(gapx, gapy), coinSize, coinSize);                    
                     
                 }
-                else if ((!grid[i].isEmpty()) && (grid[i].getCoin().getColor() == 1))
+                else if ((!grid[i].isEmpty()) && (grid[i].getCoin().getColor() == 1)) //if it is normal
                 {
                     p = penArray[1];
                     b = brushArray[1];
@@ -247,7 +246,8 @@ namespace Project4
             if(startIndex < numCells && grid[startIndex].isLast())
             {
 
-                if(grid[startIndex].getCoin().getColor() == 2)
+                //if the start is the most lefthand side, and we decide a winner
+                if (grid[startIndex].getCoin().getColor() == 2)
                 {
                     if (currentPlayer == 1)
                     {
@@ -268,6 +268,7 @@ namespace Project4
                 }
                 else
                 {
+                    //if the start is a normal cell, then the game progresses normally
                     if (!grid[startIndex].isEmpty())
                     {
                         grid[startIndex].setEmpty(true);
@@ -298,9 +299,10 @@ namespace Project4
             
             endIndex = index;
 
-
+            //see if the logic works
             if (endIndex < numCells && logic(startIndex, endIndex))
-            {               
+            {
+                //if it is valid move, print the grid and chnage the player
                 printGrid();
                 playerChange();
             }
@@ -308,21 +310,24 @@ namespace Project4
             printGrid();
         }
 
+        //logic of the game
         public bool logic(int start, int end)
         {
-            //this check works
+            //the game progresses right to left
             if (start < end)
             {
                 warningMessage(2);
                 return false;
             }
 
+            //the start grid is not empty
             if(grid[start].isEmpty())
             {
                 warningMessage(8);
                 return false;
             }           
 
+            //make sure that we ar enot jumping over coins
             for (int i = start - 1; i >= end; i--)
             {
                 if (!grid[i].isEmpty())
@@ -332,9 +337,11 @@ namespace Project4
                 }
             }
 
+            //change the grid array
             grid[end].setCoinColor(grid[start].getCoin());
             grid[start].setEmpty(true);
-                     
+            
+            //do the animation
             doAnimation(start, end, grid[start].getCoin().getColor());           
             return true;
         }       
@@ -354,6 +361,7 @@ namespace Project4
             MessageBox.Show(message[choice], "The GAME Notification", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
+        //change the player
         public void playerChange()
         {
             if (currentPlayer == 1)
@@ -369,6 +377,7 @@ namespace Project4
                 
         }
 
+        //do the coin animation
         public void doAnimation(int startIndex, int endIndex, int color)
         {
 
@@ -457,6 +466,7 @@ namespace Project4
             pathAnimationStoryboard.Begin(cnv1,true);
         }
 
+        //losd the path of the animation
         private void LoadPathPoints(PolyBezierSegment pBezierSegment, Point start, Point end)
         {
             double incrx = (end.X - start.X) / 20;
@@ -480,6 +490,7 @@ namespace Project4
             }
         }
 
+        //do the winning animation with the appriopiate message
         public void doWinningAnimation(int choice)
         {
             String[] messg = {"Player 1 Wins!!! Game END",
@@ -565,6 +576,7 @@ namespace Project4
             pathAnimationStoryboard.Begin(cnv1, true);
         }
 
+        //show a message box about the program
         private void btnAbout_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Kunal Mukherjee EE-356 10/14/18 Gold Button", "The CREATOR INFO", MessageBoxButton.OK, MessageBoxImage.Hand);
