@@ -168,57 +168,42 @@ namespace Project4
             DrawingContext dc = vis.RenderOpen();
 
             //draw the square
-            int gapx = 0, gapy = 0, numCol = 0;
+            int gapx = 0;
             Brush b = new SolidColorBrush();
             Pen p = new Pen();
             for (int i = 0; i < numCells; i++)
             {
                 p = penArray[2];
                 b = brushArray[2];
-                dc.DrawRectangle(b, p, new Rect(gapx, gapy, 2 * coinSize, 2 * coinSize));
+                dc.DrawRectangle(b, p, new Rect(gapx, 0, 2 * coinSize, 2 * coinSize));
 
-                gapx += 2 * coinSize;
-                numCol++;
-
-                if (numCol % 8 == 0)
-                {
-                    gapy += 2 * coinSize;
-                    gapx = 0;
-                }
+                gapx += 2 * coinSize;                
             }
 
             //draw the ellpise
-            gapx = coinSize; gapy = coinSize; numCol = 0;           
+            gapx = coinSize;           
             for (int i = 0; i < numCells; i++)
             {
                 if ((!grid[i].isEmpty()) && (grid[i].getCoin().getColor() == 2)) //if it is gold
                 {
                     p = penArray[0];
                     b = brushArray[0];
-                    dc.DrawEllipse(b, p, new Point(gapx, gapy), coinSize, coinSize);                    
+                    dc.DrawEllipse(b, p, new Point(gapx, coinSize), coinSize, coinSize);                    
                     
                 }
                 else if ((!grid[i].isEmpty()) && (grid[i].getCoin().getColor() == 1)) //if it is normal
                 {
                     p = penArray[1];
                     b = brushArray[1];
-                    dc.DrawEllipse(b, p, new Point(gapx, gapy), coinSize, coinSize);
-                }
-
-                
+                    dc.DrawEllipse(b, p, new Point(gapx, coinSize), coinSize, coinSize);
+                }                
 
                 gapx += 2 * coinSize;
-                numCol++;
-
-                if (numCol % 8 == 0)
-                {
-                    gapy += 2 * coinSize;
-                    gapx = coinSize;
-                }
+                
             }            
-
+            
                 dc.Close();
-                RenderTargetBitmap bmp = new RenderTargetBitmap(1080, 1080, 96, 96, PixelFormats.Pbgra32);
+                RenderTargetBitmap bmp = new RenderTargetBitmap(1384, 311, 20, 20, PixelFormats.Pbgra32);
                 bmp.Render(vis);
                 imgGame.Source = bmp;
             
@@ -236,12 +221,15 @@ namespace Project4
             x = (int)point.X;
             y = (int)point.Y;
 
-            int rowSel = y / 35;
-            int colSel = x / 35;
+            lblXvalue.Content = x.ToString();
+            lblYvalue.Content = y.ToString();
 
-            int index = (rowSel * 8) + colSel;              
+            int rowSel = y / 25;
+            int colSel = x / 25;
+
+            int index = colSel ;              
             //add the start Index
-            startIndex = index;
+            startIndex = index;           
             
             if(startIndex < numCells && grid[startIndex].isLast())
             {
@@ -292,13 +280,13 @@ namespace Project4
             x = (int)point.X;
             y = (int)point.Y;
 
-            int rowSel = y / 35;
-            int colSel = x / 35;
+            int rowSel = y / 25;
+            int colSel = x / 25;
 
-            int index = (rowSel * 8) + colSel;
+            int index = colSel;
             
             endIndex = index;
-
+            
             //see if the logic works
             if (endIndex < numCells && logic(startIndex, endIndex))
             {
@@ -342,7 +330,7 @@ namespace Project4
             grid[start].setEmpty(true);
             
             //do the animation
-            doAnimation(start, end, grid[start].getCoin().getColor());           
+            //doAnimation(start, end, grid[start].getCoin().getColor());           
             return true;
         }       
 
