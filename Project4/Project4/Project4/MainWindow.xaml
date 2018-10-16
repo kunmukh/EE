@@ -7,18 +7,15 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="482.585" Width="1429.103" WindowStartupLocation="CenterScreen">
     <Grid Margin="0,0,0,-0.2" HorizontalAlignment="Left" Width="1419">
-        <Label Name="lblCell" Content="Cell" HorizontalAlignment="Left" Height="62" Margin="239,371,0,0" VerticalAlignment="Top" Width="125" FontSize="36" FontFamily="Yu Gothic UI Semibold"/>
-        <Label Name="lblCoin" Content="Coin" HorizontalAlignment="Left" Height="62" Margin="470,371,0,0" VerticalAlignment="Top" Width="125" FontSize="36" FontFamily="Yu Gothic UI Semibold"/>
-        <TextBox Name="txtCell" HorizontalAlignment="Left" Height="57" Margin="328,371,0,0" TextWrapping="Wrap" Text="48" VerticalAlignment="Top" Width="125" FontSize="36" FontFamily="Yu Gothic UI Semibold" TextAlignment="Center"/>
-        <TextBox Name="txtCoin" HorizontalAlignment="Left" Height="57" Margin="571,371,0,0" TextWrapping="Wrap" Text="8" VerticalAlignment="Top" Width="125" FontSize="36" FontFamily="Yu Gothic UI Semibold" TextAlignment="Center"/>
-        <Button Name="btnStart" Content="Start" HorizontalAlignment="Left" Margin="710,370,0,0" VerticalAlignment="Top" Width="115" Height="53" FontSize="36" FontFamily="Yu Gothic UI Semibold" Click="btnStart_Click"/>
+        <Label Name="lblCell" Content="Cell" HorizontalAlignment="Left" Height="62" Margin="459,378,0,0" VerticalAlignment="Top" Width="125" FontSize="36" FontFamily="Yu Gothic UI Semibold"/>
+        <Label Name="lblCoin" Content="Coin" HorizontalAlignment="Left" Height="62" Margin="729,381,0,0" VerticalAlignment="Top" Width="125" FontSize="36" FontFamily="Yu Gothic UI Semibold"/>
+        <TextBox Name="txtCell" HorizontalAlignment="Left" Height="57" Margin="599,381,0,0" TextWrapping="Wrap" Text="16" VerticalAlignment="Top" Width="125" FontSize="36" FontFamily="Yu Gothic UI Semibold" TextAlignment="Center"/>
+        <TextBox Name="txtCoin" HorizontalAlignment="Left" Height="57" Margin="859,386,0,0" TextWrapping="Wrap" Text="8" VerticalAlignment="Top" Width="125" FontSize="36" FontFamily="Yu Gothic UI Semibold" TextAlignment="Center"/>
+        <Button Name="btnStart" Content="Start" HorizontalAlignment="Left" Margin="989,390,0,0" VerticalAlignment="Top" Width="115" Height="53" FontSize="36" FontFamily="Yu Gothic UI Semibold" Click="btnStart_Click"/>
         <Image Name="imgGame" HorizontalAlignment="Left" Height="311" Margin="25,22,0,0" VerticalAlignment="Top" Width="1384" MouseLeftButtonUp="imgGame_MouseLeftButtonUp" MouseRightButtonUp="imgGame_MouseRightButtonUp"/>
         <Canvas Name="cnv1"   HorizontalAlignment="Left" Height="311" Margin="25,22,0,0" VerticalAlignment="Top" Width="1384" ></Canvas>
-        <Label Name="lbltemp" HorizontalAlignment="Left" Height="95" Margin="25,338,0,0" VerticalAlignment="Top" Width="209" FontFamily="Consolas"/>
-        <Button Name="btnAbout" Content="About" HorizontalAlignment="Left" Height="36" Margin="1007,404,0,0" VerticalAlignment="Top" Width="115" FontSize="25" FontFamily="Yu Gothic UI Semibold" Click="btnAbout_Click"/>
-        <Button Name="btnHelp" Content="Help" HorizontalAlignment="Left" Height="36" Margin="874,404,0,0" VerticalAlignment="Top" Width="115" FontSize="25" FontFamily="Yu Gothic UI Semibold" Click="btnHelp_Click"/>
-        <Label Name="lblXvalue" HorizontalAlignment="Left" Height="46" Margin="1150,319,0,0" VerticalAlignment="Top" Width="248" FontFamily="Consolas"/>
-        <Label Name="lblYvalue" HorizontalAlignment="Left" Height="46" Margin="1150,371,0,0" VerticalAlignment="Top" Width="248" FontFamily="Consolas"/>
-
+        <Label Name="lbltemp" HorizontalAlignment="Left" Height="43" Margin="25,338,0,0" VerticalAlignment="Top" Width="1361" FontFamily="Consolas"/>
+        <Button Name="btnAbout" Content="About" HorizontalAlignment="Left" Height="36" Margin="1271,404,0,0" VerticalAlignment="Top" Width="115" FontSize="25" FontFamily="Yu Gothic UI Semibold" Click="btnAbout_Click"/>
+        <Button Name="btnHelp" Content="Help" HorizontalAlignment="Left" Height="36" Margin="1118,404,0,0" VerticalAlignment="Top" Width="115" FontSize="25" FontFamily="Yu Gothic UI Semibold" Click="btnHelp_Click" RenderTransformOrigin="0.58,0.569"/>
     </Grid>
 </Window>

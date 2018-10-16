@@ -133,16 +133,11 @@ namespace Project4
 
         public void printGridConsole()
         {
-            int col = 0;
+            
             StringBuilder Output = new StringBuilder();
             for (int i = 0; i < numCells; i++)
             {
-                Output.Append(grid[i] + " ");
-                col++;
-                if (col % 8 == 0)
-                {
-                    Output.Append("\n");
-                }
+                Output.Append(grid[i] + " ");                
             }
 
             lbltemp.Content = Output.ToString();
@@ -221,8 +216,8 @@ namespace Project4
             x = (int)point.X;
             y = (int)point.Y;
 
-            lblXvalue.Content = x.ToString();
-            lblYvalue.Content = y.ToString();
+            //lblXvalue.Content = x.ToString();
+            //lblYvalue.Content = y.ToString();
 
             int rowSel = y / 25;
             int colSel = x / 25;
@@ -330,7 +325,7 @@ namespace Project4
             grid[start].setEmpty(true);
             
             //do the animation
-            //doAnimation(start, end, grid[start].getCoin().getColor());           
+            doAnimation(start, end, grid[start].getCoin().getColor());           
             return true;
         }       
 
@@ -381,8 +376,8 @@ namespace Project4
             }
 
             Ellipse ell1 = new Ellipse();
-            ell1.Height = coinSize / 2;
-            ell1.Width = coinSize / 2;
+            ell1.Height = coinSize * 0.40;
+            ell1.Width = coinSize  * 0.40;
             ell1.Fill = bluBrush;
             
 
@@ -397,9 +392,9 @@ namespace Project4
             
             PolyBezierSegment pBezierSegment = new PolyBezierSegment(); 
             
-            Point start = new Point((startIndex % 8) * 35, (startIndex / 8) * 35);
-            Point end = new Point((endIndex % 8) * 35, (endIndex / 8) * 35);
-            pFigure.StartPoint = new Point((startIndex % 8) * 35, (startIndex / 8) * 35);
+            Point start = new Point(startIndex * 25, 0);
+            Point end =   new Point(endIndex   * 25, 0);
+            pFigure.StartPoint = new Point(startIndex  * 25, 0);
 
             Console.WriteLine("Point start: " + start + " Point end: " + end );
             LoadPathPoints(pBezierSegment, start, end);
@@ -458,24 +453,27 @@ namespace Project4
         private void LoadPathPoints(PolyBezierSegment pBezierSegment, Point start, Point end)
         {
             double incrx = (end.X - start.X) / 20;
-            double incry = (end.Y - start.Y) / 20;
-            Random rnd = new Random();
-            int chance = rnd.Next(0, 200);
-            int yval = rnd.Next(0, 200);
+            double incry = ((end.Y+100) - start.Y) / 10;            
+          
 
             double x, y;
             x = start.X; y = start.Y;
-            for (int i = 0; i < 21; i++)
+            for (int i = 0; i < 10; i++)
             {
                 pBezierSegment.Points.Add(new Point(x, y));
                 x += incrx;                
-                y += incry;
-
-                if ((chance % 2 == 0) && (i < 15))
-                    pBezierSegment.Points.Add(new Point(x+0.1, rnd.Next(0, 200)));
-                chance = rnd.Next(0, 200);
+                y += incry;                
 
             }
+
+            for (int i = 0; i < 11; i++)
+            {
+                pBezierSegment.Points.Add(new Point(x, y));
+                x += incrx;                
+                y -= incry;              
+
+            }            
+
         }
 
         //do the winning animation with the appriopiate message
@@ -507,9 +505,9 @@ namespace Project4
 
             PolyBezierSegment pBezierSegment = new PolyBezierSegment();
 
-            Point start = new Point((startIndex % 8) * 35, (startIndex / 8) * 35);
-            Point end = new Point((endIndex % 8) * 35, (endIndex / 8) * 35);
-            pFigure.StartPoint = new Point((startIndex % 8) * 35, (startIndex / 8) * 35);
+            Point start = new Point((startIndex % 8) * 35, 0);
+            Point end = new Point(200, 0);
+            pFigure.StartPoint = new Point(200, 0);
 
             Console.WriteLine("Point start: " + start + " Point end: " + end);
             LoadPathPoints(pBezierSegment, start, end);
@@ -557,7 +555,7 @@ namespace Project4
 
             // Create a Storyboard to contain and apply the animations.
             Storyboard pathAnimationStoryboard = new Storyboard();
-
+            pathAnimationStoryboard.RepeatBehavior = RepeatBehavior.Forever;
             pathAnimationStoryboard.Children.Add(translateXAnimation);
             pathAnimationStoryboard.Children.Add(translateYAnimation);
             // Start the animations.
