@@ -570,11 +570,11 @@ namespace Project4
 
         private void btnHelp_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("1.There are two players who take turns.\n2.For each turn a player must either take the button on the far left or " +
-                "move some other button some number of squares to the left.\n" + 
+            MessageBox.Show("1.There are two players who take turns.\n\n2.For each turn a player must either take the button on the far left or " +
+                "move some other button some number of squares to the left.\n\n" + 
                 "3.Players cannot jump other buttons when moving a single button to the left and" + 
-                "neither can two buttons occupy the same square.\n" + "4.Play continues until someone takes the gold button which can only be taken when\n"+
-                "it is on the far left.", "The GAME RULES", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+                "neither can two buttons occupy the same square.\n\n" + "4.Play continues until someone takes the gold button which can only be taken when"+
+                "it is on the far left.\n", "The GAME RULES", MessageBoxButton.OK, MessageBoxImage.Asterisk);
         }
     }
 
