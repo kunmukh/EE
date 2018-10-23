@@ -41,6 +41,7 @@ namespace Server
         StreamWriter[] sw = new StreamWriter[100];
         List <int> AvailableClientNumbers = new List<int>(100);
         List<int>  UsedClientNumbers = new List<int>(100);
+        string userName = "GOD: ";
 
         int clientcount = 0;
 
@@ -77,7 +78,7 @@ namespace Server
                 ns[clientcount] = new NetworkStream(client);  //Create Network stream
                 sr[clientcount] = new StreamReader(ns[clientcount]);
                 sw[clientcount] = new StreamWriter(ns[clientcount]);
-                string welcome = "Welcome";
+                string welcome = userName + ">> "+ "Welcome";
 
                 InsertText("client connected");
 
@@ -147,7 +148,7 @@ namespace Server
 
             foreach (int t in UsedClientNumbers)
             {
-                sw[t].WriteLine(textBox1.Text);
+                sw[t].WriteLine(userName + ">> " + textBox1.Text);
                 sw[t].Flush();
             }
             textBox1.Text = "";
