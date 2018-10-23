@@ -29,6 +29,7 @@ namespace Client
         StreamWriter sw;
         delegate void SetTextCallback(String text);
         BackgroundWorker backgroundWorker1 = new BackgroundWorker();
+        private String UserName = "";
 
         public MainWindow()
         {
@@ -38,7 +39,7 @@ namespace Client
 
         private void btn_Send_Click(object sender, RoutedEventArgs e)
         {
-            sw.WriteLine(textBox1.Text);
+            sw.WriteLine(UserName + textBox1.Text);
             sw.Flush();
             if (textBox1.Text == "disconnect")
             {
@@ -53,13 +54,15 @@ namespace Client
 
         private void btn_Connect_Click(object sender, RoutedEventArgs e)
         {
+            UserName = txtbxUsername.Text + ">> ";
             TcpClient newcon = new TcpClient();
             newcon.Connect("127.0.0.1", 9090);  //IPAddress of Server
             ns = newcon.GetStream();
             sr = new StreamReader(ns);  //Stream Reader and Writer take away some of the overhead of keeping track of Message size.  By Default WriteLine and ReadLine use Line Feed to delimit the messages
             sw = new StreamWriter(ns);            
             backgroundWorker1.DoWork += new DoWorkEventHandler(backgroundWorker1_DoWork);
-            backgroundWorker1.RunWorkerAsync("Message to Worker");           
+            backgroundWorker1.RunWorkerAsync("Message to Worker");
+            txtbxUsername.IsEnabled = false;
         }
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
@@ -80,7 +83,7 @@ namespace Client
 
 
                         System.Environment.Exit(System.Environment.ExitCode); //close all 
-
+                        txtbxUsername.IsEnabled = true;
                         break;
                     }
                 }
