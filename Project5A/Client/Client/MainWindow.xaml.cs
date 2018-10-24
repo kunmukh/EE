@@ -33,8 +33,7 @@ namespace Client
 
         public MainWindow()
         {
-            InitializeComponent();            
-
+            InitializeComponent();    
         }
 
         private void btn_Send_Click(object sender, RoutedEventArgs e)
@@ -47,7 +46,7 @@ namespace Client
                 sr.Close();
                 ns.Close();
                 System.Environment.Exit(System.Environment.ExitCode); //close all 
-
+                
             }
             textBox1.Text = ""; 
         }
@@ -59,7 +58,7 @@ namespace Client
             newcon.Connect("127.0.0.1", 9090);  //IPAddress of Server
             ns = newcon.GetStream();
             sr = new StreamReader(ns);  //Stream Reader and Writer take away some of the overhead of keeping track of Message size.  By Default WriteLine and ReadLine use Line Feed to delimit the messages
-            sw = new StreamWriter(ns);            
+            sw = new StreamWriter(ns);
             backgroundWorker1.DoWork += new DoWorkEventHandler(backgroundWorker1_DoWork);
             backgroundWorker1.RunWorkerAsync("Message to Worker");
             txtbxUsername.IsEnabled = false;
@@ -83,14 +82,14 @@ namespace Client
 
 
                         System.Environment.Exit(System.Environment.ExitCode); //close all 
-                        txtbxUsername.IsEnabled = true;
+                        
                         break;
                     }
                 }
                 catch
                 {
                     ns.Close();
-                    System.Environment.Exit(System.Environment.ExitCode); //close all 
+                    System.Environment.Exit(System.Environment.ExitCode); //close all                     
                 }
 
             }

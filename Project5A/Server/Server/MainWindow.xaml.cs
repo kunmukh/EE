@@ -78,7 +78,7 @@ namespace Server
                 ns[clientcount] = new NetworkStream(client);  //Create Network stream
                 sr[clientcount] = new StreamReader(ns[clientcount]);
                 sw[clientcount] = new StreamWriter(ns[clientcount]);
-                string welcome = userName + ">> "+ "Welcome";
+                string welcome = userName + ">> "+ "Welcome to EE 356";
 
                 InsertText("client connected");
 
@@ -105,29 +105,44 @@ namespace Server
                 try
                 {
                     //  
+                    inputStream = sr[clientnum].ReadLine();       
 
-                    inputStream = sr[clientnum].ReadLine();
-                    for (int j = 0; j < UsedClientNumbers.Count; j++)
-                    {
-                        int client2Num = UsedClientNumbers[j];
-
-                        if (client2Num != clientnum)
-                        {                            
-                            sw[client2Num].WriteLine(inputStream);
-                            sw[client2Num].Flush();
-                        }
-                    }                  
-                    //
-
-
-                    if (inputStream == "disconnect")
+                    if (inputStream.Contains("disconnect"))
                     {
                         sr[clientnum].Close();
                         sw[clientnum].Close();
                         ns[clientnum].Close();
                         InsertText("Client " + clientnum + " has disconnected");
+                        //
+                        for (int j = 0; j < UsedClientNumbers.Count; j++)
+                        {
+                            int client2Num = UsedClientNumbers[j];
+
+                            if (client2Num != clientnum)
+                            {
+                                sw[client2Num].WriteLine("Client " + 
+                                    clientnum + " has disconnected");
+                                sw[client2Num].Flush();
+                            }
+                        }
+                        //
                         KillMe(clientnum);
                         break;
+                    }
+                    else
+                    {
+                        //
+                        for (int j = 0; j < UsedClientNumbers.Count; j++)
+                        {
+                            int client2Num = UsedClientNumbers[j];
+
+                            if (client2Num != clientnum)
+                            {
+                                InsertText(inputStream);
+                                sw[client2Num].WriteLine(inputStream);
+                                sw[client2Num].Flush();
+                            }
+                        }
                     }
 
 
@@ -145,7 +160,7 @@ namespace Server
 
         private void button1_Click(object sender, RoutedEventArgs e)
         {
-
+            InsertText(userName + ">> " + textBox1.Text);
             foreach (int t in UsedClientNumbers)
             {
                 sw[t].WriteLine(userName + ">> " + textBox1.Text);
