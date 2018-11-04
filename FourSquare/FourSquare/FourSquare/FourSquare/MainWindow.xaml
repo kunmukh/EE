@@ -5,8 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FourSquare"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Four Square - Kunal Mukherjee" Height="450" Width="800">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="203*"/>
+            <ColumnDefinition Width="61*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="Black" Offset="0"/>
+                <GradientStop Color="#FFFF1818" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
     </Grid>
 </Window>
