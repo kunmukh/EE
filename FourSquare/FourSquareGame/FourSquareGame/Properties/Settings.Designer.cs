@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FourSquare.Properties
+namespace FourSquareGame.Properties
 {
 
 
