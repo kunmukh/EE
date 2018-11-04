@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FourSquare", "FourSquare\FourSquare.csproj", "{1D1A5F0C-0CE2-4F14-82AC-CCDC09AB35B6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1D1A5F0C-0CE2-4F14-82AC-CCDC09AB35B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D1A5F0C-0CE2-4F14-82AC-CCDC09AB35B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D1A5F0C-0CE2-4F14-82AC-CCDC09AB35B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D1A5F0C-0CE2-4F14-82AC-CCDC09AB35B6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {94B77D89-1571-40FA-8966-64F24E35B739}
+	EndGlobalSection
+EndGlobal
