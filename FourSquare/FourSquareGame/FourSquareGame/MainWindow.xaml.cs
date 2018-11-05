@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Media.Animation;
+
 
 namespace FourSquareGame
 {
@@ -24,10 +26,23 @@ namespace FourSquareGame
         private Boolean Player1 = false;
         private static int height = 6, width = 7;
         private Cell[,]  grid = new Cell[height,width];
+        private TranslateTransform animatedTranslateTransform;
+        Storyboard pathAnimationStoryboard;
 
         public MainWindow()
         {
-            InitializeComponent();            
+            InitializeComponent();
+
+            //canvas
+            cnv1.ClipToBounds = true;
+            // Create a transform. This transform
+            // will be used to move the rectangle.
+            animatedTranslateTransform =
+                new TranslateTransform();
+
+            // Register the transform's name with the page
+            // so that they it be targeted by a Storyboard.
+            cnv1.RegisterName("AnimatedTranslateTransform", animatedTranslateTransform);
         }
 
         private void btnStart_Click(object sender, RoutedEventArgs e)
@@ -136,6 +151,8 @@ namespace FourSquareGame
 
         private void imgGame_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            cnv1.Children.Clear();
+
             var point = e.GetPosition(imgGame);
 
             int x, y;
@@ -146,6 +163,7 @@ namespace FourSquareGame
 
             int rowSel = (y / 33) - 1;
             int colSel = x / 33;
+            int iSel = 0;
 
             for (int i = height - 1; i >= 0; i--)
             {
@@ -155,25 +173,38 @@ namespace FourSquareGame
                     if(Player1)
                     {
                         grid[i,colSel].setCoinBlue();
+                        iSel = i;
                         break;
                     }                        
                     else
                     {
                         grid[i,colSel].setCoinRed();
+                        iSel = i;
                         break;
                     }                      
 
                 }
-            }
+            }            
 
-            if(isGameOver())
+            doAnimation(colSel, 0, colSel, iSel);
+
+            
+           if(isGameOver())
             {
                 imgGame.IsEnabled = false;
-                lblMessage.Content = "ISWIN";
+                if(Player1)
+                {
+                    lblMessage.Content = "PLAYER 1 HAS WON";
+                }
+                else
+                {
+                    lblMessage.Content = "PLAYER 2 HAS WON";
+                }
+                
             }
 
             changePlayer();
-            drawBoard();
+            //drawBoard();
         }
 
         private void imgGame_MouseMove(object sender, MouseEventArgs e)
@@ -305,12 +336,133 @@ namespace FourSquareGame
             return false;
         }
 
+        private void btnReset_Click(object sender, RoutedEventArgs e)
+        {
+            isWin = false;
+            getFirstPlayer();
+            makeEmptyBoard();
+            drawBoard();
+            imgGame.IsEnabled = true;
+        }
+
         int getPlayer()
         {
             if (Player1)
                 return 0;
             else
                 return 1;
+        }
+
+        //do the coin animation
+        public void doAnimation(int startIndex1, int endIndex1, int startIndex2, int endIndex2)
+        {
+            int coinSize =  35;
+            SolidColorBrush bluBrush;
+
+            if (Player1)
+            {
+                bluBrush = new SolidColorBrush(Color.FromRgb(0, 0, 255));
+            }
+            else
+            {
+                bluBrush = new SolidColorBrush(Color.FromRgb(255, 0, 0));
+            }
+
+            Ellipse ell1 = new Ellipse();
+            ell1.Height = coinSize;
+            ell1.Width = coinSize;
+            ell1.Fill = bluBrush;
+
+
+            cnv1.Children.Add(ell1);
+
+            ell1.RenderTransform = animatedTranslateTransform;
+
+            ///*start
+            // Create the animation path.
+            PathGeometry animationPath = new PathGeometry();
+            PathFigure pFigure = new PathFigure();
+
+            PolyBezierSegment pBezierSegment = new PolyBezierSegment();           
+
+            Point start = new Point(startIndex1 * 33, endIndex1 * 33);
+            Point end =   new Point(startIndex2 * 33, (endIndex2 + 1) * 33);
+
+            pFigure.StartPoint = start;
+            pFigure.Segments.Add(pBezierSegment);          
+
+            Console.WriteLine("Point start: " + start + " Point end: " + end);
+            LoadPathPoints(pBezierSegment, start, end);            
+            animationPath.Figures.Add(pFigure);
+
+            // Freeze the PathGeometry for performance benefits.
+            animationPath.Freeze();
+            // Create a DoubleAnimationUsingPath to move the
+            // rectangle horizontally along the path by animating 
+            // its TranslateTransform.
+            DoubleAnimationUsingPath translateXAnimation =
+                new DoubleAnimationUsingPath();
+            translateXAnimation.PathGeometry = animationPath;
+            translateXAnimation.Duration = TimeSpan.FromSeconds(2);
+
+            // Set the Source property to X. This makes
+            // the animation generate horizontal offset values from
+            // the path information. 
+            translateXAnimation.Source = PathAnimationSource.X;
+
+            // Set the animation to target the X property
+            // of the TranslateTransform named "AnimatedTranslateTransform".
+            Storyboard.SetTargetName(translateXAnimation, "AnimatedTranslateTransform");
+            Storyboard.SetTargetProperty(translateXAnimation,
+                new PropertyPath(TranslateTransform.XProperty));
+            // Create a DoubleAnimationUsingPath to move the
+            // rectangle vertically along the path by animating 
+            // its TranslateTransform.
+            DoubleAnimationUsingPath translateYAnimation =
+                new DoubleAnimationUsingPath();
+            translateYAnimation.PathGeometry = animationPath;
+            translateYAnimation.Duration = TimeSpan.FromSeconds(2);
+
+            // Set the Source property to Y. This makes
+            // the animation generate vertical offset values from
+            // the path information. 
+            translateYAnimation.Source = PathAnimationSource.Y;
+
+            // Set the animation to target the Y property
+            // of the TranslateTransform named "AnimatedTranslateTransform".
+            Storyboard.SetTargetName(translateYAnimation, "AnimatedTranslateTransform");
+            Storyboard.SetTargetProperty(translateYAnimation,
+                new PropertyPath(TranslateTransform.YProperty));
+
+            // Create a Storyboard to contain and apply the animations.
+            pathAnimationStoryboard = new Storyboard();
+
+            pathAnimationStoryboard.Children.Add(translateXAnimation);
+            pathAnimationStoryboard.Children.Add(translateYAnimation);
+            // Start the animations.           
+            pathAnimationStoryboard.Completed += new EventHandler(Story_Completed);
+            pathAnimationStoryboard.Begin(cnv1, true);
+        }
+
+        private void Story_Completed(object sender, EventArgs e)
+        {
+            cnv1.Children.Clear();
+            drawBoard();            
+        }
+
+        private void LoadPathPoints(PolyBezierSegment pBezierSegment, Point start, Point end)
+        {
+            double incrx = (end.X - start.X) / 5;
+            double incry = (end.Y - start.Y) / 5;
+            int i;
+            double x, y;
+            x = start.X; y = start.Y;
+            for (i = 0; i < 6; i++)
+            {
+                pBezierSegment.Points.Add(new Point(x, y));
+                x += incrx;
+                y += incry;
+            }
         }
     }
 
