@@ -247,9 +247,9 @@ namespace FourSquareGame
         bool isGameOver()
         {
             // horizontalCheck 
-            for (int j = 0; j < height - 3; j++)
+            for (int j = 0; j < width - 3; j++)
             {
-                for (int i = 0; i < width; i++)
+                for (int i = 0; i < height; i++)
                 {
                     if (grid[i,j].getCoin().getColor() == getPlayer() &&
                         grid[i,j + 1].getCoin().getColor() == getPlayer() &&
@@ -261,9 +261,9 @@ namespace FourSquareGame
                 }
             }
             // verticalCheck
-            for (int i = 0; i < width - 3; i++)
+            for (int i = 0; i < height - 3; i++)
             {
-                for (int j = 0; j < height; j++)
+                for (int j = 0; j < width; j++)
                 {                    
                     if (grid[i, j].getCoin().getColor() == getPlayer() &&
                         grid[i + 1, j].getCoin().getColor() == getPlayer() &&
@@ -275,9 +275,9 @@ namespace FourSquareGame
                 }
             }
             // ascendingDiagonalCheck 
-            for (int i = 3; i < width; i++)
+            for (int i = 3; i < height; i++)
             {
-                for (int j = 0; j < height - 3; j++)
+                for (int j = 0; j < width - 3; j++)
                 {                    
                     if (grid[i, j].getCoin().getColor() == getPlayer() &&
                        grid[i - 1, j + 1].getCoin().getColor() == getPlayer() &&
@@ -289,9 +289,9 @@ namespace FourSquareGame
                 }
             }
             // descendingDiagonalCheck
-            for (int i = 3; i < width; i++)
+            for (int i = 3; i < height; i++)
             {
-                for (int j = 3; j < height; j++)
+                for (int j = 3; j < width; j++)
                 {     
                     if (grid[i, j].getCoin().getColor() == getPlayer() &&
                        grid[i - 1, j - 1].getCoin().getColor() == getPlayer() &&
@@ -323,7 +323,7 @@ namespace FourSquareGame
         public Cell()
         {
             //create a empty cell
-            _c = new Coin(0);
+            _c = new Coin(2);
             _Empty = true;
         }
 
