@@ -23,11 +23,11 @@ namespace FourSquareGame
         private Boolean isWin = true;
         private Boolean Player1 = false;
         private static int height = 6, width = 7;
-        private Cell[,]  grid = new Cell[width,height];
+        private Cell[,]  grid = new Cell[height,width];
 
         public MainWindow()
         {
-            InitializeComponent();
+            InitializeComponent();            
         }
 
         private void btnStart_Click(object sender, RoutedEventArgs e)
@@ -35,6 +35,78 @@ namespace FourSquareGame
             isWin = false;
             getFirstPlayer();
             makeEmptyBoard();
+            drawBoard();
+        }
+
+        void drawBoard()
+        {
+            Pen[] penArray = new Pen[3];
+            penArray[0] = new Pen(Brushes.Black, 1);
+            penArray[1] = new Pen(Brushes.Black, 1);
+            penArray[2] = new Pen(Brushes.Black, 2);
+
+
+            Brush[] brushArray = new Brush[3];
+            brushArray[1] = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0)); //red
+            brushArray[0] = new SolidColorBrush(Color.FromArgb(255, 0, 0, 255)); //blue
+            brushArray[2] = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
+
+
+            DrawingVisual vis = new DrawingVisual();
+            DrawingContext dc = vis.RenderOpen();
+
+            //draw the square
+            int gapx = 0, gapy = 46, coinSize = 46;
+            Brush b = new SolidColorBrush();
+            Pen p = new Pen();           
+
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    p = penArray[2];
+                    b = brushArray[2];
+                    dc.DrawRectangle(b, p, new Rect(gapx, gapy, coinSize, coinSize));                    
+                    gapx += coinSize;
+                }
+                gapy += coinSize;
+                gapx = 0;
+            }            
+
+            //draw the ellpise
+            gapx = 0; gapy = coinSize = 46;
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    //if grid is not empty
+                    if (!grid[i,j].isEmpty())
+                    {
+                        //if it is first player
+                        if (grid[i,j].getCoin().getColor() == 0)
+                        {
+                            p = penArray[2];
+                            b = brushArray[0];                            
+                            dc.DrawEllipse(b, p, new Point(gapx + coinSize / 2, gapy + coinSize / 2), coinSize / 2, coinSize / 2);                            
+                        }
+                        else
+                        {
+                            p = penArray[2];
+                            b = brushArray[1];
+                            dc.DrawEllipse(b, p, new Point(gapx + coinSize / 2, gapy + coinSize / 2), coinSize / 2, coinSize / 2);
+                        }
+                    }
+                    
+                    gapx += coinSize;
+                }
+                gapy += coinSize;
+                gapx = 0;
+            }           
+
+            dc.Close();
+            RenderTargetBitmap bmp = new RenderTargetBitmap(1384, 1280, 300, 300, PixelFormats.Pbgra32);
+            bmp.Render(vis);
+            imgGame.Source = bmp;
         }
 
         void changePlayer()
@@ -60,17 +132,185 @@ namespace FourSquareGame
             {
                 Player1 = false;
             }
+        }        
+
+        private void imgGame_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var point = e.GetPosition(imgGame);
+
+            int x, y;
+
+            x = (int)point.X;
+            y = (int)point.Y;
+
+
+            int rowSel = (y / 33) - 1;
+            int colSel = x / 33;
+
+            for (int i = height - 1; i >= 0; i--)
+            {
+                
+                if(grid[i,colSel].isEmpty())
+                {
+                    if(Player1)
+                    {
+                        grid[i,colSel].setCoinBlue();
+                        break;
+                    }                        
+                    else
+                    {
+                        grid[i,colSel].setCoinRed();
+                        break;
+                    }                      
+
+                }
+            }
+
+            if(isGameOver())
+            {
+                imgGame.IsEnabled = false;
+                lblMessage.Content = "ISWIN";
+            }
+
+            changePlayer();
+            drawBoard();
+        }
+
+        private void imgGame_MouseMove(object sender, MouseEventArgs e)
+        {
+            var point = e.GetPosition(imgGame);
+
+            int x, y;
+
+            x = (int)point.X;
+            y = (int)point.Y;
+
+
+            int rowSel = (y / 33) - 1;
+            int colSel = x / 33;
+
+            if(x > 0 && x < 231 && y > 33 && y < 198 )
+            {
+                int gapx = colSel * 46;
+
+                lblMessage.Content = rowSel.ToString() + " " + colSel.ToString() + " " + gapx.ToString();
+
+                Pen[] penArray = new Pen[2];
+                penArray[0] = new Pen(Brushes.Black, 1);
+                penArray[1] = new Pen(Brushes.Black, 1);
+
+                Brush[] brushArray = new Brush[2];
+                brushArray[1] = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0)); //red
+                brushArray[0] = new SolidColorBrush(Color.FromArgb(255, 0, 0, 255)); //blue
+
+                DrawingVisual vis = new DrawingVisual();
+                DrawingContext dc = vis.RenderOpen();
+
+                int coinSize = 46, gapy = 23;
+
+
+                Brush b = new SolidColorBrush();
+                Pen p = new Pen();
+
+                if (Player1)
+                {
+                    p = penArray[1];
+                    b = brushArray[0];
+                    dc.DrawEllipse(b, p, new Point(gapx + coinSize / 2, gapy), coinSize / 2, coinSize / 2);
+                }
+                else
+                {
+                    p = penArray[1];
+                    b = brushArray[1];
+                    dc.DrawEllipse(b, p, new Point(gapx + coinSize / 2, gapy), coinSize / 2, coinSize / 2);
+                }
+
+                dc.Close();
+                RenderTargetBitmap bmp = new RenderTargetBitmap(1384, 1280, 300, 300, PixelFormats.Pbgra32);
+                bmp.Render(vis);
+                imgGame2.Source = bmp;
+            }
+            
         }
 
         void makeEmptyBoard()
         {
-            for (int i = 0; i < width; i++)
+            for (int i = 0; i < height; i++)
             {
-                for (int j = 0; j < height; j++)
+                for (int j = 0; j < width; j++)
                 {
                     grid[i, j] = new Cell();
                 }
             }
+        }
+
+        bool isGameOver()
+        {
+            // horizontalCheck 
+            for (int j = 0; j < height - 3; j++)
+            {
+                for (int i = 0; i < width; i++)
+                {
+                    if (grid[i,j].getCoin().getColor() == getPlayer() &&
+                        grid[i,j + 1].getCoin().getColor() == getPlayer() &&
+                        grid[i,j + 2].getCoin().getColor() == getPlayer() &&
+                        grid[i,j + 3].getCoin().getColor() == getPlayer())
+                    {
+                        return true;
+                    }
+                }
+            }
+            // verticalCheck
+            for (int i = 0; i < width - 3; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {                    
+                    if (grid[i, j].getCoin().getColor() == getPlayer() &&
+                        grid[i + 1, j].getCoin().getColor() == getPlayer() &&
+                        grid[i + 2, j].getCoin().getColor() == getPlayer() &&
+                        grid[i + 3, j].getCoin().getColor() == getPlayer())
+                    {
+                        return true;
+                    }
+                }
+            }
+            // ascendingDiagonalCheck 
+            for (int i = 3; i < width; i++)
+            {
+                for (int j = 0; j < height - 3; j++)
+                {                    
+                    if (grid[i, j].getCoin().getColor() == getPlayer() &&
+                       grid[i - 1, j + 1].getCoin().getColor() == getPlayer() &&
+                       grid[i - 2, j + 2].getCoin().getColor() == getPlayer() &&
+                       grid[i - 3, j + 3].getCoin().getColor() == getPlayer())
+                    {
+                        return true;
+                    }
+                }
+            }
+            // descendingDiagonalCheck
+            for (int i = 3; i < width; i++)
+            {
+                for (int j = 3; j < height; j++)
+                {     
+                    if (grid[i, j].getCoin().getColor() == getPlayer() &&
+                       grid[i - 1, j - 1].getCoin().getColor() == getPlayer() &&
+                       grid[i - 2, j - 2].getCoin().getColor() == getPlayer() &&
+                       grid[i - 3, j - 3].getCoin().getColor() == getPlayer())
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        int getPlayer()
+        {
+            if (Player1)
+                return 0;
+            else
+                return 1;
         }
     }
 
