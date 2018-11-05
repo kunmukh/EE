@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Media.Animation;
+using System.Media;
 
 
 namespace FourSquareGame
@@ -28,6 +29,7 @@ namespace FourSquareGame
         private Cell[,]  grid = new Cell[height,width];
         private TranslateTransform animatedTranslateTransform;
         Storyboard pathAnimationStoryboard;
+        System.Media.SoundPlayer myPlayerW;
 
         public MainWindow()
         {
@@ -129,10 +131,12 @@ namespace FourSquareGame
             if(Player1)
             {
                 Player1 = false;
+                lblMessage.Content = "Player 2 Turn";
             }
             else
             {
                 Player1 = true;
+                lblMessage.Content = "Player 1 Turn";
             }
         }
 
@@ -160,51 +164,64 @@ namespace FourSquareGame
             x = (int)point.X;
             y = (int)point.Y;
 
-
-            int rowSel = (y / 33) - 1;
-            int colSel = x / 33;
-            int iSel = 0;
-
-            for (int i = height - 1; i >= 0; i--)
+            if (x > 0 && x < 231 && y > 33 && y < 231)
             {
-                
-                if(grid[i,colSel].isEmpty())
+                //play sound
+                var myPlayer = new System.Media.SoundPlayer();
+                myPlayer.SoundLocation = @"C:\Users\kunmu\Documents\Kunal\UE courses\EE-356\EE-356\FourSquare\FourSquareGame\coin.wav";
+                myPlayer.Play();
+
+                //seelct the appriopiate row and col
+                int rowSel = (y / 33) - 1;
+                int colSel = x / 33;
+                int iSel = 0;
+
+                for (int i = height - 1; i >= 0; i--)
                 {
-                    if(Player1)
+
+                    if (grid[i, colSel].isEmpty())
                     {
-                        grid[i,colSel].setCoinBlue();
-                        iSel = i;
-                        break;
-                    }                        
+                        if (Player1)
+                        {
+                            grid[i, colSel].setCoinBlue();
+                            iSel = i;
+                            break;
+                        }
+                        else
+                        {
+                            grid[i, colSel].setCoinRed();
+                            iSel = i;
+                            break;
+                        }
+
+                    }
+                }
+
+                doAnimation(colSel, 0, colSel, iSel);
+
+
+                if (isGameOver())
+                {
+                    imgGame.IsEnabled = false;
+                    if (Player1)
+                    {
+                        lblMessage.Content = "PLAYER 1 HAS WON";
+                    }
                     else
                     {
-                        grid[i,colSel].setCoinRed();
-                        iSel = i;
-                        break;
-                    }                      
+                        lblMessage.Content = "PLAYER 2 HAS WON";
+                    }
 
-                }
-            }            
-
-            doAnimation(colSel, 0, colSel, iSel);
-
-            
-           if(isGameOver())
-            {
-                imgGame.IsEnabled = false;
-                if(Player1)
-                {
-                    lblMessage.Content = "PLAYER 1 HAS WON";
+                    //play sound
+                    myPlayerW = new System.Media.SoundPlayer();
+                    myPlayerW.SoundLocation = @"C:\Users\kunmu\Documents\Kunal\UE courses\EE-356\EE-356\FourSquare\FourSquareGame\win.wav";
+                    myPlayerW.Play();
                 }
                 else
                 {
-                    lblMessage.Content = "PLAYER 2 HAS WON";
+                    changePlayer();
                 }
-                
             }
-
-            changePlayer();
-            //drawBoard();
         }
 
         private void imgGame_MouseMove(object sender, MouseEventArgs e)
@@ -224,7 +241,7 @@ namespace FourSquareGame
             {
                 int gapx = colSel * 46;
 
-                lblMessage.Content = rowSel.ToString() + " " + colSel.ToString() + " " + gapx.ToString();
+                //lblMessage.Content = rowSel.ToString() + " " + colSel.ToString() + " " + gapx.ToString();
 
                 Pen[] penArray = new Pen[2];
                 penArray[0] = new Pen(Brushes.Black, 1);
@@ -338,6 +355,7 @@ namespace FourSquareGame
 
         private void btnReset_Click(object sender, RoutedEventArgs e)
         {
+            myPlayerW.Stop();
             isWin = false;
             getFirstPlayer();
             makeEmptyBoard();
@@ -403,7 +421,7 @@ namespace FourSquareGame
             DoubleAnimationUsingPath translateXAnimation =
                 new DoubleAnimationUsingPath();
             translateXAnimation.PathGeometry = animationPath;
-            translateXAnimation.Duration = TimeSpan.FromSeconds(2);
+            translateXAnimation.Duration = TimeSpan.FromSeconds(1);
 
             // Set the Source property to X. This makes
             // the animation generate horizontal offset values from
@@ -421,7 +439,7 @@ namespace FourSquareGame
             DoubleAnimationUsingPath translateYAnimation =
                 new DoubleAnimationUsingPath();
             translateYAnimation.PathGeometry = animationPath;
-            translateYAnimation.Duration = TimeSpan.FromSeconds(2);
+            translateYAnimation.Duration = TimeSpan.FromSeconds(1);
 
             // Set the Source property to Y. This makes
             // the animation generate vertical offset values from
