@@ -53,6 +53,155 @@ namespace FourSquareGame
             getFirstPlayer();
             makeEmptyBoard();
             drawBoard();
+            btnStart.IsEnabled = false;
+        }
+
+        private void btnReset_Click(object sender, RoutedEventArgs e)
+        {           
+            isWin = false;
+            getFirstPlayer();
+            makeEmptyBoard();
+            drawBoard();
+            imgGame.IsEnabled = true;
+            btnStart.IsEnabled = true;
+        }
+
+        private void imgGame_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            cnv1.Children.Clear();
+
+            var point = e.GetPosition(imgGame);
+
+            int x, y;
+
+            x = (int)point.X;
+            y = (int)point.Y;
+
+            if (x > 0 && x < 231 && y > 33 && y < 231)
+            {
+                //play sound
+                var myPlayer = new System.Media.SoundPlayer();
+                myPlayer.SoundLocation = @"C:\Users\kunmu\Documents\Kunal\UE courses\EE-356\EE-356\FourSquare\FourSquareGame\coin.wav";
+                myPlayer.Play();
+
+                //seelct the appriopiate row and col
+                int rowSel = (y / 33) - 1;
+                int colSel = x / 33;
+                int iSel = 0;
+
+                for (int i = height - 1; i >= 0; i--)
+                {
+
+                    if (grid[i, colSel].isEmpty())
+                    {
+                        if (Player1)
+                        {
+                            grid[i, colSel].setCoinBlue();
+                            iSel = i;
+                            break;
+                        }
+                        else
+                        {
+                            grid[i, colSel].setCoinRed();
+                            iSel = i;
+                            break;
+                        }
+
+                    }
+                }
+
+                doAnimation(colSel, 0, colSel, iSel);
+
+
+                if (isGameOver())
+                {
+                    imgGame.IsEnabled = false;
+                    if (Player1)
+                    {
+                        lblMessage.Content = "PLAYER 1 HAS WON";
+                    }
+                    else
+                    {
+                        lblMessage.Content = "PLAYER 2 HAS WON";
+                    }
+
+                    //play sound
+                    myPlayerW = new System.Media.SoundPlayer();
+                    myPlayerW.SoundLocation = @"C:\Users\kunmu\Documents\Kunal\UE courses\EE-356\EE-356\FourSquare\FourSquareGame\win.wav";
+                    myPlayerW.Play();
+                }
+                else if (isGameDraw())
+                {
+                    imgGame.IsEnabled = false;
+                    lblMessage.Content = "THE GAME HAS DRAWN";
+
+                    //play sound
+                    myPlayerW = new System.Media.SoundPlayer();
+                    myPlayerW.SoundLocation = @"C:\Users\kunmu\Documents\Kunal\UE courses\EE-356\EE-356\FourSquare\FourSquareGame\win.wav";
+                    myPlayerW.Play();
+                }
+                else
+                {
+                    changePlayer();
+                }
+            }
+        }
+
+        private void imgGame_MouseMove(object sender, MouseEventArgs e)
+        {
+            var point = e.GetPosition(imgGame);
+
+            int x, y;
+
+            x = (int)point.X;
+            y = (int)point.Y;
+
+
+            int rowSel = (y / 33) - 1;
+            int colSel = x / 33;
+
+            if (x > 0 && x < 231 && y > 33 && y < 198)
+            {
+                int gapx = colSel * 46;
+
+                //lblMessage.Content = rowSel.ToString() + " " + colSel.ToString() + " " + gapx.ToString();
+
+                Pen[] penArray = new Pen[2];
+                penArray[0] = new Pen(Brushes.Black, 1);
+                penArray[1] = new Pen(Brushes.Black, 1);
+
+                Brush[] brushArray = new Brush[2];
+                brushArray[1] = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0)); //red
+                brushArray[0] = new SolidColorBrush(Color.FromArgb(255, 0, 0, 255)); //blue
+
+                DrawingVisual vis = new DrawingVisual();
+                DrawingContext dc = vis.RenderOpen();
+
+                int coinSize = 46, gapy = 23;
+
+
+                Brush b = new SolidColorBrush();
+                Pen p = new Pen();
+
+                if (Player1)
+                {
+                    p = penArray[1];
+                    b = brushArray[0];
+                    dc.DrawEllipse(b, p, new Point(gapx + coinSize / 2, gapy), coinSize / 2, coinSize / 2);
+                }
+                else
+                {
+                    p = penArray[1];
+                    b = brushArray[1];
+                    dc.DrawEllipse(b, p, new Point(gapx + coinSize / 2, gapy), coinSize / 2, coinSize / 2);
+                }
+
+                dc.Close();
+                RenderTargetBitmap bmp = new RenderTargetBitmap(1384, 1280, 300, 300, PixelFormats.Pbgra32);
+                bmp.Render(vis);
+                imgGame2.Source = bmp;
+            }
+
         }
 
         void drawBoard()
@@ -146,140 +295,14 @@ namespace FourSquareGame
             if(rnd.Next(0, 100) % 2 == 0)
             {
                 Player1 = true;
+                lblMessage.Content = "Player 1 is Blue";
             }
             else
             {
                 Player1 = false;
+                lblMessage.Content = "Player 1 is Red";
             }
-        }        
-
-        private void imgGame_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            cnv1.Children.Clear();
-
-            var point = e.GetPosition(imgGame);
-
-            int x, y;
-
-            x = (int)point.X;
-            y = (int)point.Y;
-
-            if (x > 0 && x < 231 && y > 33 && y < 231)
-            {
-                //play sound
-                var myPlayer = new System.Media.SoundPlayer();
-                myPlayer.SoundLocation = @"C:\Users\kunmu\Documents\Kunal\UE courses\EE-356\EE-356\FourSquare\FourSquareGame\coin.wav";
-                myPlayer.Play();
-
-                //seelct the appriopiate row and col
-                int rowSel = (y / 33) - 1;
-                int colSel = x / 33;
-                int iSel = 0;
-
-                for (int i = height - 1; i >= 0; i--)
-                {
-
-                    if (grid[i, colSel].isEmpty())
-                    {
-                        if (Player1)
-                        {
-                            grid[i, colSel].setCoinBlue();
-                            iSel = i;
-                            break;
-                        }
-                        else
-                        {
-                            grid[i, colSel].setCoinRed();
-                            iSel = i;
-                            break;
-                        }
-
-                    }
-                }
-
-                doAnimation(colSel, 0, colSel, iSel);
-
-
-                if (isGameOver())
-                {
-                    imgGame.IsEnabled = false;
-                    if (Player1)
-                    {
-                        lblMessage.Content = "PLAYER 1 HAS WON";
-                    }
-                    else
-                    {
-                        lblMessage.Content = "PLAYER 2 HAS WON";
-                    }
-
-                    //play sound
-                    myPlayerW = new System.Media.SoundPlayer();
-                    myPlayerW.SoundLocation = @"C:\Users\kunmu\Documents\Kunal\UE courses\EE-356\EE-356\FourSquare\FourSquareGame\win.wav";
-                    myPlayerW.Play();
-                }
-                else
-                {
-                    changePlayer();
-                }
-            }
-        }
-
-        private void imgGame_MouseMove(object sender, MouseEventArgs e)
-        {
-            var point = e.GetPosition(imgGame);
-
-            int x, y;
-
-            x = (int)point.X;
-            y = (int)point.Y;
-
-
-            int rowSel = (y / 33) - 1;
-            int colSel = x / 33;
-
-            if(x > 0 && x < 231 && y > 33 && y < 198 )
-            {
-                int gapx = colSel * 46;
-
-                //lblMessage.Content = rowSel.ToString() + " " + colSel.ToString() + " " + gapx.ToString();
-
-                Pen[] penArray = new Pen[2];
-                penArray[0] = new Pen(Brushes.Black, 1);
-                penArray[1] = new Pen(Brushes.Black, 1);
-
-                Brush[] brushArray = new Brush[2];
-                brushArray[1] = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0)); //red
-                brushArray[0] = new SolidColorBrush(Color.FromArgb(255, 0, 0, 255)); //blue
-
-                DrawingVisual vis = new DrawingVisual();
-                DrawingContext dc = vis.RenderOpen();
-
-                int coinSize = 46, gapy = 23;
-
-
-                Brush b = new SolidColorBrush();
-                Pen p = new Pen();
-
-                if (Player1)
-                {
-                    p = penArray[1];
-                    b = brushArray[0];
-                    dc.DrawEllipse(b, p, new Point(gapx + coinSize / 2, gapy), coinSize / 2, coinSize / 2);
-                }
-                else
-                {
-                    p = penArray[1];
-                    b = brushArray[1];
-                    dc.DrawEllipse(b, p, new Point(gapx + coinSize / 2, gapy), coinSize / 2, coinSize / 2);
-                }
-
-                dc.Close();
-                RenderTargetBitmap bmp = new RenderTargetBitmap(1384, 1280, 300, 300, PixelFormats.Pbgra32);
-                bmp.Render(vis);
-                imgGame2.Source = bmp;
-            }
-            
-        }
+        }                
 
         void makeEmptyBoard()
         {
@@ -353,15 +376,21 @@ namespace FourSquareGame
             return false;
         }
 
-        private void btnReset_Click(object sender, RoutedEventArgs e)
+        bool isGameDraw()
         {
-            myPlayerW.Stop();
-            isWin = false;
-            getFirstPlayer();
-            makeEmptyBoard();
-            drawBoard();
-            imgGame.IsEnabled = true;
-        }
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    if (grid[i, j].isEmpty())
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }        
 
         int getPlayer()
         {
