@@ -90,15 +90,15 @@ namespace Server
 
                     if (CurrentlyInProgressClientNumbers.Count == 1)
                     {
-                        sw[clientcount].WriteLine(welcome + " You are player 1. Waiting for Player 2 to connect"); //Stream Reader and Writer take away some of the overhead of keeping track of Message size. 
+                        sw[clientcount].WriteLine(welcome + "\nSystem>> You are player 1. Waiting for Player 2 to connect"); //Stream Reader and Writer take away some of the overhead of keeping track of Message size. 
                         sw[clientcount].Flush();               // By Default WriteLine and ReadLine use Line Feed to delimit the messages
                     }
                     else
                     {
-                        sw[clientcount].WriteLine(welcome + " You are player 2. Game Begins"); 
+                        sw[clientcount].WriteLine(welcome + "\nSystem>> You are player 2. Game Begins"); 
                         sw[clientcount].Flush();               // By Default WriteLine and ReadLine use Line Feed 
 
-                        sw[CurrentlyInProgressClientNumbers.First()].WriteLine("Player 2 has connected. Game Begins");
+                        sw[CurrentlyInProgressClientNumbers.First()].WriteLine("\nSystem>> Player 2 has connected. Game Begins");
                         sw[CurrentlyInProgressClientNumbers.First()].Flush();
 
                     }
@@ -149,15 +149,15 @@ namespace Server
                                     for (int k = 0; k < CurrentlyInLineClientNumbers.Count; k++)
                                     {
                                         int client2Num = CurrentlyInLineClientNumbers[k];
-                                        InsertText("Sorry you are in a Line");
+                                        InsertText("System>> Sorry you are in a Line");
                                         sw[client2Num].WriteLine(inputStream);
                                         sw[client2Num].Flush();
 
                                     }
 
                                     //send message back to player 1
-                                    InsertText(". Player 2 has not connected yet. So, cannot send message.");
-                                    sw[clientnum].WriteLine(inputStream + " Player 2 has not connected yet.");
+                                    InsertText("\nSystem>> Player 2 has not connected yet. So, cannot send message.");
+                                    sw[clientnum].WriteLine(inputStream + "\nSystem>> Player 2 has not connected yet.");
                                     sw[clientnum].Flush();
                                 }
                                 else //player 2 has also connected
@@ -166,8 +166,8 @@ namespace Server
                                     for (int k = 0; k < CurrentlyInLineClientNumbers.Count; k++)
                                     {
                                         int client2Num = CurrentlyInLineClientNumbers[k];
-                                        InsertText(" Sorry you are in a Line");
-                                        sw[client2Num].WriteLine(inputStream);
+                                        InsertText("System>> Sorry you are in a Line");
+                                        sw[client2Num].WriteLine(inputStream + "\nSystem>> Sorry you are in a Line");
                                         sw[client2Num].Flush();
 
                                     }
@@ -189,7 +189,7 @@ namespace Server
                             if (clientnum == CurrentlyInLineClientNumbers[j])
                             {
                                 //send message back to waiting player
-                                InsertText(" You cannot send message since you are still waiting");
+                                InsertText("System>> You cannot send message since you are still waiting");
                                 sw[clientnum].WriteLine(inputStream);
                                 sw[clientnum].Flush();
                             }
@@ -212,16 +212,16 @@ namespace Server
 
         private void button1_Click(object sender, RoutedEventArgs e)
         {
-            InsertText(">> " + textBox1.Text); 
+            InsertText("6System>> " + textBox1.Text); 
 
             foreach (int t in CurrentlyInLineClientNumbers)
             {
-                sw[t].WriteLine(">> " + textBox1.Text);
+                sw[t].WriteLine("System>> " + textBox1.Text);
                 sw[t].Flush();
             }
             foreach (int t in CurrentlyInProgressClientNumbers)
             {
-                sw[t].WriteLine(">> " + textBox1.Text);
+                sw[t].WriteLine("System>> " + textBox1.Text);
                 sw[t].Flush();
             }
             textBox1.Text = "";
