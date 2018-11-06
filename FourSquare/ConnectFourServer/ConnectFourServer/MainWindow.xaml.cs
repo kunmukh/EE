@@ -482,7 +482,7 @@ namespace ConnectFourServer
                                     //only 1 player has connected
                                     if (CurrentlyInProgressClientNumbers.Count == 1)
                                     {
-                                        //send message back to player 1
+                                        //send message back to player 1 
                                         serverMessage = "6" + server + "Player 2 has not connected yet. So, you cannot send message.";
                                         InsertText(serverMessage);
                                         InsertText(clientMessage);
