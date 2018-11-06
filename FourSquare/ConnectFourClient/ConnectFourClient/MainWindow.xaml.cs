@@ -187,7 +187,7 @@ namespace ConnectFourClient
                     if (inputStream.StartsWith("0"))
                     {
                         //play sound
-                        //var myPlayer = new System.Media.SoundPlayer();
+                        //var myPlayer = new System.Media.SoundPlayer(); 
                         //myPlayer.SoundLocation = @"C:\Users\kunmu\Documents\Kunal\UE courses\EE-356\EE-356\FourSquare\FourSquareGame\coin.wav";
                         //myPlayer.Play();
 
