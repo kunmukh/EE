@@ -557,7 +557,7 @@ namespace ConnectFourServer
                                 for (int i = height - 1; i >= 0; i--)
                                 {
                                     if (grid[i, colSel].isEmpty() && !found && !isGameOver()
-                                        && !isGameDraw())
+                                        && !isGameDraw() && CurrentlyInProgressClientNumbers.Count == 2)
                                     {
                                         if (Player1)
                                         {
@@ -594,6 +594,7 @@ namespace ConnectFourServer
                                                 message = iSel.ToString() + "\n" + colSel.ToString() + "\n" + "blue";
                                             else
                                                 message = iSel.ToString() + "\n" + colSel.ToString() + "\n" + "red";
+
                                             sw[CurrentlyInProgressClientNumbers.ElementAt(0)].WriteLine("Move\n" + message);
                                             sw[CurrentlyInProgressClientNumbers.ElementAt(1)].WriteLine("Move\n" + message);
                                             sw[CurrentlyInProgressClientNumbers.ElementAt(0)].Flush();
@@ -608,6 +609,19 @@ namespace ConnectFourServer
                                         sw[CurrentlyInProgressClientNumbers.ElementAt(1)].WriteLine("Server\n" + message);
                                         sw[CurrentlyInProgressClientNumbers.ElementAt(0)].Flush();
                                         sw[CurrentlyInProgressClientNumbers.ElementAt(1)].Flush();
+
+                                        if (found)
+                                        {
+                                            if (Player1)
+                                                message = iSel.ToString() + "\n" + colSel.ToString() + "\n" + "blue";
+                                            else
+                                                message = iSel.ToString() + "\n" + colSel.ToString() + "\n" + "red";
+
+                                            sw[CurrentlyInProgressClientNumbers.ElementAt(0)].WriteLine("Move\n" + message);
+                                            sw[CurrentlyInProgressClientNumbers.ElementAt(1)].WriteLine("Move\n" + message);
+                                            sw[CurrentlyInProgressClientNumbers.ElementAt(0)].Flush();
+                                            sw[CurrentlyInProgressClientNumbers.ElementAt(1)].Flush();
+                                        }
                                     }
                                     drawBoard();
                                 }
@@ -623,7 +637,7 @@ namespace ConnectFourServer
 
                                 }
                                 //the coin fell
-                                else if (found && !isGameDraw() && !isGameOver())
+                                else if (found && !isGameDraw() && !isGameOver() && CurrentlyInProgressClientNumbers.Count == 2)
                                 {
                                     if (Player1)
                                         message = iSel.ToString() + "\n" + colSel.ToString() + "\n" + "blue";
@@ -674,7 +688,7 @@ namespace ConnectFourServer
                                             sw[CurrentlyInProgressClientNumbers.ElementAt(0)].Flush();
                                             sw[CurrentlyInProgressClientNumbers.ElementAt(1)].Flush();
 
-                                            if (CurrentlyInLineClientNumbers.Count == 0)
+                                            if (CurrentlyInLineClientNumbers.Count != 0)
                                             {
                                                 sw[Player2Num].WriteLine("Disconnect");
                                                 sw[Player2Num].Flush();
@@ -691,7 +705,7 @@ namespace ConnectFourServer
                                             sw[CurrentlyInProgressClientNumbers.ElementAt(0)].Flush();
                                             sw[CurrentlyInProgressClientNumbers.ElementAt(1)].Flush();
 
-                                            if (CurrentlyInLineClientNumbers.Count == 0)
+                                            if (CurrentlyInLineClientNumbers.Count != 0)
                                             {
                                                 sw[Player1Num].WriteLine("Disconnect");
                                                 sw[Player1Num].Flush();
@@ -795,6 +809,14 @@ namespace ConnectFourServer
                             CurrentlyInProgressClientNumbers.Add(CurrentlyInLineClientNumbers.First());
                             CurrentlyInLineClientNumbers.Remove(CurrentlyInLineClientNumbers.First());
 
+                            int count = 1;
+                            foreach (int t in CurrentlyInLineClientNumbers)
+                            {      
+                                sw[t].WriteLine(server + "\n" + "A game has begun, but currently you are " + count + " in line.");
+                                sw[t].Flush();
+                                count++;
+                            }                           
+
                             initializeGame();
                         }
 
@@ -805,6 +827,7 @@ namespace ConnectFourServer
                         }
                     }
                 }
+
                 for (int j = 0; j < CurrentlyInLineClientNumbers.Count; j++)
                 {
                     if (threadnum == CurrentlyInLineClientNumbers[j])

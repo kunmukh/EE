@@ -277,9 +277,9 @@ namespace ConnectFourClient
                     if (inputStream.Contains("Move"))
                     {
                         //play sound
-                        //var myPlayer = new System.Media.SoundPlayer(); 
-                        //myPlayer.SoundLocation = @"C:\Users\kunmu\Documents\Kunal\UE courses\EE-356\EE-356\FourSquare\FourSquareGame\coin.wav";
-                        //myPlayer.Play();
+                        var myPlayer = new System.Media.SoundPlayer(); 
+                        myPlayer.SoundLocation = @"C:\Users\kunmu\Documents\Kunal\UE courses\EE-356\EE-356\FourSquare\FourSquareGame\coin.wav";
+                        myPlayer.Play();
 
                         string iSels= sr.ReadLine();
                         string colSels = sr.ReadLine();
@@ -311,13 +311,14 @@ namespace ConnectFourClient
                         }
 
                         makeEmptyBoard();
+                        drawBoard();
                             
                     }
                     if (inputStream.Contains("Disconnect"))
                     {                        
                         sr.Close();
                         sw.Close();
-                        changeStartBtn(true);
+                        changeStartBtn(false);
                         changeChatBtn(false);
                         changeImg(false);
                     }
