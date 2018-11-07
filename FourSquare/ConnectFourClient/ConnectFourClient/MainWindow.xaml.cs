@@ -41,6 +41,9 @@ namespace ConnectFourClient
         Storyboard pathAnimationStoryboard;
         System.Media.SoundPlayer myPlayerW;      
         delegate void SetBitMapCallbCk(RenderTargetBitmap bmp);
+        delegate void SetStartBtn(Boolean b);
+        delegate void SetChatBtn(Boolean b);
+        delegate void SetImg(Boolean b);
 
         public MainWindow()
         {
@@ -83,7 +86,7 @@ namespace ConnectFourClient
 
             makeEmptyBoard();
             drawBoard();
-            btnStart.IsEnabled = false;
+            changeStartBtn(false);
         }
 
         private void InsertBitMap(RenderTargetBitmap bmp)
@@ -128,6 +131,45 @@ namespace ConnectFourClient
             else
             {
                 listBox1.Dispatcher.BeginInvoke(new SetTextCallback(InsertText), text);
+            }
+        }
+
+        private void changeStartBtn(Boolean b)
+        {            
+            if (this.btnStart.Dispatcher.CheckAccess())
+            {
+                this.btnStart.IsEnabled = b;
+
+            }
+            else
+            {
+                btnStart.Dispatcher.BeginInvoke(new SetStartBtn(changeStartBtn), b);
+            }
+        }
+
+        private void changeChatBtn(Boolean b)
+        {
+            if (this.btn_Send.Dispatcher.CheckAccess())
+            {
+                this.btn_Send.IsEnabled = b;
+
+            }
+            else
+            {
+                btn_Send.Dispatcher.BeginInvoke(new SetChatBtn(changeChatBtn), b);
+            }
+        }
+
+        private void changeImg(Boolean b)
+        {
+            if (this.imgGame.Dispatcher.CheckAccess())
+            {
+                this.imgGame.IsEnabled = b;
+
+            }
+            else
+            {
+                imgGame.Dispatcher.BeginInvoke(new SetImg(changeImg), b);
             }
         }
 
@@ -225,7 +267,7 @@ namespace ConnectFourClient
                     if (inputStream.Contains("Server"))
                     {
                         string newstring = sr.ReadLine();
-                        InsertTextMessage(newstring);
+                        InsertTextMessage(newstring);                        
                     }
                     if (inputStream.Contains("Chat"))
                     {
@@ -242,8 +284,6 @@ namespace ConnectFourClient
                         string iSels= sr.ReadLine();
                         string colSels = sr.ReadLine();
                         string color = sr.ReadLine();
-
-                        InsertText(iSels + " " + colSels);
 
                         int iSel = Convert.ToInt32(iSels);
                         int colSel = Convert.ToInt32(colSels);
@@ -262,15 +302,25 @@ namespace ConnectFourClient
                         if (status.Contains("true"))
                         {
                             Player1 = true;
-                            InsertText("You are Blue");
+                            InsertText("You are Blue. And YOU START!!!!");
                         }                            
                         else
                         {
                             Player1 = false;
-                            InsertText("You are Red");
+                            InsertText("You are Red. BLUE STARTS, so PLEASE WAIT");
                         }
+
+                        makeEmptyBoard();
                             
-                    }                   
+                    }
+                    if (inputStream.Contains("Disconnect"))
+                    {                        
+                        sr.Close();
+                        sw.Close();
+                        changeStartBtn(true);
+                        changeChatBtn(false);
+                        changeImg(false);
+                    }
 
                 }
                 catch
@@ -281,7 +331,7 @@ namespace ConnectFourClient
 
             }
 
-        }
+        }        
 
         void changePlayer()
         {

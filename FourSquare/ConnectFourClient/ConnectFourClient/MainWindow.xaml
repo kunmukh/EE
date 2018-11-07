@@ -21,7 +21,7 @@
         <Image Name="imgGame" HorizontalAlignment="Left" Height="322" Margin="62,10,0,0" VerticalAlignment="Top" Width="322" OpacityMask="#FF1028BB"
                MouseLeftButtonDown="imgGame_MouseLeftButtonDown" MouseMove="imgGame_MouseMove"/>
         <Canvas Name="cnv1" HorizontalAlignment="Left" Height="322" Margin="62,10,0,0" VerticalAlignment="Top" Width="322"/>
-        <ListBox Name="listBox1" Height="197" HorizontalAlignment="Left" Margin="432,62,0,0"  VerticalAlignment="Top" Width="350" RenderTransformOrigin="0.5,0.5" Background="#FF81EE15" Foreground="#FF0276EA" />
+        <ListBox Name="listBox1" Height="197" HorizontalAlignment="Left" Margin="432,62,0,0"  VerticalAlignment="Top" Width="350" RenderTransformOrigin="0.5,0.5" Background="#FF81EE15" Foreground="#FFFC0404" FontSize="16" FontFamily="Tahoma" />
         <Button Content="Send" Height="37" HorizontalAlignment="Left" Margin="593,304,0,0" Name="btn_Send" VerticalAlignment="Top" Width="75" Click="btn_Send_Click"
                 Background="Black" 
                 FontSize="24" FontFamily="Segoe UI Semibold" Foreground="#FFF11616" BorderBrush="#FF3264D1"/>

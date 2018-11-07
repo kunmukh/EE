@@ -222,6 +222,8 @@ namespace ConnectFourServer
                 sw[CurrentlyInProgressClientNumbers[1]].Write("Player1\n" + "false");
                 sw[CurrentlyInProgressClientNumbers[0]].Flush();
                 sw[CurrentlyInProgressClientNumbers[1]].Flush();
+                Player1Num = CurrentlyInProgressClientNumbers.First();
+                Player2Num = CurrentlyInProgressClientNumbers.ElementAt(1);
             }
             else
             {                
@@ -229,18 +231,13 @@ namespace ConnectFourServer
                 sw[CurrentlyInProgressClientNumbers[1]].Write("Player1\n" + "true");
                 sw[CurrentlyInProgressClientNumbers[0]].Flush();
                 sw[CurrentlyInProgressClientNumbers[1]].Flush();
+                Player2Num = CurrentlyInProgressClientNumbers.First();
+                Player1Num = CurrentlyInProgressClientNumbers.ElementAt(1);
             }
 
-            if (rnd.Next(0, 100) % 3 == 0)
-            {
-                Player1 = false;
-                message = "Red is Starting";
-            }
-            else
-            {
-                Player1 = true;
-                message = "Blue is Starting";
-            }     
+            message = "Blue is Starting";
+            Player1 = true;
+              
 
             foreach (int t in CurrentlyInProgressClientNumbers)
             {
@@ -250,6 +247,7 @@ namespace ConnectFourServer
 
         }
 
+        //handles initial connection
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
 
@@ -259,19 +257,6 @@ namespace ConnectFourServer
             for (int i = 0; i < 5; i++)
             {
                 AvailableClientNumbers.Add(i);
-            }
-
-            if (AvailableClientNumbers.Count == 0)
-            {
-                client = newsocket.AcceptSocket();
-                NetworkStream ns = new NetworkStream(client);  //Create Network stream                
-                StreamWriter sw = new StreamWriter(ns); //create a stream writer
-
-                sw.WriteLine(server + "\n" + "You have reached Four square server. " +
-                             "Sorry the current queue is full, cannot accept connection.");
-                sw.Flush();
-
-                client.Close();
             }
 
             while (AvailableClientNumbers.Count > 0)
@@ -318,6 +303,8 @@ namespace ConnectFourServer
                         sw[CurrentlyInProgressClientNumbers.First()].WriteLine(server + "\n" + "Player 2 has connected. Game Begins");
                         sw[CurrentlyInProgressClientNumbers.First()].Flush();
 
+                        InsertTextMessage(server + "\n" + "Player 2 has connected. Game Begins");
+
                         initializeGame();
                     }
 
@@ -336,6 +323,24 @@ namespace ConnectFourServer
                     }          
                                   
                 }
+            }
+
+            if (AvailableClientNumbers.Count == 0)
+            {
+                client = newsocket.AcceptSocket();
+                NetworkStream ns = new NetworkStream(client);  //Create Network stream                
+                StreamWriter sw = new StreamWriter(ns); //create a stream writer
+
+                sw.WriteLine(server + "\n" + "You have reached Four square server. " +
+                             "Sorry the current queue is full, cannot accept connection.");
+                sw.Flush();
+
+                sw.WriteLine("Disconnect\n");
+                sw.Flush();
+
+                sw.Close();
+                ns.Close();                
+                client.Close();
             }
 
         }
@@ -474,12 +479,12 @@ namespace ConnectFourServer
 
                     if (clientMessage.Contains("disconnect"))
                     {
-                        sr[clientnum].Close();
-                        sw[clientnum].Close();
-                        ns[clientnum].Close();
-                        InsertText("Client " + clientnum + " has disconnected");
-                        KillMe(clientnum);
-                        break;
+                        //sr[clientnum].Close();
+                        //sw[clientnum].Close();
+                        //ns[clientnum].Close();
+                        //InsertText("Client " + clientnum + " has disconnected");
+                        //KillMe(clientnum);
+                        //break;
                     }
                     else
                     {
@@ -650,44 +655,89 @@ namespace ConnectFourServer
                             //chnage player and keep in playing
                             else
                             {
-                                string message;
-
-                                sw[clientnum].WriteLine("Server\n" + "Opponent has not made a move yet.");
-                                sw[clientnum].Flush();
-
-                                //game is over
-                                if (isGameOver())
+                                if(!CurrentlyInLineClientNumbers.Contains(clientnum))
                                 {
-                                    if (Player1)
+                                    string message;
+
+                                    sw[clientnum].WriteLine("Server\n" + "Opponent has not made a move yet.");
+                                    sw[clientnum].Flush();
+
+                                    //game is over
+                                    if (isGameOver())
                                     {
-                                        message = "BLUE HAS WON";
-                                        InsertTextMessage(message);
-                                        sw[CurrentlyInProgressClientNumbers.ElementAt(0)].WriteLine("Server\n" + message);
-                                        sw[CurrentlyInProgressClientNumbers.ElementAt(1)].WriteLine("Server\n" + message);
-                                        sw[CurrentlyInProgressClientNumbers.ElementAt(0)].Flush();
-                                        sw[CurrentlyInProgressClientNumbers.ElementAt(1)].Flush();
+                                        if (Player1)
+                                        {
+                                            message = "BLUE HAS WON";
+                                            InsertTextMessage(message);
+                                            sw[CurrentlyInProgressClientNumbers.ElementAt(0)].WriteLine("Server\n" + message);
+                                            sw[CurrentlyInProgressClientNumbers.ElementAt(1)].WriteLine("Server\n" + message);
+                                            sw[CurrentlyInProgressClientNumbers.ElementAt(0)].Flush();
+                                            sw[CurrentlyInProgressClientNumbers.ElementAt(1)].Flush();
+
+                                            if (CurrentlyInLineClientNumbers.Count == 0)
+                                            {
+                                                sw[Player2Num].WriteLine("Disconnect");
+                                                sw[Player2Num].Flush();
+                                                InsertText("Client " + Player2Num + " has disconnected");
+                                                KillMe(Player2Num);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            message = "RED HAS WON";
+                                            InsertTextMessage(message);
+                                            sw[CurrentlyInProgressClientNumbers.ElementAt(0)].WriteLine("Server\n" + message);
+                                            sw[CurrentlyInProgressClientNumbers.ElementAt(1)].WriteLine("Server\n" + message);
+                                            sw[CurrentlyInProgressClientNumbers.ElementAt(0)].Flush();
+                                            sw[CurrentlyInProgressClientNumbers.ElementAt(1)].Flush();
+
+                                            if (CurrentlyInLineClientNumbers.Count == 0)
+                                            {
+                                                sw[Player1Num].WriteLine("Disconnect");
+                                                sw[Player1Num].Flush();
+                                                InsertText("Client " + Player1Num + " has disconnected");
+                                                KillMe(Player1Num);
+                                            }
+                                        }
                                     }
-                                    else
+                                    //game is drawn
+                                    else if (isGameDraw())
                                     {
-                                        message = "RED HAS WON";
+                                        message = "THE GAME HAS DRAWN";
                                         InsertTextMessage(message);
                                         sw[CurrentlyInProgressClientNumbers.ElementAt(0)].WriteLine("Server\n" + message);
                                         sw[CurrentlyInProgressClientNumbers.ElementAt(1)].WriteLine("Server\n" + message);
                                         sw[CurrentlyInProgressClientNumbers.ElementAt(0)].Flush();
                                         sw[CurrentlyInProgressClientNumbers.ElementAt(1)].Flush();
-                                    }                                   
-                                }
-                                //game is drawn
-                                else if (isGameDraw())
-                                {
-                                    message = "THE GAME HAS DRAWN";
-                                    InsertTextMessage(message);
-                                    sw[CurrentlyInProgressClientNumbers.ElementAt(0)].WriteLine("Server\n" + message);
-                                    sw[CurrentlyInProgressClientNumbers.ElementAt(1)].WriteLine("Server\n" + message);
-                                    sw[CurrentlyInProgressClientNumbers.ElementAt(0)].Flush();
-                                    sw[CurrentlyInProgressClientNumbers.ElementAt(1)].Flush();
 
+                                        if(CurrentlyInLineClientNumbers.Count != 0)
+                                        {
+                                            sw[CurrentlyInProgressClientNumbers.ElementAt(0)].WriteLine("Disconnect");
+                                            sw[CurrentlyInProgressClientNumbers.ElementAt(1)].WriteLine("Disconnect");
+                                            sw[CurrentlyInProgressClientNumbers.ElementAt(0)].Flush();
+                                            sw[CurrentlyInProgressClientNumbers.ElementAt(1)].Flush();
+
+                                            sr[CurrentlyInProgressClientNumbers.ElementAt(0)].Close();
+                                            sw[CurrentlyInProgressClientNumbers.ElementAt(0)].Close();
+                                            ns[CurrentlyInProgressClientNumbers.ElementAt(0)].Close();
+                                            InsertText("Client " + CurrentlyInProgressClientNumbers.ElementAt(0) + " has disconnected");
+                                            KillMe(CurrentlyInProgressClientNumbers.ElementAt(0));
+
+                                            sr[CurrentlyInProgressClientNumbers.ElementAt(1)].Close();
+                                            sw[CurrentlyInProgressClientNumbers.ElementAt(1)].Close();
+                                            ns[CurrentlyInProgressClientNumbers.ElementAt(1)].Close();
+                                            InsertText("Client " + CurrentlyInProgressClientNumbers.ElementAt(1) + " has disconnected");
+                                            KillMe(CurrentlyInProgressClientNumbers.ElementAt(1));
+                                        }                                       
+
+                                    }
                                 }
+                                else
+                                {
+                                    sw[clientnum].WriteLine("Server\n" + "A game is in Progress");
+                                    sw[clientnum].Flush();
+                                }
+                                
                             }
 
                             drawBoard();
@@ -701,7 +751,7 @@ namespace ConnectFourServer
                 {
                     //sr[clientnum].Close();
                     //sw[clientnum].Close();
-                   // ns[clientnum].Close();
+                    //ns[clientnum].Close();
                     //InsertText("Client " + clientnum + " has disconnected");
                     //KillMe(clientnum);
                 }
@@ -710,7 +760,7 @@ namespace ConnectFourServer
 
         int currentPlayerNum()
         {
-            if (!Player1)
+            if (Player1)
                 return Player1Num;
             else
                 return Player2Num;
