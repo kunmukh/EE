@@ -270,11 +270,7 @@ namespace ConnectFourClient
                             InsertText("You are Red");
                         }
                             
-                    }
-                    if (inputStream.Contains("ChangePlayer"))
-                    {
-                        //changePlayer();
-                    }
+                    }                   
 
                 }
                 catch
