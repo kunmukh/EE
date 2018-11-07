@@ -39,8 +39,8 @@ namespace ConnectFourClient
         private Cell[,] grid = new Cell[height, width];
         private TranslateTransform animatedTranslateTransform;
         Storyboard pathAnimationStoryboard;
-        System.Media.SoundPlayer myPlayerW;
-        delegate void SetVoidCallbCk();
+        System.Media.SoundPlayer myPlayerW;      
+        delegate void SetBitMapCallbCk(RenderTargetBitmap bmp);
 
         public MainWindow()
         {
@@ -56,17 +56,21 @@ namespace ConnectFourClient
             // Register the transform's name with the page
             // so that they it be targeted by a Storyboard.
             cnv1.RegisterName("AnimatedTranslateTransform", animatedTranslateTransform);
+
+            btn_Send.IsEnabled = false;
         }
 
         private void btn_Send_Click(object sender, RoutedEventArgs e)
         {
-            sw.WriteLine("6" + UserName + txtbxMessage.Text);
+            sw.WriteLine("Chat\n" + UserName + txtbxMessage.Text);
             sw.Flush();
             txtbxMessage.Text = "";
         }
 
         private void btnStart_Click(object sender, RoutedEventArgs e)
         {
+            btn_Send.IsEnabled = true;
+
             UserName = txtbxUsername.Text + ">> ";
             TcpClient newcon = new TcpClient();
             newcon.Connect("127.0.0.1", 9090);  //IPAddress of Server
@@ -80,6 +84,51 @@ namespace ConnectFourClient
             makeEmptyBoard();
             drawBoard();
             btnStart.IsEnabled = false;
+        }
+
+        private void InsertBitMap(RenderTargetBitmap bmp)
+        {
+            if (this.imgGame.Dispatcher.CheckAccess())
+            {
+                this.imgGame.Source = bmp;
+            }
+            else
+            {
+                bmp.Freeze();
+                this.imgGame.Dispatcher.BeginInvoke(new SetBitMapCallbCk(InsertBitMap), bmp);                
+            }
+        }
+
+        private void InsertTextMessage(string text)
+        {
+            // InvokeRequired required compares the thread ID of the
+            // calling thread to the thread ID of the creating thread.
+            // If these threads are different, it returns true.
+            if (this.lblMessage.Dispatcher.CheckAccess())
+            {
+                this.lblMessage.Content = text; ;
+
+            }
+            else
+            {
+                lblMessage.Dispatcher.BeginInvoke(new SetTextCallback(InsertTextMessage), text);
+            }
+        }
+
+        private void InsertText(string text)
+        {
+            // InvokeRequired required compares the thread ID of the
+            // calling thread to the thread ID of the creating thread.
+            // If these threads are different, it returns true.
+            if (this.listBox1.Dispatcher.CheckAccess())
+            {
+                this.listBox1.Items.Insert(0, text);
+
+            }
+            else
+            {
+                listBox1.Dispatcher.BeginInvoke(new SetTextCallback(InsertText), text);
+            }
         }
 
         void drawBoard()
@@ -150,7 +199,7 @@ namespace ConnectFourClient
             dc.Close();
             RenderTargetBitmap bmp = new RenderTargetBitmap(1384, 1280, 300, 300, PixelFormats.Pbgra32);
             bmp.Render(vis);
-            imgGame.Source = bmp;
+            InsertBitMap(bmp);
         }
 
         void makeEmptyBoard()
@@ -172,31 +221,61 @@ namespace ConnectFourClient
                 {
                     string inputStream = sr.ReadLine();  //Note Read only reads into a byte array.  Also Note that Read is a "Blocking Function"   
 
-                    if (inputStream.ElementAt(0) == '6')
+                    //if it is a server message
+                    if (inputStream.Contains("Server"))
                     {
-                        string newstring = inputStream.Remove(0);                        
+                        string newstring = sr.ReadLine();
+                        InsertTextMessage(newstring);
+                    }
+                    if (inputStream.Contains("Chat"))
+                    {
+                        string newstring = sr.ReadLine();
                         InsertText(newstring);
                     }
-                    if (inputStream.ElementAt(0) == '1')
-                    {
-                        string newstring = inputStream.Remove(0);
-                        InsertTextMessage(newstring);                                             
-                    }
-
-
-                    if (inputStream.StartsWith("0"))
+                    if (inputStream.Contains("Move"))
                     {
                         //play sound
                         //var myPlayer = new System.Media.SoundPlayer(); 
                         //myPlayer.SoundLocation = @"C:\Users\kunmu\Documents\Kunal\UE courses\EE-356\EE-356\FourSquare\FourSquareGame\coin.wav";
                         //myPlayer.Play();
 
-                        int iSel = inputStream.ElementAt(1);
-                        int colSel = inputStream.ElementAt(2);
+                        string iSels= sr.ReadLine();
+                        string colSels = sr.ReadLine();
+                        string color = sr.ReadLine();
 
-                        doAnimation(colSel, 0, colSel, iSel);
+                        InsertText(iSels + " " + colSels);
+
+                        int iSel = Convert.ToInt32(iSels);
+                        int colSel = Convert.ToInt32(colSels);
+
+                        if(color == "blue")
+                            grid[iSel, colSel].setCoinBlue();
+                        else
+                            grid[iSel, colSel].setCoinRed();
+
+                        drawBoard();
+                        //doAnimation(colSel, 0, colSel, iSel);                        
                     }
-                       
+                    if (inputStream.Contains("Player1"))
+                    {
+                        string status = sr.ReadLine();
+                        if (status.Contains("true"))
+                        {
+                            Player1 = true;
+                            InsertText("You are Blue");
+                        }                            
+                        else
+                        {
+                            Player1 = false;
+                            InsertText("You are Red");
+                        }
+                            
+                    }
+                    if (inputStream.Contains("ChangePlayer"))
+                    {
+                        //changePlayer();
+                    }
+
                 }
                 catch
                 {
@@ -208,37 +287,18 @@ namespace ConnectFourClient
 
         }
 
-        private void InsertTextMessage(string text)
+        void changePlayer()
         {
-            // InvokeRequired required compares the thread ID of the
-            // calling thread to the thread ID of the creating thread.
-            // If these threads are different, it returns true.
-            if (this.txtbxMessage.Dispatcher.CheckAccess())
+            string message;
+            if (Player1)
             {
-                this.lblMessage.Content = text; ;
-
+                Player1 = false;                
             }
             else
             {
-                listBox1.Dispatcher.BeginInvoke(new SetTextCallback(InsertTextMessage), text);
+                Player1 = true;                
             }
-        }
-
-        private void InsertText(string text)
-        {
-            // InvokeRequired required compares the thread ID of the
-            // calling thread to the thread ID of the creating thread.
-            // If these threads are different, it returns true.
-            if (this.listBox1.Dispatcher.CheckAccess())
-            {
-                this.listBox1.Items.Insert(0, text);
-
-            }
-            else
-            {
-                listBox1.Dispatcher.BeginInvoke(new SetTextCallback(InsertText), text);
-            }
-        }
+        }        
         
         private void imgGame_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -252,7 +312,7 @@ namespace ConnectFourClient
             {         
                 //seelct the appriopiate row and col                
                 int colSel = x / 33;
-                sw.WriteLine("0" + colSel + "4");
+                sw.WriteLine("Move\n" + colSel);
                 sw.Flush();
             }
         }
@@ -400,7 +460,7 @@ namespace ConnectFourClient
             pathAnimationStoryboard.Children.Add(translateXAnimation);
             pathAnimationStoryboard.Children.Add(translateYAnimation);
             // Start the animations.           
-            pathAnimationStoryboard.Completed += new EventHandler(Story_Completed);
+            //pathAnimationStoryboard.Completed += new EventHandler(Story_Completed);
             pathAnimationStoryboard.Begin(cnv1, true);
         }
 

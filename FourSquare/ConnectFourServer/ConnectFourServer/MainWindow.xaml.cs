@@ -42,30 +42,31 @@ namespace ConnectFourServer
         private Boolean Player1 = false;
         private int Player1Num, Player2Num;
         private static int height = 6, width = 7;
-        private Cell[,] grid = new Cell[height, width];
-        delegate void SetVoidCallbCk();
-
+        private Cell[,] grid = new Cell[height, width];        
+        delegate void SetBitMapCallbCk(RenderTargetBitmap bmp);
+       
         int clientcount = 0;
         string server = "Server>> ";
 
         public MainWindow()
         {
             InitializeComponent();
+            btn_Send.IsEnabled = false;
         }
 
         //concatenate a 6 with string for message
         private void btn_Send_Click(object sender, RoutedEventArgs e)
         {
-            InsertText("6" + server + txtbxMessage.Text);
+            InsertText(server + txtbxMessage.Text);
 
             foreach (int t in CurrentlyInLineClientNumbers)
             {
-                sw[t].WriteLine("6" + server + txtbxMessage.Text);
+                sw[t].WriteLine("Chat\n" + server + txtbxMessage.Text);
                 sw[t].Flush();
             }
             foreach (int t in CurrentlyInProgressClientNumbers)
             {
-                sw[t].WriteLine("6" + server + txtbxMessage.Text);
+                sw[t].WriteLine("Chat\n" + server + txtbxMessage.Text);
                 sw[t].Flush();
             }
             txtbxMessage.Text = "";
@@ -91,19 +92,33 @@ namespace ConnectFourServer
             // InvokeRequired required compares the thread ID of the
             // calling thread to the thread ID of the creating thread.
             // If these threads are different, it returns true.
-            if (this.txtbxMessage.Dispatcher.CheckAccess())
+            if (this.lblMessage.Dispatcher.CheckAccess())
             {
                 this.lblMessage.Content = text; ;
 
             }
             else
             {
-                listBox1.Dispatcher.BeginInvoke(new SetTextCallback(InsertTextMessage), text);
+                lblMessage.Dispatcher.BeginInvoke(new SetTextCallback(InsertTextMessage), text);
+            }
+        }
+
+        private void InsertBitMap(RenderTargetBitmap bmp)
+        {
+            if (this.imgGame.Dispatcher.CheckAccess())
+            {                
+                this.imgGame.Source = bmp;
+            }
+            else
+            {
+                bmp.Freeze();
+                this.imgGame.Dispatcher.BeginInvoke(new SetBitMapCallbCk(InsertBitMap), bmp);                
             }
         }
 
         private void btnStart_Click(object sender, RoutedEventArgs e)
         {
+            btn_Send.IsEnabled = true;
             backgroundWorker1.DoWork += new DoWorkEventHandler(backgroundWorker1_DoWork);
             backgroundWorker1.RunWorkerAsync("Message to Worker");
 
@@ -191,7 +206,7 @@ namespace ConnectFourServer
             dc.Close();
             RenderTargetBitmap bmp = new RenderTargetBitmap(1384, 1280, 300, 300, PixelFormats.Pbgra32);
             bmp.Render(vis);
-            imgGame.Source = bmp;
+            InsertBitMap(bmp);
         }
 
         private void getFirstPlayer()
@@ -202,23 +217,36 @@ namespace ConnectFourServer
 
             Random rnd = new Random();
             if (rnd.Next(0, 100) % 2 == 0)
+            {                
+                sw[CurrentlyInProgressClientNumbers[0]].Write("Player1\n" + "true");
+                sw[CurrentlyInProgressClientNumbers[1]].Write("Player1\n" + "false");
+                sw[CurrentlyInProgressClientNumbers[0]].Flush();
+                sw[CurrentlyInProgressClientNumbers[1]].Flush();
+            }
+            else
+            {                
+                sw[CurrentlyInProgressClientNumbers[0]].Write("Player1\n" + "false");
+                sw[CurrentlyInProgressClientNumbers[1]].Write("Player1\n" + "true");
+                sw[CurrentlyInProgressClientNumbers[0]].Flush();
+                sw[CurrentlyInProgressClientNumbers[1]].Flush();
+            }
+
+            if (rnd.Next(0, 100) % 3 == 0)
             {
-                Player1 = true;
-                message = "Player 1 is Blue";
-                InsertTextMessage(message);
+                Player1 = false;
+                message = "Red is Starting";
             }
             else
             {
-                Player1 = false;
-                message = "Player 1 is Red";
-                InsertTextMessage(message);
-            }
+                Player1 = true;
+                message = "Blue is Starting";
+            }     
 
             foreach (int t in CurrentlyInProgressClientNumbers)
             {
-                sw[t].WriteLine("1" + server + message);
+                sw[t].WriteLine(server + "\n" + message);
                 sw[t].Flush();
-            }
+            }            
 
         }
 
@@ -239,7 +267,7 @@ namespace ConnectFourServer
                 NetworkStream ns = new NetworkStream(client);  //Create Network stream                
                 StreamWriter sw = new StreamWriter(ns); //create a stream writer
 
-                sw.WriteLine("6" + server + "\nYou have reached Four square server. " +
+                sw.WriteLine(server + "\n" + "You have reached Four square server. " +
                              "Sorry the current queue is full, cannot accept connection.");
                 sw.Flush();
 
@@ -272,22 +300,22 @@ namespace ConnectFourServer
 
                     if (CurrentlyInProgressClientNumbers.Count == 1)
                     {                        
-                        sw[clientcount].WriteLine( "1" + server + welcome); 
+                        sw[clientcount].WriteLine( server + "\n" + welcome); 
                         sw[clientcount].Flush();               // By Default WriteLine and ReadLine use Line Feed to delimit the messages
 
                         InsertTextMessage(server + welcome);
 
-                        sw[clientcount].WriteLine("1" + server + "You are player 1. Waiting for Player 2 to connect"); //Stream Reader and Writer take away some of the overhead of keeping track of Message size. 
+                        sw[clientcount].WriteLine(server + "\n" + "You are player 1. Waiting for Player 2 to connect"); //Stream Reader and Writer take away some of the overhead of keeping track of Message size. 
                         sw[clientcount].Flush();               // By Default WriteLine and ReadLine use Line Feed to delimit the messages
 
                         InsertTextMessage(server + "You are player 1. Waiting for Player 2 to connect");
                     }
                     else
                     {
-                        sw[clientcount].WriteLine("1" + server + "You are player 2. Game Begins.");
+                        sw[clientcount].WriteLine(server + "\n" + "You are player 2. Game Begins.");
                         sw[clientcount].Flush();               // By Default WriteLine and ReadLine use Line Feed 
 
-                        sw[CurrentlyInProgressClientNumbers.First()].WriteLine("1" + server + "Player 2 has connected. Game Begins");
+                        sw[CurrentlyInProgressClientNumbers.First()].WriteLine(server + "\n" + "Player 2 has connected. Game Begins");
                         sw[CurrentlyInProgressClientNumbers.First()].Flush();
 
                         initializeGame();
@@ -300,10 +328,10 @@ namespace ConnectFourServer
                     {
                         CurrentlyInLineClientNumbers.Add(clientcount);
 
-                        sw[clientcount].WriteLine("1" + server + welcome);
+                        sw[clientcount].WriteLine(server + "\n" + welcome);
                         sw[clientcount].Flush();
 
-                        sw[clientcount].WriteLine("1" + server + "\nA game has begun, but currently you are " + CurrentlyInLineClientNumbers.Count + " in line.");
+                        sw[clientcount].WriteLine(server + "\n" + "A game has begun, but currently you are " + CurrentlyInLineClientNumbers.Count + " in line.");
                         sw[clientcount].Flush();
                     }          
                                   
@@ -326,19 +354,20 @@ namespace ConnectFourServer
             if (Player1)
             {
                 Player1 = false;
-                message = "Player 2 Turn";
+                message = "Red Turn";
                 InsertTextMessage(message);
-                sw[CurrentlyInProgressClientNumbers.ElementAt(0)].WriteLine("1" + message);
-                sw[CurrentlyInProgressClientNumbers.ElementAt(1)].WriteLine("1" + message);
+                sw[CurrentlyInProgressClientNumbers.ElementAt(0)].WriteLine(server + "\n" +  message);
+                sw[CurrentlyInProgressClientNumbers.ElementAt(1)].WriteLine(server + "\n" + message);
                 sw[CurrentlyInProgressClientNumbers.ElementAt(0)].Flush();
                 sw[CurrentlyInProgressClientNumbers.ElementAt(1)].Flush();
             }
             else
             {
                 Player1 = true;
-                message = "Player 1 Turn";
-                sw[CurrentlyInProgressClientNumbers.ElementAt(0)].WriteLine("1" + message);
-                sw[CurrentlyInProgressClientNumbers.ElementAt(1)].WriteLine("1" + message);
+                message = "Blue Turn";
+                InsertTextMessage(message);
+                sw[CurrentlyInProgressClientNumbers.ElementAt(0)].WriteLine(server + "\n" + message);
+                sw[CurrentlyInProgressClientNumbers.ElementAt(1)].WriteLine(server + "\n" + message);
                 sw[CurrentlyInProgressClientNumbers.ElementAt(0)].Flush();
                 sw[CurrentlyInProgressClientNumbers.ElementAt(1)].Flush();
             }
@@ -455,9 +484,9 @@ namespace ConnectFourServer
                     else
                     {
                         //client has sent a message
-                        if (clientMessage.StartsWith("6"))
+                        if (clientMessage.Contains("Chat"))
                         {
-                            clientMessage.Remove(0);
+                            clientMessage = sr[clientnum].ReadLine();
 
                             //see if a player in line is trying to send a chat
                             for (int j = 0; j < CurrentlyInLineClientNumbers.Count; j++)
@@ -465,12 +494,12 @@ namespace ConnectFourServer
                                 if (clientnum == CurrentlyInLineClientNumbers[j])
                                 {
                                     //send message back to waiting player
-                                    serverMessage = "6" + server + "You cannot send message since you are still waiting";
+                                    serverMessage = server + "You cannot send message since you are still waiting";
                                     InsertText(serverMessage);
                                     InsertText(clientMessage);
-                                    sw[clientnum].WriteLine(clientMessage);
+                                    sw[clientnum].WriteLine("Chat\n" + clientMessage);
                                     sw[clientnum].Flush();
-                                    sw[clientnum].WriteLine(serverMessage);
+                                    sw[clientnum].WriteLine("Chat\n" + serverMessage);
                                     sw[clientnum].Flush();
                                 }
                             }
@@ -483,12 +512,12 @@ namespace ConnectFourServer
                                     if (CurrentlyInProgressClientNumbers.Count == 1)
                                     {
                                         //send message back to player 1  
-                                        serverMessage = "6" + server + "Player 2 has not connected yet. So, you cannot send message.";
+                                        serverMessage = server + "Player 2 has not connected yet. So, you cannot send message.";
                                         InsertText(serverMessage);
                                         InsertText(clientMessage);
-                                        sw[clientnum].WriteLine(clientMessage);
+                                        sw[clientnum].WriteLine("Chat\n" + clientMessage);
                                         sw[clientnum].Flush();
-                                        sw[clientnum].WriteLine(serverMessage);
+                                        sw[clientnum].WriteLine("Chat\n" + serverMessage);
                                         sw[clientnum].Flush();
                                     }
                                     else //player 2 has also connected
@@ -497,9 +526,9 @@ namespace ConnectFourServer
                                         for (int k = 0; k < CurrentlyInProgressClientNumbers.Count; k++)
                                         {
                                             int client2Num = CurrentlyInProgressClientNumbers[k];
-                                            serverMessage = "6" + clientMessage;
+                                            serverMessage = clientMessage;
                                             InsertText(serverMessage);
-                                            sw[client2Num].WriteLine(serverMessage);
+                                            sw[client2Num].WriteLine("Chat\n" + serverMessage);
                                             sw[client2Num].Flush();
 
                                         }
@@ -507,12 +536,13 @@ namespace ConnectFourServer
                                 }
                             }
                         }
+
                         //client has sent a move
-                        if(clientMessage.StartsWith("0"))
+                        if(clientMessage.Contains("Move"))
                         {
                             if(clientnum == currentPlayerNum())
                             {
-                                clientMessage.Remove(0);
+                                clientMessage = sr[clientnum].ReadLine();
                                 //get the column 
                                 int colSel = System.Convert.ToInt32(clientMessage);
                                 int iSel = 0;
@@ -521,173 +551,166 @@ namespace ConnectFourServer
                                 //move coin
                                 for (int i = height - 1; i >= 0; i--)
                                 {
-
-                                    if (grid[i, colSel].isEmpty())
+                                    if (grid[i, colSel].isEmpty() && !found && !isGameOver()
+                                        && !isGameDraw())
                                     {
                                         if (Player1)
                                         {
                                             grid[i, colSel].setCoinBlue();
                                             iSel = i;
-                                            found = true;
-                                            break;
+                                            found = true;                                            
                                         }
                                         else
                                         {
                                             grid[i, colSel].setCoinRed();
                                             iSel = i;
-                                            found = true;
-                                            break;
+                                            found = true;                                            
                                         }
-
                                     }
                                 }
 
-                                string message;
+                                string message;                                
 
-                                if (found)
-                                {
-                                    message = currentPlayerNum() + "i" + "colSel";
-                                    InsertTextMessage(message);
-                                    sw[CurrentlyInProgressClientNumbers.ElementAt(0)].WriteLine("0" + "i" + "colSel");
-                                    sw[CurrentlyInProgressClientNumbers.ElementAt(1)].WriteLine("0" + "i" + "colSel");
-                                    sw[CurrentlyInProgressClientNumbers.ElementAt(0)].Flush();
-                                    sw[CurrentlyInProgressClientNumbers.ElementAt(1)].Flush();
-                                }
-                                else
-                                {
-                                    sw[CurrentlyInProgressClientNumbers.ElementAt(0)].WriteLine("1" + "Cannot Move");
-                                    sw[CurrentlyInProgressClientNumbers.ElementAt(1)].WriteLine("1" + "Cannot Move");
-                                    sw[CurrentlyInProgressClientNumbers.ElementAt(0)].Flush();
-                                    sw[CurrentlyInProgressClientNumbers.ElementAt(1)].Flush();
-                                }
-
-                                if (isGameOver())
-                                {
-                                    imgGame.IsEnabled = false;
+                                //game is over
+                                if (isGameOver() )
+                                {                                    
                                     if (Player1)
                                     {
-                                        message = "PLAYER 1 HAS WON";
+                                        message = "BLUE HAS WON";
                                         InsertTextMessage(message);
-                                        sw[CurrentlyInProgressClientNumbers.ElementAt(0)].WriteLine("1" + message);
-                                        sw[CurrentlyInProgressClientNumbers.ElementAt(1)].WriteLine("1" + message);
+                                        sw[CurrentlyInProgressClientNumbers.ElementAt(0)].WriteLine("Server\n" + message);
+                                        sw[CurrentlyInProgressClientNumbers.ElementAt(1)].WriteLine("Server\n" + message);
+                                        sw[CurrentlyInProgressClientNumbers.ElementAt(0)].Flush();
+                                        sw[CurrentlyInProgressClientNumbers.ElementAt(1)].Flush();
+
+                                        if (found)
+                                        {
+                                            if (Player1)
+                                                message = iSel.ToString() + "\n" + colSel.ToString() + "\n" + "blue";
+                                            else
+                                                message = iSel.ToString() + "\n" + colSel.ToString() + "\n" + "red";
+                                            sw[CurrentlyInProgressClientNumbers.ElementAt(0)].WriteLine("Move\n" + message);
+                                            sw[CurrentlyInProgressClientNumbers.ElementAt(1)].WriteLine("Move\n" + message);
+                                            sw[CurrentlyInProgressClientNumbers.ElementAt(0)].Flush();
+                                            sw[CurrentlyInProgressClientNumbers.ElementAt(1)].Flush();
+                                        }                                        
+                                    }
+                                    else
+                                    {
+                                        message = "RED HAS WON";
+                                        InsertTextMessage(message);
+                                        sw[CurrentlyInProgressClientNumbers.ElementAt(0)].WriteLine("Server\n" + message);
+                                        sw[CurrentlyInProgressClientNumbers.ElementAt(1)].WriteLine("Server\n" + message);
+                                        sw[CurrentlyInProgressClientNumbers.ElementAt(0)].Flush();
+                                        sw[CurrentlyInProgressClientNumbers.ElementAt(1)].Flush();
+                                    }
+                                    drawBoard();
+                                }
+                                //game is drawn
+                                else if (isGameDraw())
+                                {                                    
+                                    message = "THE GAME HAS DRAWN";
+                                    InsertTextMessage(message);
+                                    sw[CurrentlyInProgressClientNumbers.ElementAt(0)].WriteLine("Server\n" + message);
+                                    sw[CurrentlyInProgressClientNumbers.ElementAt(1)].WriteLine("Server\n" + message);
+                                    sw[CurrentlyInProgressClientNumbers.ElementAt(0)].Flush();
+                                    sw[CurrentlyInProgressClientNumbers.ElementAt(1)].Flush();
+
+                                }
+                                //the coin fell
+                                else if (found && !isGameDraw() && !isGameOver())
+                                {
+                                    if (Player1)
+                                        message = iSel.ToString() + "\n" + colSel.ToString() + "\n" + "blue";
+                                    else
+                                        message = iSel.ToString() + "\n" + colSel.ToString() + "\n" + "red";
+
+                                    InsertTextMessage(message);
+                                    sw[CurrentlyInProgressClientNumbers.ElementAt(0)].WriteLine("Move\n" + message);
+                                    sw[CurrentlyInProgressClientNumbers.ElementAt(1)].WriteLine("Move\n" + message);
+                                    sw[CurrentlyInProgressClientNumbers.ElementAt(0)].Flush();
+                                    sw[CurrentlyInProgressClientNumbers.ElementAt(1)].Flush();
+
+                                    changePlayer();
+                                    sw[CurrentlyInProgressClientNumbers.ElementAt(0)].WriteLine("ChangePlayer");
+                                    sw[CurrentlyInProgressClientNumbers.ElementAt(1)].WriteLine("ChangePlayer");
+                                    sw[CurrentlyInProgressClientNumbers.ElementAt(0)].Flush();
+                                    sw[CurrentlyInProgressClientNumbers.ElementAt(1)].Flush();
+                                }
+                                else if(!found)
+                                {
+                                    sw[CurrentlyInProgressClientNumbers.ElementAt(0)].WriteLine("Server\n" + "Cannot Move");
+                                    sw[CurrentlyInProgressClientNumbers.ElementAt(1)].WriteLine("Server\n" + "Cannot Move");
+                                    sw[CurrentlyInProgressClientNumbers.ElementAt(0)].Flush();
+                                    sw[CurrentlyInProgressClientNumbers.ElementAt(1)].Flush();
+                                }
+                                
+                                drawBoard();
+                            }
+                            //chnage player and keep in playing
+                            else
+                            {
+                                string message;
+
+                                sw[clientnum].WriteLine("Server\n" + "Opponent has not made a move yet.");
+                                sw[clientnum].Flush();
+
+                                //game is over
+                                if (isGameOver())
+                                {
+                                    if (Player1)
+                                    {
+                                        message = "BLUE HAS WON";
+                                        InsertTextMessage(message);
+                                        sw[CurrentlyInProgressClientNumbers.ElementAt(0)].WriteLine("Server\n" + message);
+                                        sw[CurrentlyInProgressClientNumbers.ElementAt(1)].WriteLine("Server\n" + message);
                                         sw[CurrentlyInProgressClientNumbers.ElementAt(0)].Flush();
                                         sw[CurrentlyInProgressClientNumbers.ElementAt(1)].Flush();
                                     }
                                     else
                                     {
-                                        message = "PLAYER 2 HAS WON";
+                                        message = "RED HAS WON";
                                         InsertTextMessage(message);
-                                        sw[CurrentlyInProgressClientNumbers.ElementAt(0)].WriteLine("1" + message);
-                                        sw[CurrentlyInProgressClientNumbers.ElementAt(1)].WriteLine("1" + message);
+                                        sw[CurrentlyInProgressClientNumbers.ElementAt(0)].WriteLine("Server\n" + message);
+                                        sw[CurrentlyInProgressClientNumbers.ElementAt(1)].WriteLine("Server\n" + message);
                                         sw[CurrentlyInProgressClientNumbers.ElementAt(0)].Flush();
                                         sw[CurrentlyInProgressClientNumbers.ElementAt(1)].Flush();
-                                    }
+                                    }                                   
                                 }
-                                
+                                //game is drawn
                                 else if (isGameDraw())
                                 {
-                                    imgGame.IsEnabled = false;
                                     message = "THE GAME HAS DRAWN";
                                     InsertTextMessage(message);
-                                    sw[CurrentlyInProgressClientNumbers.ElementAt(0)].WriteLine("1" + message);
-                                    sw[CurrentlyInProgressClientNumbers.ElementAt(1)].WriteLine("1" + message);
+                                    sw[CurrentlyInProgressClientNumbers.ElementAt(0)].WriteLine("Server\n" + message);
+                                    sw[CurrentlyInProgressClientNumbers.ElementAt(1)].WriteLine("Server\n" + message);
                                     sw[CurrentlyInProgressClientNumbers.ElementAt(0)].Flush();
                                     sw[CurrentlyInProgressClientNumbers.ElementAt(1)].Flush();
 
                                 }
-                                else
-                                {
-                                    changePlayer();
-                                }
                             }
 
-                            else
-                            {
-                                sw[CurrentlyInProgressClientNumbers.ElementAt(0)].WriteLine("1" + "Opponent has not made a move yet.");
-                                sw[CurrentlyInProgressClientNumbers.ElementAt(1)].WriteLine("1" + "Opponent has not made a move yet.");
-                                sw[CurrentlyInProgressClientNumbers.ElementAt(0)].Flush();
-                                sw[CurrentlyInProgressClientNumbers.ElementAt(1)].Flush();
-                            }
+                            drawBoard();
 
-
-                        }
+                        }            
                         
-                        //
-                        for (int j = 0; j < CurrentlyInProgressClientNumbers.Count; j++)
-                        {
-                            if (clientnum == CurrentlyInProgressClientNumbers[j])
-                            {
-                                //only 1 player has connected
-                                if (CurrentlyInProgressClientNumbers.Count == 1)
-                                {
-                                    //send message to waiting player
-                                    for (int k = 0; k < CurrentlyInLineClientNumbers.Count; k++)
-                                    {
-                                        int client2Num = CurrentlyInLineClientNumbers[k];
-                                        InsertText("System>> Sorry you are in a Line");
-                                        sw[client2Num].WriteLine(clientMessage);
-                                        sw[client2Num].Flush();
-
-                                    }
-
-                                    //send message back to player 1
-                                    InsertText("\nSystem>> Player 2 has not connected yet. So, cannot send message.");
-                                    sw[clientnum].WriteLine(clientMessage + "\nSystem>> Player 2 has not connected yet.");
-                                    sw[clientnum].Flush();
-                                }
-                                else //player 2 has also connected
-                                {
-                                    //send message to waiting player
-                                    for (int k = 0; k < CurrentlyInLineClientNumbers.Count; k++)
-                                    {
-                                        int client2Num = CurrentlyInLineClientNumbers[k];
-                                        InsertText("System>> Sorry you are in a Line");
-                                        sw[client2Num].WriteLine(clientMessage + "\nSystem>> Sorry you are in a Line");
-                                        sw[client2Num].Flush();
-
-                                    }
-                                    //start playing message
-                                    for (int k = 0; k < CurrentlyInProgressClientNumbers.Count; k++)
-                                    {
-                                        int client2Num = CurrentlyInProgressClientNumbers[k];
-                                        InsertText(clientMessage);
-                                        sw[client2Num].WriteLine(clientMessage);
-                                        sw[client2Num].Flush();
-
-                                    }
-                                }
-                            }
-                        }
-
-                        for (int j = 0; j < CurrentlyInLineClientNumbers.Count; j++)
-                        {
-                            if (clientnum == CurrentlyInLineClientNumbers[j])
-                            {
-                                //send message back to waiting player
-                                InsertText("System>> You cannot send message since you are still waiting");
-                                sw[clientnum].WriteLine(clientMessage);
-                                sw[clientnum].Flush();
-                            }
-                        }
-
                     }
-
 
                 }
                 catch
                 {
-                    sr[clientnum].Close();
-                    sw[clientnum].Close();
-                    ns[clientnum].Close();
-                    InsertText("Client " + clientnum + " has disconnected");
-                    KillMe(clientnum);
+                    //sr[clientnum].Close();
+                    //sw[clientnum].Close();
+                   // ns[clientnum].Close();
+                    //InsertText("Client " + clientnum + " has disconnected");
+                    //KillMe(clientnum);
                 }
             }
         }
 
         int currentPlayerNum()
         {
-            if (Player1)
+            if (!Player1)
                 return Player1Num;
             else
                 return Player2Num;
@@ -713,10 +736,10 @@ namespace ConnectFourServer
                         //only 1 player is left and there are player in line
                         if (CurrentlyInProgressClientNumbers.Count == 1 && CurrentlyInLineClientNumbers.Count != 0)
                         {
-                            sw[CurrentlyInProgressClientNumbers.First()].WriteLine("1"+ server + "You are player 1 now. Player 2 has connected. Game Begins.");
+                            sw[CurrentlyInProgressClientNumbers.First()].WriteLine(server + "\n" + "You are player 1 now. Player 2 has connected. Game Begins.");
                             sw[CurrentlyInProgressClientNumbers.First()].Flush();
 
-                            sw[CurrentlyInLineClientNumbers.First()].WriteLine("1" + server + "You are player 2 now. Player 2 has connected. Game Begins.");
+                            sw[CurrentlyInLineClientNumbers.First()].WriteLine(server + "\n" + "You are player 2 now. Player 2 has connected. Game Begins.");
                             sw[CurrentlyInLineClientNumbers.First()].Flush();
 
                             CurrentlyInProgressClientNumbers.Add(CurrentlyInLineClientNumbers.First());
@@ -727,7 +750,7 @@ namespace ConnectFourServer
 
                         if (CurrentlyInProgressClientNumbers.Count == 1)
                         {
-                            sw[CurrentlyInProgressClientNumbers.First()].WriteLine("1" + server + "You are player 1 now. Waiting for player 2 to connect");
+                            sw[CurrentlyInProgressClientNumbers.First()].WriteLine(server + "\n" + "You are player 1 now. Waiting for player 2 to connect");
                             sw[CurrentlyInProgressClientNumbers.First()].Flush();
                         }
                     }
