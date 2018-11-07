@@ -53,7 +53,6 @@ namespace ConnectFourServer
             InitializeComponent();
             btn_Send.IsEnabled = false;
         }
-
         
         private void btn_Send_Click(object sender, RoutedEventArgs e)
         {
@@ -261,14 +260,13 @@ namespace ConnectFourServer
 
             while (AvailableClientNumbers.Count >= 0)
             {
-                if (AvailableClientNumbers.Count != 0)
+                if (AvailableClientNumbers.Count == 0)
                 {
                     client = newsocket.AcceptSocket();
                     NetworkStream ns = new NetworkStream(client);  //Create Network stream                
                     StreamWriter sw = new StreamWriter(ns); //create a stream writer 
 
-                    sw.WriteLine(server + "\n" + "You have reached Four square server.\n " +
-                                 "Sorry all slots full.Try later");
+                    sw.WriteLine(server + "\n" +  "Sorry all slots full.Try later");
                     sw.Flush();
 
                     sw.WriteLine("Disconnect\n");
