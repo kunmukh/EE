@@ -261,7 +261,7 @@ namespace ConnectFourClient
             {
                 try
                 {
-                    string inputStream = sr.ReadLine();  //Note Read only reads into a byte array.  Also Note that Read is a "Blocking Function"    
+                    string inputStream = sr.ReadLine();  //Note Read only reads into a byte array.  Also Note that Read is a "Blocking Function"     
 
                     //if it is a server message
                     if (inputStream.Contains("Server"))
