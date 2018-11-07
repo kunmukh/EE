@@ -268,7 +268,7 @@ namespace ConnectFourClient
                     //if it is a server message
                     if (inputStream.Contains("Server"))
                     {
-                        string newstring = sr.ReadLine();
+                        string newstring = sr.ReadToEnd();
                         InsertTextMessage(newstring);                        
                     }
                     if (inputStream.Contains("Chat"))

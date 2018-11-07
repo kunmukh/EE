@@ -54,7 +54,7 @@ namespace ConnectFourServer
             btn_Send.IsEnabled = false;
         }
 
-        //concatenate a 6 with string for message
+        
         private void btn_Send_Click(object sender, RoutedEventArgs e)
         {
             InsertText(server + txtbxMessage.Text);
@@ -259,89 +259,93 @@ namespace ConnectFourServer
                 AvailableClientNumbers.Add(i);
             }
 
-            while (AvailableClientNumbers.Count > 0)
+            while (AvailableClientNumbers.Count >= 0)
             {
-                InsertText("waiting for player");                   //wait for connection               
-                InsertText("Available Clients = " + AvailableClientNumbers.Count);  //wait for connection
-
-                client = newsocket.AcceptSocket();     //Accept Connection
-                clientcount = AvailableClientNumbers.First();
-                AvailableClientNumbers.Remove(clientcount);
-
-                ns[clientcount] = new NetworkStream(client);  //Create Network stream
-                sr[clientcount] = new StreamReader(ns[clientcount]); //Create a stream reader
-                sw[clientcount] = new StreamWriter(ns[clientcount]); //create a stream writer                
-
-                bkw1[clientcount] = new BackgroundWorker();
-                bkw1[clientcount].DoWork += new DoWorkEventHandler(client_DoWork);
-                bkw1[clientcount].RunWorkerAsync(clientcount);
-
-                string welcome = " Welcome to FourSquare Game";
-                InsertText("client connected");
-
-                if (CurrentlyInProgressClientNumbers.Count < 2)
+                if (AvailableClientNumbers.Count != 0)
                 {
-                    CurrentlyInProgressClientNumbers.Add(clientcount);
+                    client = newsocket.AcceptSocket();
+                    NetworkStream ns = new NetworkStream(client);  //Create Network stream                
+                    StreamWriter sw = new StreamWriter(ns); //create a stream writer
 
-                    if (CurrentlyInProgressClientNumbers.Count == 1)
-                    {                        
-                        sw[clientcount].WriteLine( server + "\n" + welcome); 
-                        sw[clientcount].Flush();               // By Default WriteLine and ReadLine use Line Feed to delimit the messages
+                    sw.WriteLine(server + "\n" + "You have reached Four square server.\n " +
+                                 "Sorry all slots full.Try later");
+                    sw.Flush();
 
-                        InsertTextMessage(server + welcome);
+                    sw.WriteLine("Disconnect\n");
+                    sw.Flush();
 
-                        sw[clientcount].WriteLine(server + "\n" + "You are player 1. Waiting for Player 2 to connect"); //Stream Reader and Writer take away some of the overhead of keeping track of Message size. 
-                        sw[clientcount].Flush();               // By Default WriteLine and ReadLine use Line Feed to delimit the messages
+                    sw.Close();
+                    ns.Close();
+                    client.Close();
+                }
 
-                        InsertTextMessage(server + "You are player 1. Waiting for Player 2 to connect");
+                else
+                {
+                    InsertText("waiting for player");                   //wait for connection               
+                    InsertText("Available Clients = " + AvailableClientNumbers.Count);  //wait for connection
+
+                    client = newsocket.AcceptSocket();     //Accept Connection
+                    clientcount = AvailableClientNumbers.First();
+                    AvailableClientNumbers.Remove(clientcount);
+
+                    ns[clientcount] = new NetworkStream(client);  //Create Network stream
+                    sr[clientcount] = new StreamReader(ns[clientcount]); //Create a stream reader
+                    sw[clientcount] = new StreamWriter(ns[clientcount]); //create a stream writer                
+
+                    bkw1[clientcount] = new BackgroundWorker();
+                    bkw1[clientcount].DoWork += new DoWorkEventHandler(client_DoWork);
+                    bkw1[clientcount].RunWorkerAsync(clientcount);
+
+                    string welcome = " Welcome to FourSquare Game";
+                    InsertText("client connected");
+
+                    if (CurrentlyInProgressClientNumbers.Count < 2)
+                    {
+                        CurrentlyInProgressClientNumbers.Add(clientcount);
+
+                        if (CurrentlyInProgressClientNumbers.Count == 1)
+                        {
+                            sw[clientcount].WriteLine(server + "\n" + welcome);
+                            sw[clientcount].Flush();               // By Default WriteLine and ReadLine use Line Feed to delimit the messages
+
+                            InsertTextMessage(server + welcome);
+
+                            sw[clientcount].WriteLine(server + "\n" + "You are player 1. Waiting for Player 2 to connect"); //Stream Reader and Writer take away some of the overhead of keeping track of Message size. 
+                            sw[clientcount].Flush();               // By Default WriteLine and ReadLine use Line Feed to delimit the messages
+
+                            InsertTextMessage(server + "You are player 1. Waiting for Player 2 to connect");
+                        }
+                        else
+                        {
+                            sw[clientcount].WriteLine(server + "\n" + "You are player 2. Game Begins.");
+                            sw[clientcount].Flush();               // By Default WriteLine and ReadLine use Line Feed 
+
+                            sw[CurrentlyInProgressClientNumbers.First()].WriteLine(server + "\n" + "Player 2 has connected. Game Begins");
+                            sw[CurrentlyInProgressClientNumbers.First()].Flush();
+
+                            InsertTextMessage(server + "\n" + "Player 2 has connected. Game Begins");
+
+                            initializeGame();
+                        }
+
                     }
                     else
                     {
-                        sw[clientcount].WriteLine(server + "\n" + "You are player 2. Game Begins.");
-                        sw[clientcount].Flush();               // By Default WriteLine and ReadLine use Line Feed 
+                        if (CurrentlyInLineClientNumbers.Count < 3)
+                        {
+                            CurrentlyInLineClientNumbers.Add(clientcount);
 
-                        sw[CurrentlyInProgressClientNumbers.First()].WriteLine(server + "\n" + "Player 2 has connected. Game Begins");
-                        sw[CurrentlyInProgressClientNumbers.First()].Flush();
+                            sw[clientcount].WriteLine(server + "\n" + welcome);
+                            sw[clientcount].Flush();
 
-                        InsertTextMessage(server + "\n" + "Player 2 has connected. Game Begins");
+                            sw[clientcount].WriteLine(server + "\n" + "A game has begun, but currently you are " + CurrentlyInLineClientNumbers.Count + " in line.");
+                            sw[clientcount].Flush();
+                        }
 
-                        initializeGame();
                     }
-
                 }
-                else
-                {
-                    if (CurrentlyInLineClientNumbers.Count < 3)
-                    {
-                        CurrentlyInLineClientNumbers.Add(clientcount);
-
-                        sw[clientcount].WriteLine(server + "\n" + welcome);
-                        sw[clientcount].Flush();
-
-                        sw[clientcount].WriteLine(server + "\n" + "A game has begun, but currently you are " + CurrentlyInLineClientNumbers.Count + " in line.");
-                        sw[clientcount].Flush();
-                    }          
-                                  
-                }
-            }
-
-            if (AvailableClientNumbers.Count == 0)
-            {
-                client = newsocket.AcceptSocket();
-                NetworkStream ns = new NetworkStream(client);  //Create Network stream                
-                StreamWriter sw = new StreamWriter(ns); //create a stream writer
-
-                sw.WriteLine(server + "\n" + "You have reached Four square server. " +
-                             "Sorry the current queue is full, cannot accept connection.");
-                sw.Flush();
-
-                sw.WriteLine("Disconnect\n");
-                sw.Flush();
-
-                sw.Close();
-                ns.Close();                
-                client.Close();
-            }
+                
+            }            
 
         }
 
@@ -477,14 +481,14 @@ namespace ConnectFourServer
                 {
                     clientMessage = sr[clientnum].ReadLine();
 
-                    if (clientMessage.Contains("disconnect"))
+                    if (clientMessage.Contains("exit"))
                     {
-                        //sr[clientnum].Close();
-                        //sw[clientnum].Close();
-                        //ns[clientnum].Close();
-                        //InsertText("Client " + clientnum + " has disconnected");
-                        //KillMe(clientnum);
-                        //break;
+                        sr[clientnum].Close();
+                        sw[clientnum].Close();
+                        ns[clientnum].Close();
+                        InsertText("Client " + clientnum + " has disconnected");
+                        KillMe(clientnum);
+                        break;
                     }
                     else
                     {
