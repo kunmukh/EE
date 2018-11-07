@@ -294,7 +294,7 @@ namespace ConnectFourClient
                             grid[iSel, colSel].setCoinRed();
 
                         drawBoard();
-                        //doAnimation(colSel, 0, colSel, iSel);                        
+                        //doAnimation(colSel, 0, colSel, iSel);                         
                     }
                     if (inputStream.Contains("Player1"))
                     {
