@@ -265,7 +265,7 @@ namespace ConnectFourServer
                 {
                     client = newsocket.AcceptSocket();
                     NetworkStream ns = new NetworkStream(client);  //Create Network stream                
-                    StreamWriter sw = new StreamWriter(ns); //create a stream writer
+                    StreamWriter sw = new StreamWriter(ns); //create a stream writer 
 
                     sw.WriteLine(server + "\n" + "You have reached Four square server.\n " +
                                  "Sorry all slots full.Try later");
