@@ -44,6 +44,8 @@ namespace ConnectFourClient
         delegate void SetStartBtn(Boolean b);
         delegate void SetChatBtn(Boolean b);
         delegate void SetImg(Boolean b);
+        delegate void SetCnv(int startIndex1, int endIndex1, int startIndex2, int endIndex2);
+        Boolean blue;
 
         public MainWindow()
         {
@@ -289,12 +291,18 @@ namespace ConnectFourClient
                         int colSel = Convert.ToInt32(colSels);
 
                         if(color == "blue")
+                        {
                             grid[iSel, colSel].setCoinBlue();
+                            blue = true;
+                        }                            
                         else
+                        {
                             grid[iSel, colSel].setCoinRed();
+                            blue = false;
+                        }                            
 
-                        drawBoard();
-                        //doAnimation(colSel, 0, colSel, iSel);                         
+                        //drawBoard();
+                        doAnimation(colSel, 0, colSel, iSel);                         
                     }
                     if (inputStream.Contains("Player1"))
                     {
@@ -421,99 +429,106 @@ namespace ConnectFourClient
         }
 
         //do the coin animation
-        public void doAnimation(int startIndex1, int endIndex1, int startIndex2, int endIndex2)
+        private void doAnimation(int startIndex1, int endIndex1, int startIndex2, int endIndex2)
         {
-            int coinSize = 35;
-            SolidColorBrush bluBrush;
-
-            if (Player1)
+            if (this.cnv1.Dispatcher.CheckAccess())
             {
-                bluBrush = new SolidColorBrush(Color.FromRgb(0, 0, 255));
+                int coinSize = 35;
+                SolidColorBrush bluBrush;
+
+                if (blue)
+                {
+                    bluBrush = new SolidColorBrush(Color.FromRgb(0, 0, 255));
+                }
+                else
+                {
+                    bluBrush = new SolidColorBrush(Color.FromRgb(255, 0, 0));
+                }
+
+                Ellipse ell1 = new Ellipse();
+                ell1.Height = coinSize;
+                ell1.Width = coinSize;
+                ell1.Fill = bluBrush;
+
+                cnv1.Children.Add(ell1);
+
+                ell1.RenderTransform = animatedTranslateTransform;
+
+                ///*start
+                // Create the animation path.
+                PathGeometry animationPath = new PathGeometry();
+                PathFigure pFigure = new PathFigure();
+
+                PolyBezierSegment pBezierSegment = new PolyBezierSegment();
+
+                Point start = new Point(startIndex1 * 33, endIndex1 * 33);
+                Point end = new Point(startIndex2 * 33, (endIndex2 + 1) * 33);
+
+                pFigure.StartPoint = start;
+                pFigure.Segments.Add(pBezierSegment);
+
+                Console.WriteLine("Point start: " + start + " Point end: " + end);
+                LoadPathPoints(pBezierSegment, start, end);
+                animationPath.Figures.Add(pFigure);
+
+                // Freeze the PathGeometry for performance benefits.
+                animationPath.Freeze();
+                // Create a DoubleAnimationUsingPath to move the
+                // rectangle horizontally along the path by animating 
+                // its TranslateTransform.
+                DoubleAnimationUsingPath translateXAnimation =
+                    new DoubleAnimationUsingPath();
+                translateXAnimation.PathGeometry = animationPath;
+                translateXAnimation.Duration = TimeSpan.FromSeconds(1);
+
+                // Set the Source property to X. This makes
+                // the animation generate horizontal offset values from
+                // the path information. 
+                translateXAnimation.Source = PathAnimationSource.X;
+
+                // Set the animation to target the X property
+                // of the TranslateTransform named "AnimatedTranslateTransform".
+                Storyboard.SetTargetName(translateXAnimation, "AnimatedTranslateTransform");
+                Storyboard.SetTargetProperty(translateXAnimation,
+                    new PropertyPath(TranslateTransform.XProperty));
+                // Create a DoubleAnimationUsingPath to move the
+                // rectangle vertically along the path by animating 
+                // its TranslateTransform.
+                DoubleAnimationUsingPath translateYAnimation =
+                    new DoubleAnimationUsingPath();
+                translateYAnimation.PathGeometry = animationPath;
+                translateYAnimation.Duration = TimeSpan.FromSeconds(1);
+
+                // Set the Source property to Y. This makes
+                // the animation generate vertical offset values from
+                // the path information. 
+                translateYAnimation.Source = PathAnimationSource.Y;
+
+                // Set the animation to target the Y property
+                // of the TranslateTransform named "AnimatedTranslateTransform".
+                Storyboard.SetTargetName(translateYAnimation, "AnimatedTranslateTransform");
+                Storyboard.SetTargetProperty(translateYAnimation,
+                    new PropertyPath(TranslateTransform.YProperty));
+
+                // Create a Storyboard to contain and apply the animations.
+                pathAnimationStoryboard = new Storyboard();
+
+                pathAnimationStoryboard.Children.Add(translateXAnimation);
+                pathAnimationStoryboard.Children.Add(translateYAnimation);
+                // Start the animations.           
+                pathAnimationStoryboard.Completed += new EventHandler(Story_Completed);
+                pathAnimationStoryboard.Begin(cnv1, true);
             }
             else
             {
-                bluBrush = new SolidColorBrush(Color.FromRgb(255, 0, 0));
+                cnv1.Dispatcher.BeginInvoke(new SetCnv(doAnimation), startIndex1, endIndex1, startIndex2, endIndex2);
             }
 
-            Ellipse ell1 = new Ellipse();
-            ell1.Height = coinSize;
-            ell1.Width = coinSize;
-            ell1.Fill = bluBrush;
-
-
-            cnv1.Children.Add(ell1);
-
-            ell1.RenderTransform = animatedTranslateTransform;
-
-            ///*start
-            // Create the animation path.
-            PathGeometry animationPath = new PathGeometry();
-            PathFigure pFigure = new PathFigure();
-
-            PolyBezierSegment pBezierSegment = new PolyBezierSegment();
-
-            Point start = new Point(startIndex1 * 33, endIndex1 * 33);
-            Point end = new Point(startIndex2 * 33, (endIndex2 + 1) * 33);
-
-            pFigure.StartPoint = start;
-            pFigure.Segments.Add(pBezierSegment);
-
-            Console.WriteLine("Point start: " + start + " Point end: " + end);
-            LoadPathPoints(pBezierSegment, start, end);
-            animationPath.Figures.Add(pFigure);
-
-            // Freeze the PathGeometry for performance benefits.
-            animationPath.Freeze();
-            // Create a DoubleAnimationUsingPath to move the
-            // rectangle horizontally along the path by animating 
-            // its TranslateTransform.
-            DoubleAnimationUsingPath translateXAnimation =
-                new DoubleAnimationUsingPath();
-            translateXAnimation.PathGeometry = animationPath;
-            translateXAnimation.Duration = TimeSpan.FromSeconds(1);
-
-            // Set the Source property to X. This makes
-            // the animation generate horizontal offset values from
-            // the path information. 
-            translateXAnimation.Source = PathAnimationSource.X;
-
-            // Set the animation to target the X property
-            // of the TranslateTransform named "AnimatedTranslateTransform".
-            Storyboard.SetTargetName(translateXAnimation, "AnimatedTranslateTransform");
-            Storyboard.SetTargetProperty(translateXAnimation,
-                new PropertyPath(TranslateTransform.XProperty));
-            // Create a DoubleAnimationUsingPath to move the
-            // rectangle vertically along the path by animating 
-            // its TranslateTransform.
-            DoubleAnimationUsingPath translateYAnimation =
-                new DoubleAnimationUsingPath();
-            translateYAnimation.PathGeometry = animationPath;
-            translateYAnimation.Duration = TimeSpan.FromSeconds(1);
-
-            // Set the Source property to Y. This makes
-            // the animation generate vertical offset values from
-            // the path information. 
-            translateYAnimation.Source = PathAnimationSource.Y;
-
-            // Set the animation to target the Y property
-            // of the TranslateTransform named "AnimatedTranslateTransform".
-            Storyboard.SetTargetName(translateYAnimation, "AnimatedTranslateTransform");
-            Storyboard.SetTargetProperty(translateYAnimation,
-                new PropertyPath(TranslateTransform.YProperty));
-
-            // Create a Storyboard to contain and apply the animations.
-            pathAnimationStoryboard = new Storyboard();
-
-            pathAnimationStoryboard.Children.Add(translateXAnimation);
-            pathAnimationStoryboard.Children.Add(translateYAnimation);
-            // Start the animations.           
-            //pathAnimationStoryboard.Completed += new EventHandler(Story_Completed);
-            pathAnimationStoryboard.Begin(cnv1, true);
         }
 
         private void Story_Completed(object sender, EventArgs e)
         {
-            cnv1.Children.Clear();
+            cnv1.Children.Clear();            
             drawBoard();
         }
 

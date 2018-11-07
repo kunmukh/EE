@@ -851,7 +851,7 @@ namespace ConnectFourServer
         }
     }
 
-    //class cell that has the attribute of being last, empty
+    //class cell that has the attribute of being last, empty 
     public class Cell
     {
         public Coin _c { get; set; }
