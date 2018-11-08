@@ -399,7 +399,7 @@ namespace ConnectFourServer
                                 else if (!found)
                                 {
                                     //if the move cannot be done, then it is sen tto the client
-                                    w[CurrentlyInProgressClientNumbers.ElementAt(0)].WriteLine("Server\n" + "Cannot Move");
+                                    sw[CurrentlyInProgressClientNumbers.ElementAt(0)].WriteLine("Server\n" + "Cannot Move");
                                     sw[CurrentlyInProgressClientNumbers.ElementAt(1)].WriteLine("Server\n" + "Cannot Move");
                                     sw[CurrentlyInProgressClientNumbers.ElementAt(0)].Flush();
                                     sw[CurrentlyInProgressClientNumbers.ElementAt(1)].Flush();
