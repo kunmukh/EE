@@ -26,7 +26,7 @@ namespace ConnectFourClient
     /// </summary>
     public partial class MainWindow : Window
     {
-
+        //Socket connection variables
         NetworkStream ns;
         StreamReader sr;
         StreamWriter sw;
@@ -34,17 +34,19 @@ namespace ConnectFourClient
         BackgroundWorker backgroundWorker1 = new BackgroundWorker();
         private String UserName = "";
         
+        //Game setup logic
         private Boolean Player1 = false;
         private static int height = 6, width = 7;
         private Cell[,] grid = new Cell[height, width];
         private TranslateTransform animatedTranslateTransform;
         Storyboard pathAnimationStoryboard;
         System.Media.SoundPlayer myPlayerW;      
+        //delegate function so that chat, graphics , image can be shown
         delegate void SetBitMapCallbCk(RenderTargetBitmap bmp);
         delegate void SetStartBtn(Boolean b);
         delegate void SetChatBtn(Boolean b);
         delegate void SetImg(Boolean b);
-        delegate void SetCnv(int startIndex1, int endIndex1, int startIndex2, int endIndex2);
+        delegate void SetCnv(int startIndex1, int endIndex1, int startIndex2, int endIndex2);       
         Boolean blue;
 
         public MainWindow()
@@ -61,10 +63,11 @@ namespace ConnectFourClient
             // Register the transform's name with the page
             // so that they it be targeted by a Storyboard.
             cnv1.RegisterName("AnimatedTranslateTransform", animatedTranslateTransform);
-
+            //stop the client to send a message even when the client is not connected
             btn_Send.IsEnabled = false;
         }
 
+        //sending a text message
         private void btn_Send_Click(object sender, RoutedEventArgs e)
         {
             sw.WriteLine("Chat\n" + UserName + txtbxMessage.Text);
@@ -72,25 +75,205 @@ namespace ConnectFourClient
             txtbxMessage.Text = "";
         }
 
+        //starts the server and connects
         private void btnStart_Click(object sender, RoutedEventArgs e)
         {
+            //enable the chat button if the chat is succesfully connected
             btn_Send.IsEnabled = true;
-
+            //get the username
             UserName = txtbxUsername.Text + ">> ";
             TcpClient newcon = new TcpClient();
             newcon.Connect("127.0.0.1", 9090);  //IPAddress of Server
             ns = newcon.GetStream();
             sr = new StreamReader(ns);  //Stream Reader and Writer take away some of the overhead of keeping track of Message size.  By Default WriteLine and ReadLine use Line Feed to delimit the messages
             sw = new StreamWriter(ns);
+
+            //create the background worker and add it
             backgroundWorker1.DoWork += new DoWorkEventHandler(backgroundWorker1_DoWork);
             backgroundWorker1.RunWorkerAsync("Message to Worker");
             txtbxUsername.IsEnabled = false;
 
+            //generate an empty board
+            //draw the board
+            //no more server connection can be made after connection
             makeEmptyBoard();
             drawBoard();
             changeStartBtn(false);
         }
 
+        //get the column postion from the button click
+        private void imgGame_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var point = e.GetPosition(imgGame);
+            int x, y;
+
+            x = (int)point.X;
+            y = (int)point.Y;
+
+            if (x > 0 && x < 231 && y > 33 && y < 231)
+            {
+                //seelct the appriopiate row and col                
+                int colSel = x / 33;
+                sw.WriteLine("Move\n" + colSel);
+                sw.Flush();
+            }
+        }
+
+        //move the coin as the mouse is moved over screen
+        private void imgGame_MouseMove(object sender, MouseEventArgs e)
+        {
+            var point = e.GetPosition(imgGame);
+
+            int x, y;
+
+            x = (int)point.X;
+            y = (int)point.Y;
+
+
+            int rowSel = (y / 33) - 1;
+            int colSel = x / 33;
+
+            if (x > 0 && x < 231 && y > 33 && y < 198)
+            {
+                int gapx = colSel * 46;
+
+                //lblMessage.Content = rowSel.ToString() + " " + colSel.ToString() + " " + gapx.ToString();
+
+                Pen[] penArray = new Pen[2];
+                penArray[0] = new Pen(Brushes.Black, 1);
+                penArray[1] = new Pen(Brushes.Black, 1);
+
+                Brush[] brushArray = new Brush[2];
+                brushArray[1] = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0)); //red
+                brushArray[0] = new SolidColorBrush(Color.FromArgb(255, 0, 0, 255)); //blue
+
+                DrawingVisual vis = new DrawingVisual();
+                DrawingContext dc = vis.RenderOpen();
+
+                int coinSize = 46, gapy = 23;
+
+
+                Brush b = new SolidColorBrush();
+                Pen p = new Pen();
+
+                //select the brush and pen color depending on the player
+                if (Player1)
+                {
+                    p = penArray[1];
+                    b = brushArray[0];
+                    dc.DrawEllipse(b, p, new Point(gapx + coinSize / 2, gapy), coinSize / 2, coinSize / 2);
+                }
+                else
+                {
+                    p = penArray[1];
+                    b = brushArray[1];
+                    dc.DrawEllipse(b, p, new Point(gapx + coinSize / 2, gapy), coinSize / 2, coinSize / 2);
+                }
+
+                dc.Close();
+                RenderTargetBitmap bmp = new RenderTargetBitmap(1384, 1280, 300, 300, PixelFormats.Pbgra32);
+                bmp.Render(vis);
+                imgGame2.Source = bmp;
+            }
+        }
+
+        //the background worker that does the work
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+            while (true)
+            {
+                try
+                {
+                    string inputStream = sr.ReadLine();  //Note Read only reads into a byte array.  Also Note that Read is a "Blocking Function"     
+
+                    //if it is a server message 
+                    if (inputStream.Contains("Server"))
+                    {
+                        string newstring = sr.ReadLine();
+                        InsertTextMessage(newstring);
+                    }
+                    //this is a chat message
+                    if (inputStream.Contains("Chat"))
+                    {
+                        string newstring = sr.ReadLine();
+                        InsertText(newstring);
+                    }
+                    //this is a move made
+                    if (inputStream.Contains("Move"))
+                    {
+                        //play sound
+                        String s = System.Environment.CurrentDirectory;
+                        var myPlayer = new System.Media.SoundPlayer();
+                        myPlayer.SoundLocation = System.IO.Path.Combine(System.Environment.CurrentDirectory, @"..\..\..\coin.wav");
+                        myPlayer.Play();
+
+                        //gets the row, column, color information from the message
+                        string iSels = sr.ReadLine();
+                        string colSels = sr.ReadLine();
+                        string color = sr.ReadLine();
+
+                        //converts the row,col to string
+                        int iSel = Convert.ToInt32(iSels);
+                        int colSel = Convert.ToInt32(colSels);
+
+                        //selects the color
+                        if (color == "blue")
+                        {
+                            grid[iSel, colSel].setCoinBlue();
+                            blue = true;
+                        }
+                        else
+                        {
+                            grid[iSel, colSel].setCoinRed();
+                            blue = false;
+                        }
+
+                        //drawBoard();
+                        doAnimation(colSel, 0, colSel, iSel);
+                    }
+                    //get the player number from the server, if they are first or nor
+                    if (inputStream.Contains("Player1"))
+                    {
+                        string status = sr.ReadLine();
+                        if (status.Contains("true"))
+                        {
+                            Player1 = true;
+                            //sends the respective message
+                            InsertText("You are Blue. And YOU START!!!!");
+                        }
+                        else
+                        {
+                            Player1 = false;
+                            //sends the respective message
+                            InsertText("You are Red. BLUE STARTS, so PLEASE WAIT");
+                        }
+                        //cleasr teh board and draws the board
+                        makeEmptyBoard();
+                        drawBoard();
+
+                    }
+                    //if disconnected, closes the connection 
+                    if (inputStream.Contains("Disconnect"))
+                    {
+                        sr.Close();
+                        sw.Close();
+                        changeStartBtn(false);
+                        changeChatBtn(false);
+                        changeImg(false);                        
+                    }
+
+                }
+                catch
+                {
+                    //ns.Close();
+                    //System.Environment.Exit(System.Environment.ExitCode); //close all                     
+                }
+
+            }
+
+        }
+
+        //delegate function to insert image
         private void InsertBitMap(RenderTargetBitmap bmp)
         {
             if (this.imgGame.Dispatcher.CheckAccess())
@@ -102,8 +285,9 @@ namespace ConnectFourClient
                 bmp.Freeze();
                 this.imgGame.Dispatcher.BeginInvoke(new SetBitMapCallbCk(InsertBitMap), bmp);                
             }
-        }
+        }        
 
+        //delegate function to insert text message from server
         private void InsertTextMessage(string text)
         {
             // InvokeRequired required compares the thread ID of the
@@ -120,6 +304,7 @@ namespace ConnectFourClient
             }
         }
 
+        //insert text message into the list box
         private void InsertText(string text)
         {
             // InvokeRequired required compares the thread ID of the
@@ -136,6 +321,7 @@ namespace ConnectFourClient
             }
         }
 
+        //chnages the start button to the sent boolean
         private void changeStartBtn(Boolean b)
         {            
             if (this.btnStart.Dispatcher.CheckAccess())
@@ -149,6 +335,7 @@ namespace ConnectFourClient
             }
         }
 
+        //enabling or disabling the chat button after disconnection
         private void changeChatBtn(Boolean b)
         {
             if (this.btn_Send.Dispatcher.CheckAccess())
@@ -162,6 +349,7 @@ namespace ConnectFourClient
             }
         }
 
+        //changes the image as per the current game
         private void changeImg(Boolean b)
         {
             if (this.imgGame.Dispatcher.CheckAccess())
@@ -175,6 +363,7 @@ namespace ConnectFourClient
             }
         }
 
+        //draws the board
         void drawBoard()
         {
             Pen[] penArray = new Pen[3];
@@ -240,12 +429,16 @@ namespace ConnectFourClient
                 gapx = 0;
             }
 
+
+            //genrates the bitmap
+            //and send the bitmap to the screen
             dc.Close();
             RenderTargetBitmap bmp = new RenderTargetBitmap(1384, 1280, 300, 300, PixelFormats.Pbgra32);
             bmp.Render(vis);
             InsertBitMap(bmp);
         }
 
+        //creates an empty baord
         void makeEmptyBoard()
         {
             for (int i = 0; i < height; i++)
@@ -257,176 +450,18 @@ namespace ConnectFourClient
             }
         }
 
-        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
-        {
-            while (true)
-            {
-                try
-                {
-                    string inputStream = sr.ReadLine();  //Note Read only reads into a byte array.  Also Note that Read is a "Blocking Function"     
-
-                    //if it is a server message 
-                    if (inputStream.Contains("Server"))
-                    {
-                        string newstring = sr.ReadLine();
-                        InsertTextMessage(newstring);                        
-                    }
-                    if (inputStream.Contains("Chat"))
-                    {
-                        string newstring = sr.ReadLine();
-                        InsertText(newstring);
-                    }
-                    if (inputStream.Contains("Move"))
-                    {
-                        //play sound
-                        var myPlayer = new System.Media.SoundPlayer(); 
-                        myPlayer.SoundLocation = @"C:\Users\kunmu\Documents\Kunal\UE courses\EE-356\EE-356\FourSquare\FourSquareGame\coin.wav";
-                        myPlayer.Play();
-
-                        string iSels= sr.ReadLine();
-                        string colSels = sr.ReadLine();
-                        string color = sr.ReadLine();
-
-                        int iSel = Convert.ToInt32(iSels);
-                        int colSel = Convert.ToInt32(colSels);
-
-                        if(color == "blue")
-                        {
-                            grid[iSel, colSel].setCoinBlue();
-                            blue = true;
-                        }                            
-                        else
-                        {
-                            grid[iSel, colSel].setCoinRed();
-                            blue = false;
-                        }                            
-
-                        //drawBoard();
-                        doAnimation(colSel, 0, colSel, iSel);                         
-                    }
-                    if (inputStream.Contains("Player1"))
-                    {
-                        string status = sr.ReadLine();
-                        if (status.Contains("true"))
-                        {
-                            Player1 = true;
-                            InsertText("You are Blue. And YOU START!!!!");
-                        }                            
-                        else
-                        {
-                            Player1 = false;
-                            InsertText("You are Red. BLUE STARTS, so PLEASE WAIT");
-                        }
-
-                        makeEmptyBoard();
-                        drawBoard();
-                            
-                    }
-                    if (inputStream.Contains("Disconnect"))
-                    {                        
-                        sr.Close();
-                        sw.Close();
-                        changeStartBtn(false);
-                        changeChatBtn(false);
-                        changeImg(false);
-                    }
-
-                }
-                catch
-                {
-                    //ns.Close();
-                    //System.Environment.Exit(System.Environment.ExitCode); //close all                     
-                }
-
-            }
-
-        }        
-
+        //chanage the player
         void changePlayer()
         {
-            string message;
             if (Player1)
             {
-                Player1 = false;                
+                Player1 = false;
             }
             else
             {
-                Player1 = true;                
+                Player1 = true;
             }
         }        
-        
-        private void imgGame_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            var point = e.GetPosition(imgGame);
-            int x, y;
-
-            x = (int)point.X;
-            y = (int)point.Y;
-
-            if (x > 0 && x < 231 && y > 33 && y < 231)
-            {         
-                //seelct the appriopiate row and col                
-                int colSel = x / 33;
-                sw.WriteLine("Move\n" + colSel);
-                sw.Flush();
-            }
-        }
-
-        private void imgGame_MouseMove(object sender, MouseEventArgs e)
-        {
-            var point = e.GetPosition(imgGame);
-
-            int x, y;
-
-            x = (int)point.X;
-            y = (int)point.Y;
-
-
-            int rowSel = (y / 33) - 1;
-            int colSel = x / 33;
-
-            if (x > 0 && x < 231 && y > 33 && y < 198)
-            {
-                int gapx = colSel * 46;
-
-                //lblMessage.Content = rowSel.ToString() + " " + colSel.ToString() + " " + gapx.ToString();
-
-                Pen[] penArray = new Pen[2];
-                penArray[0] = new Pen(Brushes.Black, 1);
-                penArray[1] = new Pen(Brushes.Black, 1);
-
-                Brush[] brushArray = new Brush[2];
-                brushArray[1] = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0)); //red
-                brushArray[0] = new SolidColorBrush(Color.FromArgb(255, 0, 0, 255)); //blue
-
-                DrawingVisual vis = new DrawingVisual();
-                DrawingContext dc = vis.RenderOpen();
-
-                int coinSize = 46, gapy = 23;
-
-
-                Brush b = new SolidColorBrush();
-                Pen p = new Pen();
-
-                if (Player1)
-                {
-                    p = penArray[1];
-                    b = brushArray[0];
-                    dc.DrawEllipse(b, p, new Point(gapx + coinSize / 2, gapy), coinSize / 2, coinSize / 2);
-                }
-                else
-                {
-                    p = penArray[1];
-                    b = brushArray[1];
-                    dc.DrawEllipse(b, p, new Point(gapx + coinSize / 2, gapy), coinSize / 2, coinSize / 2);
-                }
-
-                dc.Close();
-                RenderTargetBitmap bmp = new RenderTargetBitmap(1384, 1280, 300, 300, PixelFormats.Pbgra32);
-                bmp.Render(vis);
-                imgGame2.Source = bmp;
-            }
-        }
 
         //do the coin animation
         private void doAnimation(int startIndex1, int endIndex1, int startIndex2, int endIndex2)
@@ -436,6 +471,7 @@ namespace ConnectFourClient
                 int coinSize = 35;
                 SolidColorBrush bluBrush;
 
+                //select the apporipate color for the ellipse
                 if (blue)
                 {
                     bluBrush = new SolidColorBrush(Color.FromRgb(0, 0, 255));
@@ -526,12 +562,14 @@ namespace ConnectFourClient
 
         }
 
+        //after the animation is done, reprint the baord
         private void Story_Completed(object sender, EventArgs e)
         {
             cnv1.Children.Clear();            
             drawBoard();
         }
 
+        //load the animation path
         private void LoadPathPoints(PolyBezierSegment pBezierSegment, Point start, Point end)
         {
             double incrx = (end.X - start.X) / 5;

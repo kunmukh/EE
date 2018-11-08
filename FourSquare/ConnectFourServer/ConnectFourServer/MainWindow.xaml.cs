@@ -118,6 +118,7 @@ namespace ConnectFourServer
         private void btnStart_Click(object sender, RoutedEventArgs e)
         {
             btn_Send.IsEnabled = true;
+            btnStart.IsEnabled = false;
             backgroundWorker1.DoWork += new DoWorkEventHandler(backgroundWorker1_DoWork);
             backgroundWorker1.RunWorkerAsync("Message to Worker");
 
