@@ -1,5 +1,5 @@
 Dependencies for Project 'STMF446Template', Target 'Target 1': (DO NOT MODIFY !)
-F (.\STMF446Template.c)(0x5BD66AA2)(--c99 --gnu -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.4.0\CMSIS\Core\Include-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.4.0\CMSIS\DSP\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="526" -D_RTE_ -DSTM32F446xx-o .\objects\stmf446template.o --omf_browse .\objects\stmf446template.crf --depend .\objects\stmf446template.d)
+F (.\STMF446Template.c)(0x5C00ECAF)(--c99 --gnu -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.4.0\CMSIS\Core\Include-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.4.0\CMSIS\DSP\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="526" -D_RTE_ -DSTM32F446xx-o .\objects\stmf446template.o --omf_browse .\objects\stmf446template.crf --depend .\objects\stmf446template.d)
 I (stm32f446.h)(0x5BD643FE)
 F (.\stm32f446.h)(0x5BD643FE)()
 F (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.4.0\CMSIS\Lib\ARM\arm_cortexM4lf_math.lib)(0x5B2D256C)()

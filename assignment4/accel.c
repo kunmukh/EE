@@ -71,7 +71,8 @@ void main(void)
     tmp = (ADCON & 0x10); // Get done bit
     while(tmp != 0x10) // Loop until complete
 			tmp = (ADCON & 0x10);
-    result = ADDH; // Send 8 MSB to P2
+			
+		result = ADDH; // Send 8 MSB to P2
 		result *= 4;
 		result += ADDL;
 	
