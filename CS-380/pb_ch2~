@@ -1,0 +1,19 @@
+#lang eopl
+
+;2.9 2.21 2.22 2.23 2.29 2.31
+
+;2.21
+(define-datatype env env?
+  (empty-env)
+  (extend-env (var symbol?) (val number?) (env env?)))
+
+(define has-binding?
+  (lambda (s-env sym)
+    (cases env s-env
+      (empty-env () #f)
+      (extend-env (var val c-env)
+                  (if (eqv? var sym)
+                      #t
+                      (has-binding? c-env sym))))))
+;(define t-env (extend-env 'x 1 (extend-env 'y 2 (extend-env 'z 3.2 (empty-env)))))
+;(has?binding t-env 'x) 
