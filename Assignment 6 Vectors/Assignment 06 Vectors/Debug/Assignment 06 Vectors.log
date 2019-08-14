@@ -1,7 +1,0 @@
-﻿  Source.c
-c:\users\kunal\documents\kunal\cs 210\assignment 6 vectors\assignment 06 vectors\source.c(145): warning C4028: formal parameter 1 different from declaration
-c:\users\kunal\documents\kunal\cs 210\assignment 6 vectors\assignment 06 vectors\source.c(318): warning C4028: formal parameter 1 different from declaration
-c:\users\kunal\documents\kunal\cs 210\assignment 6 vectors\assignment 06 vectors\source.c(557): warning C4715: 'AreaDifferenciator': not all control paths return a value
-c:\users\kunal\documents\kunal\cs 210\assignment 6 vectors\assignment 06 vectors\source.c(300): warning C4715: 'LineLength': not all control paths return a value
-  Assignment 06 Vectors.vcxproj -> C:\Users\Kunal\Documents\Kunal\CS 210\Assignment 6 Vectors\Debug\Assignment 06 Vectors.exe
-  Assignment 06 Vectors.vcxproj -> C:\Users\Kunal\Documents\Kunal\CS 210\Assignment 6 Vectors\Debug\Assignment 06 Vectors.pdb (Full PDB)

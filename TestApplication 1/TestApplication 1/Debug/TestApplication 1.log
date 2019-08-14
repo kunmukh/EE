@@ -1,5 +1,0 @@
-﻿  Source.c
-c:\users\kunal\documents\kunal\cs 210\testapplication 1\testapplication 1\source.c(8): warning C4477: 'printf' : format string '%d' requires an argument of type 'int', but variadic argument 1 has type 'int *'
-c:\users\kunal\documents\kunal\cs 210\testapplication 1\testapplication 1\source.c(9): warning C4477: 'printf' : format string '%d' requires an argument of type 'int', but variadic argument 1 has type 'int *'
-  TestApplication 1.vcxproj -> C:\Users\Kunal\Documents\Kunal\CS 210\TestApplication 1\Debug\TestApplication 1.exe
-  TestApplication 1.vcxproj -> C:\Users\Kunal\Documents\Kunal\CS 210\TestApplication 1\Debug\TestApplication 1.pdb (Full PDB)

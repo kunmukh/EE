@@ -1,5 +1,0 @@
-﻿  Source.c
-c:\users\kunal\documents\kunal\cs 210\in-class assignment 15\in-class assignment 15\source.c(14): warning C4101: 'aPtr': unreferenced local variable
-c:\users\kunal\documents\kunal\cs 210\in-class assignment 15\in-class assignment 15\source.c(11): warning C4101: 'err': unreferenced local variable
-  In-Class Assignment 15.vcxproj -> C:\Users\Kunal\Documents\Kunal\CS 210\In-Class Assignment 15\Debug\In-Class Assignment 15.exe
-  In-Class Assignment 15.vcxproj -> C:\Users\Kunal\Documents\Kunal\CS 210\In-Class Assignment 15\Debug\In-Class Assignment 15.pdb (Full PDB)

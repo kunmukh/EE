@@ -1,6 +1,0 @@
-﻿  Source.c
-c:\users\kunal\documents\kunal\cs 210\assignment 7 string functions\assignment 07 string functions\source.c(163): warning C4101: 'f': unreferenced local variable
-c:\users\kunal\documents\kunal\cs 210\assignment 7 string functions\assignment 07 string functions\source.c(197): warning C4013: 'abs' undefined; assuming extern returning int
-c:\users\kunal\documents\kunal\cs 210\assignment 7 string functions\assignment 07 string functions\source.c(142): warning C4715: 'Str2Double': not all control paths return a value
-  Assignment 07 String functions.vcxproj -> C:\Users\Kunal\Documents\Kunal\CS 210\Assignment 7 String functions\Debug\Assignment 07 String functions.exe
-  Assignment 07 String functions.vcxproj -> C:\Users\Kunal\Documents\Kunal\CS 210\Assignment 7 String functions\Debug\Assignment 07 String functions.pdb (Full PDB)
