@@ -1,0 +1,9 @@
+# depslib dependency file v1.0
+1542948479 source:c:\users\kunmu\desktop\algorithms\main.c
+	<stdio.h>
+	<stdlib.h>
+
+1542959137 source:c:\users\kunmu\documents\kunal\ue_courses\ee-354\project2\algorithms\main.c
+	<stdio.h>
+	<stdlib.h>
+

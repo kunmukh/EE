@@ -1,0 +1,108 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        09/06/2018  01:32:19  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE proj1.obj TO project1 PRINT (.\Listings\project1.m51) RAMSIZE (256)
+
+
+INPUT MODULES INCLUDED:
+  proj1.obj (PROJ1)
+
+
+LINK MAP OF MODULE:  project1 (PROJ1)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     07FDH                  *** GAP ***
+            CODE    0800H     0054H     UNIT         MAINSEG
+
+
+
+SYMBOL TABLE OF MODULE:  project1 (PROJ1)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        PROJ1
+  C:0800H         SEGMENT       MAINSEG
+  C:080AH         SYMBOL        L1
+  C:0811H         SYMBOL        L2
+  C:0818H         SYMBOL        L3
+  C:081EH         SYMBOL        L4
+  C:0824H         SYMBOL        L5
+  C:082AH         SYMBOL        L6
+  C:0830H         SYMBOL        LO1
+  C:0838H         SYMBOL        LO2
+  C:083BH         SYMBOL        LO3
+  C:0834H         SYMBOL        LO4
+  C:084BH         SYMBOL        LO5
+  C:0848H         SYMBOL        LO6
+  D:0090H         SYMBOL        P1
+  D:00B0H         SYMBOL        P3
+  C:0800H         SYMBOL        START
+  C:0000H         LINE#         4
+  C:0800H         LINE#         7
+  C:0802H         LINE#         8
+  C:0804H         LINE#         9
+  C:0806H         LINE#         10
+  C:0808H         LINE#         11
+  C:080AH         LINE#         13
+  C:080BH         LINE#         14
+  C:080DH         LINE#         15
+  C:080FH         LINE#         16
+  C:0811H         LINE#         18
+  C:0812H         LINE#         19
+BL51 BANKED LINKER/LOCATER V6.22                                                      09/06/2018  01:32:19  PAGE 2
+
+
+  C:0814H         LINE#         20
+  C:0816H         LINE#         21
+  C:0818H         LINE#         23
+  C:081AH         LINE#         24
+  C:081CH         LINE#         25
+  C:081EH         LINE#         27
+  C:0820H         LINE#         28
+  C:0822H         LINE#         29
+  C:0824H         LINE#         31
+  C:0826H         LINE#         32
+  C:0828H         LINE#         33
+  C:082AH         LINE#         35
+  C:082CH         LINE#         36
+  C:082EH         LINE#         37
+  C:0830H         LINE#         39
+  C:0832H         LINE#         40
+  C:0834H         LINE#         41
+  C:0836H         LINE#         42
+  C:0838H         LINE#         44
+  C:0839H         LINE#         45
+  C:083BH         LINE#         46
+  C:083CH         LINE#         47
+  C:083DH         LINE#         48
+  C:083FH         LINE#         49
+  C:0840H         LINE#         50
+  C:0842H         LINE#         51
+  C:0844H         LINE#         52
+  C:0846H         LINE#         53
+  C:0848H         LINE#         54
+  C:0849H         LINE#         55
+  C:084BH         LINE#         56
+  C:084CH         LINE#         57
+  C:084DH         LINE#         58
+  C:084FH         LINE#         59
+  C:0850H         LINE#         60
+  C:0852H         LINE#         61
+  -------         ENDMOD        PROJ1
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0057H BYTE ( 4%) *
+******************************************************************************
+
+Program Size: data=8.0 xdata=0 code=87
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

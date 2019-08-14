@@ -1,0 +1,131 @@
+A51 MACRO ASSEMBLER  DOC                                                                  09/18/2018 11:55:31 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.02c
+OBJECT MODULE PLACED IN .\Objects\doc.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE doc.a51 SET(SMALL) DEBUG PRINT(.\Listings\doc.lst) OBJECT(.\Objects\doc
+                      .obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+                       1     ; Kunal Mukherjee
+                       2     ; 9/17/2018
+                       3     ; Assignment 2
+                       4     ; EE354
+                       5     
+                       6     ; if the button is pushed one time it will output
+                       7     ;an A-note (440Hz) for about 1 second. 
+                       8     ;When the button is pushed a second time 
+                       9     ;it will output a Cnote (261Hz) for about 1 second. 
+                      10     ;A third push goes back to an A-note, etc. 
+                      11     
+                      12     ;TODO: Put in the 1sec loop  
+                      13     
+                      14     MainSeg SEGMENT CODE    
+                      15             ;Macro to set P1.0 to 1
+                      16             SetBit MACRO 
+                      17                                     setb P1.0
+                      18                                     ENDM
+                      19             ;Macro to set P1.0 to 0                 
+                      20             ClrBit MACRO 
+                      21                                     clr P1.0
+                      22                                     ENDM
+                      23                                     
+----                  24             CSEG at 0h
+0000 020000   F       25                     ljmp Start
+----                  26             RSEG MainSeg
+0000 7400             27                     mov a, #00h
+0002 B40005           28                     Start:  cjne a, #0, ReadA ;if R2 is 0, then choose A
+0005 B40127           29                                     cjne a, #1, ReadC ;if R2 is 1, then choose C               
+                                  
+0008 80F8             30                                     jmp Start ; jump to start
+                      31                     
+000A A2B4             32                     ReadA:  mov c, P3.4 ; Read button state
+000C 5002             33                                     jnc CloseA ; jump to Close, if pressed                  
+000E 80F2             34                                     jmp Start  ; jump to Start, if not pressed
+                      35                             
+0010 04               36                     CloseA: inc a ; if A is selected, incr R2, so that C is selected next time
+0011 7902             37                                     mov R1, #2
+0013 7AFA             38                     LP:             mov R2, #250
+0015 120000   F       39                     LP1:    Call PlayA ; calls play A in a loop for 500 times
+0018 DAFB             40                                     djnz R2, LP1
+001A D9F7             41                                     djnz R1, LP                             
+001C 80E4             42                                     jmp Start
+                      43                                     
+                      44                     ;subroutine for play    
+001E                  45                     PlayA:  ClrBit ;turn p1.0 on
+0020 120000   F       47                                     call DelayA ;calls delay
+                      48                                     SetBit ;turn p1.0 off                   
+0025 22               50                                     RET
+                      51                                     
+                      52                     ;subroutine to delay A  
+0026 7BAA             53                     DelayA: mov R3, #170 ;delays it for (1/440) /2 = 0.0013 sec
+0028 7C08             54                     LP4:    mov R4, #8
+002A DCFE             55                     LP3:    djnz R4, LP3
+002C DBFA             56                                     djnz R3, LP4                    
+002E 22               57                                     RET                     
+                      58                                             
+A51 MACRO ASSEMBLER  DOC                                                                  09/18/2018 11:55:31 PAGE     2
+
+002F A2B4             59                     ReadC:  mov c, P3.4 ;Read button state
+0031 5002             60                                     jnc CloseC ; jump to Close, if pressed
+0033 80CD             61                                     jmp Start  ; jump to Start, if not pressed
+                      62                             
+0035 14               63                     CloseC: dec a ;if C is selected, dec R2, so that A is selected next time
+0036 7902             64                                     mov R1, #2
+0038 7AFA             65                     LP6:    mov R2, #250
+003A 120000   F       66                     LP5:    Call PlayC
+003D DAFB             67                                     djnz R2, LP5
+003F D9F7             68                                     djnz R1, LP6
+0041 D3               69                                     setb c
+0042 80BE             70                                     jmp Start
+                      71                                     
+                      72                     ;subroutine to playC    
+0044                  73                     PlayC:  ClrBit ;turn p1.0 on
+0046 120000   F       75                                     call DelayC
+                      76                                     SetBit ;turn p1.0 off                   
+004B 22               78                                     RET; once finished return to start              
+                      79                                     
+                      80                     ;subroutine to delau C          
+004C 7BAA             81                     DelayC: mov R3, #170;delays it for (1/261) /2 = 0.0019 sec
+004E 7C0C             82                     LP8:    mov R4, #12
+0050 DCFE             83                     LP7:    djnz R4, LP7
+0052 DBFA             84                                     djnz R3, LP8                            
+0054 22               85                                     RET                     
+                      86                     
+                      87                     END
+                                                     
+A51 MACRO ASSEMBLER  DOC                                                                  09/18/2018 11:55:31 PAGE     3
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+CLOSEA . . . . . .  C ADDR   0010H   R   SEG=MAINSEG
+CLOSEC . . . . . .  C ADDR   0035H   R   SEG=MAINSEG
+DELAYA . . . . . .  C ADDR   0026H   R   SEG=MAINSEG
+DELAYC . . . . . .  C ADDR   004CH   R   SEG=MAINSEG
+LP . . . . . . . .  C ADDR   0013H   R   SEG=MAINSEG
+LP1. . . . . . . .  C ADDR   0015H   R   SEG=MAINSEG
+LP3. . . . . . . .  C ADDR   002AH   R   SEG=MAINSEG
+LP4. . . . . . . .  C ADDR   0028H   R   SEG=MAINSEG
+LP5. . . . . . . .  C ADDR   003AH   R   SEG=MAINSEG
+LP6. . . . . . . .  C ADDR   0038H   R   SEG=MAINSEG
+LP7. . . . . . . .  C ADDR   0050H   R   SEG=MAINSEG
+LP8. . . . . . . .  C ADDR   004EH   R   SEG=MAINSEG
+MAINSEG. . . . . .  C SEG    0055H       REL=UNIT
+P1 . . . . . . . .  D ADDR   0090H   A   
+P3 . . . . . . . .  D ADDR   00B0H   A   
+PLAYA. . . . . . .  C ADDR   001EH   R   SEG=MAINSEG
+PLAYC. . . . . . .  C ADDR   0044H   R   SEG=MAINSEG
+READA. . . . . . .  C ADDR   000AH   R   SEG=MAINSEG
+READC. . . . . . .  C ADDR   002FH   R   SEG=MAINSEG
+START. . . . . . .  C ADDR   0002H   R   SEG=MAINSEG
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)
