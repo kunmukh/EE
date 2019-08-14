@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1487384792 source:c:\users\kunal\documents\kunal\cs 210\ackermann\ackermann\main.cpp
+	<fstream>
+	<cstdlib>
+	<iostream>
+

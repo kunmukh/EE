@@ -1,0 +1,5 @@
+﻿  Source.c
+c:\users\kunal\documents\kunal\cs 210\assignment 2 speed of sound\speed of sound\source.c(24): warning C4098: 'main': 'void' function returning a value
+c:\users\kunal\documents\kunal\cs 210\assignment 2 speed of sound\speed of sound\source.c(39): warning C4244: 'return': conversion from 'double' to 'int', possible loss of data
+  Speed of sound.vcxproj -> C:\Users\Kunal\Documents\Kunal\CS 210\Assignment 2 Speed of sound\Debug\Speed of sound.exe
+  Speed of sound.vcxproj -> C:\Users\Kunal\Documents\Kunal\CS 210\Assignment 2 Speed of sound\Debug\Speed of sound.pdb (Full PDB)
