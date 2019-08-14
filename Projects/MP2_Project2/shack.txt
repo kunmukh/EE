@@ -1,1 +1,0 @@
-shack-This is a flammable shack. It can be easily destroyed to reveal the object that it is hiding. Cause it is flmable, it can be easily burned-no
