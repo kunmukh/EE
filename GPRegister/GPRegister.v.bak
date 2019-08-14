@@ -1,7 +1,0 @@
-module GPRegister(L, D, C, clk, BusIn, BusOut);
-input L, D, C;
-input clk;
-input [3:0] BusIn;
-output [3:0] BusOut;
-
-

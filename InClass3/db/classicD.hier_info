@@ -1,9 +1,0 @@
-|classicD
-D => Q$latch.DATAIN
-D => Qn$latch.DATAIN
-clk => Qn$latch.LATCH_ENABLE
-clk => Q$latch.LATCH_ENABLE
-Q <= Q$latch.DB_MAX_OUTPUT_PORT_TYPE
-Qn <= Qn$latch.DB_MAX_OUTPUT_PORT_TYPE
-
-
