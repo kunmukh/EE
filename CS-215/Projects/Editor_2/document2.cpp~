@@ -1,0 +1,392 @@
+///File: document2.cpp
+// IMplementtaion of the  document class program that allows a user
+// to interactively edit a test file
+//-----------------------------------------------------------------
+// Class: CS 215                     Instructor: Dr. Deborah Hwang
+// Assignment:    Project 5          Date assigned:  4/7/2017
+// Programmer:    Kunal Mukherjee    Date completed: 4/16/2017
+
+
+//header file
+#include "document2.h"
+#include <algorithm>
+
+//Default Constructor
+Document::Document()
+{
+  //creation of the head Ptr
+  headPtr = new NodeType<std::string>;
+  headPtr->next = headPtr;
+  headPtr->back = headPtr;
+}
+
+//Copy Constructor
+Document::Document(const Document & original)
+{
+  // Creation of the header node
+  headPtr = new NodeType<std::string>;
+  headPtr->next = headPtr;
+  headPtr->back = headPtr;
+
+  //copy of the current ptr
+  currentPtr = original.currentPtr;
+
+  //Copy data noded
+  // Start at first data node of orginal
+  NodeType<std::string> *scanPtr = original.headPtr->next;
+  //Stop at the original header node
+  while (scanPtr != original.headPtr)
+    {
+      //Create copy node
+      NodeType<std::string> *newNode = new NodeType<std::string>;
+      newNode->info = scanPtr->info;
+      // Insert between the last node and the header node
+      //back points to the last node
+      newNode->back = headPtr->back;
+      //next point to header node
+      newNode->next = headPtr;
+      //predecessor next points to new node
+      headPtr->back->next = newNode;
+      //sucessor back points to new node
+      headPtr->back = newNode;
+      //increment scanPtr
+      scanPtr = scanPtr->next;	
+    }
+    }
+
+//Destructore
+Document::~Document()
+{
+  NodeType<std::string>* tempPtr;
+  NodeType<std::string>* header = headPtr;  // header node
+  headPtr = headPtr -> next;      // start with first data node
+   
+  // Delete the the nodes
+  while (headPtr != header)  // stop when get to header
+    {
+      tempPtr = headPtr;
+      headPtr = headPtr->next;
+      delete tempPtr;
+    }
+  delete header;
+ 
+}
+
+//Assignment operator
+Document & Document::operator= (const Document & original)
+{
+  // Make a copy of the original
+  Document theCopy(original);
+  // Swap contents of this object with the copy
+  // Using std::swap from the STL <algorithm> library
+  std::swap(theCopy.headPtr, headPtr);
+  std::swap(theCopy.currentPtr, currentPtr);
+  // Return this object -- upon return, theCopy containing the
+  //                       original data will be destroyed
+  return *this;  // 'this' is a pointer, so need to dereference.
+}
+
+//Load
+void Document::Load (std::istream& in)  // REC'D/P'BACK: input stream
+{   
+  std::string line;   
+  // insert each line of text into document
+  while (std::getline(in, line))
+    {
+
+      NodeType<std::string>* newNode;
+      newNode = new NodeType<std::string>;
+
+      newNode->info = line;  
+   
+      newNode->next = headPtr;  
+      newNode->back = headPtr->back;
+      headPtr->back->next = newNode;   
+      headPtr->back = newNode;     
+    }
+
+  // set current to first line
+  currentPtr = headPtr->next; 
+}
+
+//Make Empty
+void Document::MakeEmpty()
+{
+   NodeType<std::string>* tempPtr;
+   NodeType<std::string>* header = headPtr;  // header node
+   headPtr = headPtr -> next;            // start with first data node
+   
+   // Delete the data nodes
+   while (headPtr != header)  // stop when get to header
+   {
+      tempPtr = headPtr;
+      headPtr = headPtr->next;
+      delete tempPtr;
+   }
+   // Reset header node links for empty list
+   headPtr->next = headPtr;
+   headPtr->back = headPtr;
+   
+   currentPtr = 0;
+}
+
+//IsEmpty
+bool Document::IsEmpty() const
+{
+   if (headPtr-> next == headPtr)
+      return true;
+   return false;
+}
+
+//Insert
+void Document::Insert (std::string newLine)
+{
+
+  if(IsEmpty())
+    {
+
+      NodeType<std::string>* newNode;
+      newNode = new NodeType<std::string>;
+
+      newNode->info = newLine;  
+   
+      newNode->next = headPtr;  
+      newNode->back = headPtr->back;
+      
+      headPtr->back->next = newNode;   
+      headPtr->back = newNode;
+      
+      currentPtr = headPtr->next;
+    }
+  
+  else
+    {
+      NodeType<std::string>* location = new NodeType<std::string>;
+      location =  currentPtr;
+
+      NodeType<std::string>* newNode;
+      newNode = new NodeType<std::string>;
+  
+      newNode->info = newLine;
+      // Set new node links
+      newNode->next = location;
+      newNode->back = location->back;
+      
+      // Set predecessor next link
+      location->back->next = newNode;
+      // Set successor back link      
+      location->back = newNode;
+      
+      currentPtr = location->back;
+    }
+}
+
+//Append
+void Document::Append (std::string newLine)
+{
+   NodeType<std::string>* newNode;
+   newNode = new NodeType<std::string>;
+
+   newNode->info = newLine;  
+   
+   newNode->next = headPtr;  
+   newNode->back = headPtr->back;
+   headPtr->back->next = newNode;   
+   headPtr->back = newNode;
+
+   currentPtr = headPtr->back;
+
+}
+
+//Replace
+void Document::Replace (std::string new_Line)
+{
+  if (IsEmpty())
+    throw std::string("This document is empty");
+  else
+    currentPtr->info = new_Line;
+}
+
+//Erase
+void Document::Erase ()
+{
+
+  if( !IsEmpty())
+    {
+      NodeType<std::string>* tempPtr = currentPtr;
+
+      if (currentPtr->next == headPtr)
+	{
+	  currentPtr = currentPtr->back;
+	  tempPtr->back->next = tempPtr->next;
+	  tempPtr->next->back = tempPtr->back;
+	}
+      else
+	{
+	  currentPtr = currentPtr->next;
+	  tempPtr->back->next = tempPtr->next;
+	  tempPtr->next->back = tempPtr->back;
+	}
+
+      delete tempPtr;
+    }
+  else
+    throw (std::string("Invalid number"));
+}
+
+//Find
+bool Document::Find (std::string target)
+{
+  bool moreToSearch = true;
+  bool found;
+  NodeType<std::string>* location = new NodeType<std::string>;
+  location = headPtr->next;  // start with first data node
+  found = false;
+  while (moreToSearch && !found)
+    {
+      if ((location->info).find(target) != std::string::npos)
+	{
+	  found = true;
+	  currentPtr = location;
+	  return found;
+	}
+      else
+	{
+	  location = location->next;
+	  moreToSearch = (location != headPtr);  // stop at the header node
+	}   
+    }
+  return found;
+}
+
+//SetCurrent
+void Document::SetCurrent (int n)
+{
+
+  int maxLength = 0;
+  NodeType<std::string>* maxL = new NodeType<std::string>;
+  maxL = headPtr->next;
+  while (maxL != headPtr)
+    {
+      maxLength++;
+      maxL = maxL->next;
+    } 
+   
+  if (n >= 0 && n < maxLength)
+    {
+      NodeType<std::string>* current = new NodeType<std::string>;
+      current = currentPtr;
+      
+      currentPtr = headPtr->next;
+      for (int i = 0; i < n; i++)
+	{
+	  currentPtr = currentPtr->next;
+	  if (currentPtr == headPtr->next)
+	    {
+	      currentPtr = current;
+	      throw (std::string("Invalid number"));
+	    }
+	}
+    }
+  else
+     throw (std::string("Invalid number"));
+}
+
+//MoveCurrent
+void Document::MoveCurrent (int n)
+{
+  if (!IsEmpty())
+    {
+      NodeType<std::string>* current = new NodeType<std::string>;
+      current = currentPtr;
+      
+      int length = 0;
+
+      bool moreToSearch = true;
+      bool found;
+      
+      NodeType<std::string>* location = new NodeType<std::string>;
+      location = headPtr->next;  // start with first data node
+      found = false;
+      
+      while (moreToSearch && !found)
+	{
+	  if ((location->info).find(currentPtr->info) != std::string::npos)
+	    {
+	      found = true;
+	      currentPtr = location;
+	     
+	    }
+	  else
+	    {
+	      length++;
+	      location = location->next;
+	      moreToSearch = (location != headPtr);  // stop at the header node
+	    }   
+	}
+
+      int maxLength = 0;
+      NodeType<std::string>* maxL = new NodeType<std::string>;
+      maxL = headPtr->next;
+      while (maxL != headPtr)
+	{
+	  maxLength++;
+	  maxL = maxL->next;
+	}
+
+      if ( length + n >= maxLength || length + n < 0)
+	throw (std::string("Invalid number"));     
+      
+     
+	  try
+	    {	      
+		SetCurrent (length + n);
+	    }
+	  catch (const std::string exception)
+	    {
+	      currentPtr = current;
+	      throw (std::string( exception));
+	    }	    
+  
+    }
+  else
+    throw std::string("Document is Empty");
+  
+}
+
+//Write Line
+void Document::WriteLine (std::ostream & out) const
+{
+  if (!IsEmpty() && currentPtr != headPtr)
+    out << currentPtr->info << std::endl; // write line to output stream
+  // else
+  //   throw (std::string ("document is empty"));
+}
+
+//Write All
+void Document::WriteAll (std::ostream & out) const
+{
+  NodeType<std::string> *temp = new NodeType<std::string>;
+  temp = headPtr -> next;
+  if (!IsEmpty())
+    {
+      while (temp != headPtr)
+	{
+	  out << temp->info << std::endl;
+	  temp = temp->next;	 
+	}
+    }
+  /*else
+    throw (std::string ("document is empty"));*/
+}
+
+
+  
+
+ 
+
+
+
+
+
+
