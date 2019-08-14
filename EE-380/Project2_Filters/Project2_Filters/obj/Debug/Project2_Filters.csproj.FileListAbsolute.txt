@@ -1,0 +1,15 @@
+C:\Users\kunmu\Documents\Kunal\UE courses\EE-380\Project2_Filters\Project2_Filters\obj\Debug\Project2_Filters.csprojAssemblyReference.cache
+C:\Users\kunmu\Documents\Kunal\UE courses\EE-380\Project2_Filters\Project2_Filters\obj\Debug\MainWindow.g.cs
+C:\Users\kunmu\Documents\Kunal\UE courses\EE-380\Project2_Filters\Project2_Filters\obj\Debug\App.g.cs
+C:\Users\kunmu\Documents\Kunal\UE courses\EE-380\Project2_Filters\Project2_Filters\obj\Debug\Project2_Filters_MarkupCompile.cache
+C:\Users\kunmu\Documents\Kunal\UE courses\EE-380\Project2_Filters\Project2_Filters\obj\Debug\Project2_Filters_MarkupCompile.lref
+C:\Users\kunmu\Documents\Kunal\UE courses\EE-380\Project2_Filters\Project2_Filters\bin\Debug\Project2_Filters.exe.config
+C:\Users\kunmu\Documents\Kunal\UE courses\EE-380\Project2_Filters\Project2_Filters\bin\Debug\Project2_Filters.exe
+C:\Users\kunmu\Documents\Kunal\UE courses\EE-380\Project2_Filters\Project2_Filters\bin\Debug\Project2_Filters.pdb
+C:\Users\kunmu\Documents\Kunal\UE courses\EE-380\Project2_Filters\Project2_Filters\obj\Debug\MainWindow.baml
+C:\Users\kunmu\Documents\Kunal\UE courses\EE-380\Project2_Filters\Project2_Filters\obj\Debug\Project2_Filters.g.resources
+C:\Users\kunmu\Documents\Kunal\UE courses\EE-380\Project2_Filters\Project2_Filters\obj\Debug\Project2_Filters.Properties.Resources.resources
+C:\Users\kunmu\Documents\Kunal\UE courses\EE-380\Project2_Filters\Project2_Filters\obj\Debug\Project2_Filters.csproj.GenerateResource.cache
+C:\Users\kunmu\Documents\Kunal\UE courses\EE-380\Project2_Filters\Project2_Filters\obj\Debug\Project2_Filters.csproj.CoreCompileInputs.cache
+C:\Users\kunmu\Documents\Kunal\UE courses\EE-380\Project2_Filters\Project2_Filters\obj\Debug\Project2_Filters.exe
+C:\Users\kunmu\Documents\Kunal\UE courses\EE-380\Project2_Filters\Project2_Filters\obj\Debug\Project2_Filters.pdb
