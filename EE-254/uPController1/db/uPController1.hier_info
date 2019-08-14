@@ -1,0 +1,21 @@
+|uPController1
+clk => pCounter[0].CLK
+clk => pCounter[1].CLK
+clk => pCounter[2].CLK
+clk => ControlBus[0]~reg0.CLK
+clk => ControlBus[1]~reg0.CLK
+clk => ControlBus[2]~reg0.CLK
+clk => ControlBus[3]~reg0.CLK
+clk => ControlBus[4]~reg0.CLK
+clk => ControlBus[5]~reg0.CLK
+clk => ControlBus[6]~reg0.CLK
+Z => ~NO_FANOUT~
+ControlBus[0] <= ControlBus[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+ControlBus[1] <= ControlBus[1]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+ControlBus[2] <= ControlBus[2]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+ControlBus[3] <= ControlBus[3]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+ControlBus[4] <= ControlBus[4]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+ControlBus[5] <= ControlBus[5]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+ControlBus[6] <= ControlBus[6]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+
+

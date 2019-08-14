@@ -1,0 +1,113 @@
+------------------------------------------------------------
+TimeQuest Timing Analyzer Summary
+------------------------------------------------------------
+
+Type  : Slow 1200mV 85C Model Setup 'clk0'
+Slack : -1.602
+TNS   : -23.970
+
+Type  : Slow 1200mV 85C Model Setup 'uPController1:MC|ControlRegister[3]'
+Slack : -1.139
+TNS   : -3.516
+
+Type  : Slow 1200mV 85C Model Hold 'uPController1:MC|ControlRegister[3]'
+Slack : 0.322
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Hold 'clk0'
+Slack : 0.348
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Recovery 'clk0'
+Slack : -1.657
+TNS   : -4.971
+
+Type  : Slow 1200mV 85C Model Removal 'clk0'
+Slack : 2.060
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Minimum Pulse Width 'CLOCK_50'
+Slack : -3.000
+TNS   : -5.806
+
+Type  : Slow 1200mV 85C Model Minimum Pulse Width 'clk0'
+Slack : -1.403
+TNS   : -33.672
+
+Type  : Slow 1200mV 85C Model Minimum Pulse Width 'uPController1:MC|ControlRegister[3]'
+Slack : -1.403
+TNS   : -5.612
+
+Type  : Slow 1200mV 0C Model Setup 'clk0'
+Slack : -1.419
+TNS   : -20.461
+
+Type  : Slow 1200mV 0C Model Setup 'uPController1:MC|ControlRegister[3]'
+Slack : -0.949
+TNS   : -2.767
+
+Type  : Slow 1200mV 0C Model Hold 'uPController1:MC|ControlRegister[3]'
+Slack : 0.217
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Hold 'clk0'
+Slack : 0.312
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Recovery 'clk0'
+Slack : -1.517
+TNS   : -4.551
+
+Type  : Slow 1200mV 0C Model Removal 'clk0'
+Slack : 1.965
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Minimum Pulse Width 'CLOCK_50'
+Slack : -3.000
+TNS   : -5.806
+
+Type  : Slow 1200mV 0C Model Minimum Pulse Width 'clk0'
+Slack : -1.403
+TNS   : -33.672
+
+Type  : Slow 1200mV 0C Model Minimum Pulse Width 'uPController1:MC|ControlRegister[3]'
+Slack : -1.403
+TNS   : -5.612
+
+Type  : Fast 1200mV 0C Model Setup 'clk0'
+Slack : -0.409
+TNS   : -3.093
+
+Type  : Fast 1200mV 0C Model Setup 'uPController1:MC|ControlRegister[3]'
+Slack : 0.064
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Hold 'uPController1:MC|ControlRegister[3]'
+Slack : 0.068
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Hold 'clk0'
+Slack : 0.152
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Recovery 'clk0'
+Slack : -0.472
+TNS   : -1.416
+
+Type  : Fast 1200mV 0C Model Removal 'clk0'
+Slack : 1.153
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Minimum Pulse Width 'CLOCK_50'
+Slack : -3.000
+TNS   : -5.067
+
+Type  : Fast 1200mV 0C Model Minimum Pulse Width 'clk0'
+Slack : -1.000
+TNS   : -24.000
+
+Type  : Fast 1200mV 0C Model Minimum Pulse Width 'uPController1:MC|ControlRegister[3]'
+Slack : -1.000
+TNS   : -4.000
+
+------------------------------------------------------------

@@ -1,0 +1,27 @@
+|GPRegister
+L => BusOut.OUTPUTSELECT
+L => BusOut.OUTPUTSELECT
+L => BusOut.OUTPUTSELECT
+L => BusOut.OUTPUTSELECT
+D => BusOut.OUTPUTSELECT
+D => BusOut.OUTPUTSELECT
+D => BusOut.OUTPUTSELECT
+D => BusOut.OUTPUTSELECT
+C => BusOut.OUTPUTSELECT
+C => BusOut.OUTPUTSELECT
+C => BusOut.OUTPUTSELECT
+C => BusOut.OUTPUTSELECT
+clk => BusOut[0]~reg0.CLK
+clk => BusOut[1]~reg0.CLK
+clk => BusOut[2]~reg0.CLK
+clk => BusOut[3]~reg0.CLK
+BusIn[0] => BusOut.DATAB
+BusIn[1] => BusOut.DATAB
+BusIn[2] => BusOut.DATAB
+BusIn[3] => BusOut.DATAB
+BusOut[0] <= BusOut[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+BusOut[1] <= BusOut[1]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+BusOut[2] <= BusOut[2]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+BusOut[3] <= BusOut[3]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+
+

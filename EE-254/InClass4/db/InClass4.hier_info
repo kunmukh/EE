@@ -1,0 +1,16 @@
+|InClass4
+X => comb.IN1
+X => comb.IN1
+Y << comb.DB_MAX_OUTPUT_PORT_TYPE
+CLK => CLK.IN1
+
+
+|InClass4|myDFF:myD
+CLK => Qn~reg0.CLK
+CLK => Q~reg0.CLK
+D => Q~reg0.DATAIN
+D => Qn~reg0.DATAIN
+Q <= Q~reg0.DB_MAX_OUTPUT_PORT_TYPE
+Qn <= Qn~reg0.DB_MAX_OUTPUT_PORT_TYPE
+
+

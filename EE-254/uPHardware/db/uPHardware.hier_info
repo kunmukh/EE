@@ -1,0 +1,124 @@
+|uPHardware
+InBus[0] => InBus[0].IN2
+InBus[1] => InBus[1].IN2
+InBus[2] => InBus[2].IN2
+InBus[3] => InBus[3].IN2
+Control[0] => ~NO_FANOUT~
+Control[1] => Control[1].IN1
+Control[2] => Control[2].IN1
+Control[3] => Control[3].IN1
+Control[4] => Control[4].IN1
+Control[5] => Control[5].IN1
+Control[6] => Control[6].IN1
+clk => clk.IN4
+OutBus[0] <= <GND>
+OutBus[1] <= <GND>
+OutBus[2] <= <GND>
+OutBus[3] <= <GND>
+Z <= <GND>
+
+
+|uPHardware|GPRegister:R
+L => BusOut.OUTPUTSELECT
+L => BusOut.OUTPUTSELECT
+L => BusOut.OUTPUTSELECT
+L => BusOut.OUTPUTSELECT
+D => BusOut.OUTPUTSELECT
+D => BusOut.OUTPUTSELECT
+D => BusOut.OUTPUTSELECT
+D => BusOut.OUTPUTSELECT
+C => BusOut.OUTPUTSELECT
+C => BusOut.OUTPUTSELECT
+C => BusOut.OUTPUTSELECT
+C => BusOut.OUTPUTSELECT
+clk => BusOut[0]~reg0.CLK
+clk => BusOut[1]~reg0.CLK
+clk => BusOut[2]~reg0.CLK
+clk => BusOut[3]~reg0.CLK
+BusIn[0] => BusOut.DATAB
+BusIn[1] => BusOut.DATAB
+BusIn[2] => BusOut.DATAB
+BusIn[3] => BusOut.DATAB
+BusOut[0] <= BusOut[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+BusOut[1] <= BusOut[1]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+BusOut[2] <= BusOut[2]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+BusOut[3] <= BusOut[3]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+
+
+|uPHardware|GPRegister:M
+L => BusOut.OUTPUTSELECT
+L => BusOut.OUTPUTSELECT
+L => BusOut.OUTPUTSELECT
+L => BusOut.OUTPUTSELECT
+D => BusOut.OUTPUTSELECT
+D => BusOut.OUTPUTSELECT
+D => BusOut.OUTPUTSELECT
+D => BusOut.OUTPUTSELECT
+C => BusOut.OUTPUTSELECT
+C => BusOut.OUTPUTSELECT
+C => BusOut.OUTPUTSELECT
+C => BusOut.OUTPUTSELECT
+clk => BusOut[0]~reg0.CLK
+clk => BusOut[1]~reg0.CLK
+clk => BusOut[2]~reg0.CLK
+clk => BusOut[3]~reg0.CLK
+BusIn[0] => BusOut.DATAB
+BusIn[1] => BusOut.DATAB
+BusIn[2] => BusOut.DATAB
+BusIn[3] => BusOut.DATAB
+BusOut[0] <= BusOut[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+BusOut[1] <= BusOut[1]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+BusOut[2] <= BusOut[2]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+BusOut[3] <= BusOut[3]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+
+
+|uPHardware|GPRegister:Q
+L => BusOut.OUTPUTSELECT
+L => BusOut.OUTPUTSELECT
+L => BusOut.OUTPUTSELECT
+L => BusOut.OUTPUTSELECT
+D => BusOut.OUTPUTSELECT
+D => BusOut.OUTPUTSELECT
+D => BusOut.OUTPUTSELECT
+D => BusOut.OUTPUTSELECT
+C => BusOut.OUTPUTSELECT
+C => BusOut.OUTPUTSELECT
+C => BusOut.OUTPUTSELECT
+C => BusOut.OUTPUTSELECT
+clk => BusOut[0]~reg0.CLK
+clk => BusOut[1]~reg0.CLK
+clk => BusOut[2]~reg0.CLK
+clk => BusOut[3]~reg0.CLK
+BusIn[0] => BusOut.DATAB
+BusIn[1] => BusOut.DATAB
+BusIn[2] => BusOut.DATAB
+BusIn[3] => BusOut.DATAB
+BusOut[0] <= BusOut[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+BusOut[1] <= BusOut[1]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+BusOut[2] <= BusOut[2]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+BusOut[3] <= BusOut[3]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+
+
+|uPHardware|ALU:AOL
+L[0] => Add0.IN4
+L[1] => Add0.IN3
+L[2] => Add0.IN2
+L[3] => Add0.IN1
+R[0] => Add0.IN8
+R[1] => Add0.IN7
+R[2] => Add0.IN6
+R[3] => Add0.IN5
+Z[0] <= Z[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+Z[1] <= Z[1]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+Z[2] <= Z[2]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+Z[3] <= Z[3]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+Sel => Z[0]~reg0.ENA
+Sel => Z[1]~reg0.ENA
+Sel => Z[2]~reg0.ENA
+Sel => Z[3]~reg0.ENA
+clk => Z[0]~reg0.CLK
+clk => Z[1]~reg0.CLK
+clk => Z[2]~reg0.CLK
+clk => Z[3]~reg0.CLK
+
+

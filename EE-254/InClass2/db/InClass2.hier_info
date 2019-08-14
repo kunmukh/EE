@@ -1,0 +1,20 @@
+|InClass2
+ain[0] => always0.IN0
+ain[0] => always0.IN0
+ain[0] => always0.IN0
+ain[0] => always0.IN0
+ain[1] => always0.IN1
+ain[1] => always0.IN1
+ain[1] => always0.IN1
+ain[1] => always0.IN1
+yout[0] <= yout[0]$latch.DB_MAX_OUTPUT_PORT_TYPE
+yout[1] <= yout[1]$latch.DB_MAX_OUTPUT_PORT_TYPE
+yout[2] <= yout[2]$latch.DB_MAX_OUTPUT_PORT_TYPE
+yout[3] <= yout[3]$latch.DB_MAX_OUTPUT_PORT_TYPE
+enable => yout[3].IN1
+enable => yout[3].OUTPUTSELECT
+enable => yout[2].OUTPUTSELECT
+enable => yout[1].OUTPUTSELECT
+enable => yout[0].OUTPUTSELECT
+
+

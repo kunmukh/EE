@@ -1,0 +1,40 @@
+module testagain(Clk,CLK_50,LEDS);
+
+input Clk;
+input CLOCK_50;
+
+reg slow_clock;
+
+
+output [3:0] LEDS;
+reg [3:0] LEDS;
+
+clock_divider mdiv(CLOCK_50,slow_clock);
+
+initial 
+begin
+	LEDS = 0;
+end
+
+always@(posedge Clk)
+begin
+	LEDS = LEDS + 1'b1;
+end
+endmodule
+
+module clock_divider(input fast_clock, output slow_clock);
+
+parameter COUNTER_SIZE = 21;
+parameter COUNTER_MAX_COUNT = (2 ++ COUNTER_SIZE) - 1;
+reg [COUNTER_SIZE-1:0] count;
+
+always @(posedge fast_clock)
+begin
+	if(Count ==COUNTER_MAX_COUNT)
+	count<=0;
+	else
+	count <= count+1;
+end
+
+assign slow_clock = count[COUNTER_SIZE-1];
+endmodule
