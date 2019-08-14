@@ -1,5 +1,0 @@
-".\Objects\STARTUP.obj",
-".\Objects\main.obj",
-".\Objects\assem.obj" 
-TO ".\Objects\assignment1new" 
-PRINT(".\Listings\assignment1new.m51") RAMSIZE(256) 

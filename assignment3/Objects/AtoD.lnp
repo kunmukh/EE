@@ -1,4 +1,0 @@
-".\Objects\STARTUP.obj",
-".\Objects\AtoD.obj" 
-TO ".\Objects\AtoD" 
-PRINT(".\Listings\AtoD.m51") RAMSIZE(256) 
