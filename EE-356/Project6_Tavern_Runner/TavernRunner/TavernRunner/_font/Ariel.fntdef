@@ -1,0 +1,10 @@
+AddfontToProcess C:\Windows\Fonts\Arial.ttf
+SelectFont "HE:12,WE:400,FN:Arial"
+AntiAlias 1
+AdjustAscent 0
+AdjustDescent 0
+AdjustExternalLeading 0
+ImportRange 32 122 
+SetAsDefaultcharacter 32
+SetDefaultcharacter
+Verbosity 0
