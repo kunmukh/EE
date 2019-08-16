@@ -1,0 +1,149 @@
+C51 COMPILER V9.54   ATOD                                                                  09/28/2018 12:22:31 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE ATOD
+OBJECT MODULE PLACED IN .\Objects\AtoD.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE AtoD.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\AtoD
+                    -.lst) TABS(2) OBJECT(.\Objects\AtoD.obj)
+
+line level    source
+
+   1          //Kunal Mukherjee
+   2          //9/27/2018
+   3          //AtoD.c
+   4          //Write a program in C which will input 2 bits from port 
+   5          //P0.0 and P0.1. Take P0.1 to be the MSB. 
+   6          //If these two bits are 00 output 0 on the D to A converter. 
+   7          //If they are 01 output the saw tooth waveform in the top
+   8          // figure below. If they are 10 output the triangular waveform 
+   9          //in the middle figure below and if they are 11 output the 
+  10          //square wave in the bottom figure below. 
+  11          
+  12          #include <at89c51cc03.h>
+  13          
+  14          void main (void)
+  15          {
+  16   1        //the variables
+  17   1        unsigned int count; 
+  18   1        unsigned char option = 3; 
+  19   1        unsigned char toggle_saw = 1; 
+  20   1        unsigned char toggle_pulse = 1; 
+  21   1        unsigned char pulse_count = 0;
+  22   1        unsigned int i;
+  23   1      
+  24   1        count = 0;
+  25   1        toggle_pulse = 0;
+  26   1        toggle_saw = 0;
+  27   1        
+  28   1        while(1)
+  29   1        {
+  30   2          //if 00 is selected option 0
+  31   2          if (P0_1 == 0 && P0_0 == 0)
+  32   2          {
+  33   3            option = 0;
+  34   3          }
+  35   2      
+  36   2          //if 10 is selected option 0
+  37   2          else if (P0_1 == 0 && P0_0 == 1)
+  38   2          {
+  39   3            option = 1;
+  40   3          }
+  41   2          //if 11 is selected option 0
+  42   2          else if (P0_1 == 1 && P0_0 == 0)
+  43   2          {
+  44   3            option = 2;
+  45   3          }
+  46   2          //default
+  47   2          else if (P0_1 == 1 && P0_0 == 1)
+  48   2          {
+  49   3            option = 3;     
+  50   3          }
+  51   2      
+  52   2          //sawtooth waveform
+  53   2          if(option == 1)
+  54   2          {
+C51 COMPILER V9.54   ATOD                                                                  09/28/2018 12:22:31 PAGE 2   
+
+  55   3            count++;
+  56   3            if (count >= 511)
+  57   3              count = 0;
+  58   3          }
+  59   2          //pos sawtooth and neg sawtooth wav
+  60   2          if(option == 2)
+  61   2          {
+  62   3            if(toggle_saw == 0)
+  63   3            {
+  64   4              count++;
+  65   4              if(count >= 255) //if pos edge done, change to negative
+  66   4              {
+  67   5                toggle_saw = 1;
+  68   5              }
+  69   4            }
+  70   3            else
+  71   3            {
+  72   4              count--;
+  73   4              if(count == 0) //if neg edge done chnage to positve
+  74   4              {
+  75   5                toggle_saw = 0;
+  76   5              }
+  77   4            }
+  78   3          }
+  79   2          //a pulse
+  80   2          if(option == 3)
+  81   2          {
+  82   3            if(toggle_pulse == 0)
+  83   3            {
+  84   4              count = 255;
+  85   4              pulse_count++;
+  86   4              if(pulse_count >= 255) //generate a pulse with a same frequency
+  87   4              {
+  88   5                toggle_pulse = 1;
+  89   5              }
+  90   4            }
+  91   3            else
+  92   3            {
+  93   4              count = 0;
+  94   4              pulse_count--;
+  95   4              if(pulse_count == 0)
+  96   4              {
+  97   5                toggle_pulse = 0;
+  98   5              }
+  99   4            }   
+ 100   3          }
+ 101   2          
+ 102   2          //default
+ 103   2          if(option == 0)
+ 104   2          {
+ 105   3            count = 0;
+ 106   3          }
+ 107   2          
+ 108   2          if(option == 1)
+ 109   2            P2 = (unsigned char)(count / 2);
+ 110   2          else
+ 111   2            P2 = (unsigned char)(count);
+ 112   2          
+ 113   2          P4_0 = 0; 
+ 114   2          P4_0 = 1;
+ 115   2          
+ 116   2          // Delay
+C51 COMPILER V9.54   ATOD                                                                  09/28/2018 12:22:31 PAGE 3   
+
+ 117   2          for(i=0;i<73;i++){}
+ 118   2            
+ 119   2          
+ 120   2        }
+ 121   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    189    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       3
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,134 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        10/05/2015  05:43:07  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE STARTUP.obj, AtoDSimulate.obj TO AtoDSimulate RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  STARTUP.obj (?C_STARTUP)
+  AtoDSimulate.obj (ATODSIMULATE)
+
+
+LINK MAP OF MODULE:  AtoDSimulate (?C_STARTUP)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            IDATA   0008H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     07FDH                  *** GAP ***
+            CODE    0800H     0031H     UNIT         ?PR?MAIN?ATODSIMULATE
+            CODE    0831H     000CH     UNIT         ?C_C51STARTUP
+
+
+
+OVERLAY MAP OF MODULE:   AtoDSimulate (?C_STARTUP)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?ATODSIMULATE
+
+
+
+SYMBOL TABLE OF MODULE:  AtoDSimulate (?C_STARTUP)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        ?C_STARTUP
+  C:0831H         SEGMENT       ?C_C51STARTUP
+  I:0008H         SEGMENT       ?STACK
+  C:0000H         PUBLIC        ?C_STARTUP
+  D:00E0H         SYMBOL        ACC
+  D:00F0H         SYMBOL        B
+  D:0083H         SYMBOL        DPH
+  D:0082H         SYMBOL        DPL
+  N:0000H         SYMBOL        IBPSTACK
+  N:0100H         SYMBOL        IBPSTACKTOP
+  N:0080H         SYMBOL        IDATALEN
+  C:0834H         SYMBOL        IDATALOOP
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/05/2015  05:43:07  PAGE 2
+
+
+  N:0000H         SYMBOL        PBPSTACK
+  N:0100H         SYMBOL        PBPSTACKTOP
+  N:0000H         SYMBOL        PDATALEN
+  N:0000H         SYMBOL        PDATASTART
+  N:0000H         SYMBOL        PPAGE
+  N:0000H         SYMBOL        PPAGEENABLE
+  D:00A0H         SYMBOL        PPAGE_SFR
+  D:0081H         SYMBOL        SP
+  C:0831H         SYMBOL        STARTUP1
+  N:0000H         SYMBOL        XBPSTACK
+  N:0000H         SYMBOL        XBPSTACKTOP
+  N:0000H         SYMBOL        XDATALEN
+  N:0000H         SYMBOL        XDATASTART
+  C:0000H         LINE#         126
+  C:0831H         LINE#         133
+  C:0833H         LINE#         134
+  C:0834H         LINE#         135
+  C:0835H         LINE#         136
+  C:0837H         LINE#         185
+  C:083AH         LINE#         196
+  -------         ENDMOD        ?C_STARTUP
+
+  -------         MODULE        ATODSIMULATE
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  B:00A8H.7       PUBLIC        EA
+  D:00F6H         PUBLIC        ADCF
+  D:00F5H         PUBLIC        ADDH
+  B:00C0H.0       PUBLIC        P4_0
+  D:00F4H         PUBLIC        ADDL
+  C:0800H         PUBLIC        main
+  D:00F2H         PUBLIC        ADCLK
+  D:00F3H         PUBLIC        ADCON
+  -------         PROC          MAIN
+  -------         DO            
+  D:0007H         SYMBOL        tmp
+  -------         ENDDO         
+  C:0800H         LINE#         14
+  C:0800H         LINE#         15
+  C:0800H         LINE#         16
+  C:0803H         LINE#         17
+  C:0806H         LINE#         18
+  C:0809H         LINE#         19
+  C:080BH         LINE#         20
+  C:080BH         LINE#         21
+  C:080EH         LINE#         22
+  C:080EH         LINE#         23
+  C:0811H         LINE#         24
+  C:0814H         LINE#         25
+  C:0816H         LINE#         26
+  C:081BH         LINE#         27
+  C:0822H         LINE#         28
+  C:0825H         LINE#         29
+  C:0828H         LINE#         30
+  C:082AH         LINE#         31
+  C:082CH         LINE#         32
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/05/2015  05:43:07  PAGE 3
+
+
+  C:082FH         LINE#         33
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        ATODSIMULATE
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0040H BYTE ( 3%) *
+******************************************************************************
+
+Program Size: data=9.0 xdata=0 code=64
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

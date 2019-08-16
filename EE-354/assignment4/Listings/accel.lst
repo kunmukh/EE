@@ -1,0 +1,121 @@
+C51 COMPILER V9.54   ACCEL                                                                 10/10/2018 01:55:28 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE ACCEL
+OBJECT MODULE PLACED IN .\Objects\accel.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE accel.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\acc
+                    -el.lst) TABS(2) OBJECT(.\Objects\accel.obj)
+
+line level    source
+
+   1          //Kunal Mukherjee
+   2          //10/8/2018
+   3          //Accel.c
+   4          //Write a program in C which will input an analog value 
+   5          //from the x-output of the ADXL335 accelerometer. 
+   6          //Connect four LEDs to your board as shown in the figure below.
+   7          //The x-output puts out a voltage from 0 to 3.3 volts that 
+   8          //is somewhat proportional to the amount of tilt along 
+   9          //the x-axis. Your C program should indicate this tilt 
+  10          //by lighting up one of the four LEDs to indicate full
+  11          //left to full right.
+  12          
+  13          #include <at89c51cc03.h>
+  14          
+  15          #define FIRST_LED  414
+  16          #define SECOND_LED 459
+  17          #define THIRD_LED  503
+  18          #define FORTH_LED  548
+  19          
+  20          
+  21          void turn_led(int num){
+  22   1        P1_1 = 1;
+  23   1        P1_2 = 1;
+  24   1        P1_3 = 1;
+  25   1        P1_4 = 1;
+  26   1      
+  27   1        switch(num){
+  28   2          case 1:
+  29   2            P1_1 = 0;
+  30   2            break;
+  31   2      
+  32   2          case 2:
+  33   2            P1_2 = 0;
+  34   2            break;
+  35   2          
+  36   2          case 3:
+  37   2            P1_3 = 0;
+  38   2            break;
+  39   2      
+  40   2          case 4:
+  41   2            P1_4 = 0;
+  42   2            break;
+  43   2          
+  44   2          default:
+  45   2            break;
+  46   2        }
+  47   1      }
+  48          
+  49          void main(void)
+  50          {
+  51   1        unsigned char tmp;
+  52   1        int i, result;
+  53   1        double x;
+  54   1        
+C51 COMPILER V9.54   ACCEL                                                                 10/10/2018 01:55:28 PAGE 2   
+
+  55   1        ADCF = 0x01; // P1.0 = ADC[0]
+  56   1        ADCON = 0x20; // Enable ADC Function
+  57   1        ADCLK = 0x00; // Prescaler to 0
+  58   1        EA = 0; //Turn off interrupts
+  59   1        
+  60   1        result = 0;
+  61   1        x = 0;
+  62   1        i = 0;
+  63   1        
+  64   1        while(1)
+  65   1        {   
+  66   2          ADCON &= 0xF8; // Reset ADC Channel Select
+  67   2          ADCON |= 0x00; // Select ADC = Ch0
+  68   2          ADCON |= 0x20; // Use Standard mode
+  69   2          ADCON |= 0x08; // Start ADC Convert
+  70   2          
+  71   2          tmp = (ADCON & 0x10); // Get done bit
+  72   2          while(tmp != 0x10) // Loop until complete
+  73   2            tmp = (ADCON & 0x10);
+  74   2          result = ADDH; // Send 8 MSB to P2
+  75   2          result *= 4;
+  76   2          result += ADDL;
+  77   2        
+  78   2          if (result < FIRST_LED - 45)
+  79   2            turn_led(5);
+  80   2          else if (result < FIRST_LED)
+  81   2            turn_led(1);
+  82   2          else if (result < SECOND_LED)
+  83   2            turn_led(2);
+  84   2          else if (result < THIRD_LED)
+  85   2            turn_led(3);
+  86   2          else if (result < FORTH_LED)
+  87   2            turn_led(4);
+  88   2          else
+  89   2            turn_led(5);
+  90   2          
+  91   2          ADCON &= 0xEF; //clear ADEOC = 0  
+  92   2          
+  93   2          for (i = 0; i < 33; i++);
+  94   2        }
+  95   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    220    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       4
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
