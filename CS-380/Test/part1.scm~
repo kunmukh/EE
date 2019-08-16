@@ -1,0 +1,26 @@
+#lang eopl
+
+(define-datatype E E?
+  (num-Exp (var number?))
+  (plus-Exp (var1 E?)
+            (var2 E?))
+  (minus-Exp (var1 E?)
+            (var2 E?))
+  (mult-Exp (var1 E?)
+            (var2 E?))
+  (div-Exp (var1 E?)
+            (var2 E?)))
+
+(define value-of
+  (lambda (input)
+    (cases E input
+      (num-Exp (var)
+               var)
+      (plus-Exp (var1 var2)
+                (+ var1 var2))
+      (minus-Exp (var1 var2)
+                (- var1 var2))
+      (mult-Exp (var1 var2)
+                (+ var1 var2))
+      (div-Exp (var1 var2)
+                (/ var1 var2)))
