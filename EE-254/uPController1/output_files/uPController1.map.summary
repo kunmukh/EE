@@ -1,0 +1,14 @@
+Analysis & Synthesis Status : Successful - Fri Apr 07 17:37:56 2017
+Quartus Prime Version : 16.1.0 Build 196 10/24/2016 SJ Lite Edition
+Revision Name : uPController1
+Top-level Entity Name : uPController1
+Family : Cyclone IV E
+Total logic elements : 9
+    Total combinational functions : 6
+    Dedicated logic registers : 9
+Total registers : 9
+Total pins : 9
+Total virtual pins : 0
+Total memory bits : 0
+Embedded Multiplier 9-bit elements : 0
+Total PLLs : 0

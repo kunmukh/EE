@@ -1,0 +1,691 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 3.1  (Win32)">
+	<META NAME="CREATED" CONTENT="20060310;15231100">
+	<META NAME="CHANGEDBY" CONTENT="Tony Richardson">
+	<META NAME="CHANGED" CONTENT="20100413;10510500">
+	<META NAME="Info 1" CONTENT="">
+	<META NAME="Info 2" CONTENT="">
+	<META NAME="Info 3" CONTENT="">
+	<META NAME="Info 4" CONTENT="">
+	<STYLE TYPE="text/css">
+	<!--
+		@page { margin: 0.8in }
+		P { margin-bottom: 0.08in }
+		TD P { margin-bottom: 0in }
+		TH P { margin-bottom: 0in; font-style: italic }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="en-US" DIR="LTR">
+<P ALIGN=CENTER STYLE="margin-bottom: 0in"><FONT SIZE=3><B>CS220
+Library User's Manual</B></FONT></P>
+<P ALIGN=CENTER STYLE="margin-bottom: 0in; font-weight: normal"><FONT SIZE=3>May
+17, 2007</FONT></P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in"><FONT SIZE=3><I>Introduction</I></FONT></P>
+<P STYLE="margin-bottom: 0in"><FONT SIZE=3>The CS220 library contains
+several <SPAN STYLE="font-weight: normal">routines that simplify
+input and output from assembly language programs.  The included
+routines are listed in Table 1.</SPAN></FONT></P>
+<P STYLE="margin-bottom: 0in; font-weight: normal"><BR>
+</P>
+<P STYLE="margin-bottom: 0in; font-weight: normal"><FONT SIZE=3><I>Examples</I></FONT></P>
+<P STYLE="margin-bottom: 0in; font-weight: normal"><FONT SIZE=3>Assume
+we have the following definitions in the data section:</FONT></P>
+<P STYLE="margin-bottom: 0in; font-weight: normal"><BR>
+</P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>.section .data</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>msg1: .asciz &ldquo;Hello
+world!&rdquo;</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>msg2: .asciz &ldquo;Enter
+an integer: &rdquo;</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>msg3: .asciz &ldquo;Enter
+a line of text&rdquo;</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>buff: .fill 80</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>xval: .int 12345</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>yval: .int 0</FONT></FONT></P>
+<P STYLE="margin-bottom: 0in; font-weight: normal"><BR>
+</P>
+<P STYLE="margin-bottom: 0in"><FONT SIZE=3>The following code
+illustrates the use of several of the routines in the library.</FONT></P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3># Display &quot;Hello
+world!&quot; message</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>movl    $msg1, %eax</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>call    print_str</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>call    print_nl</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<BR>
+</P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3># Display the value
+of the xval variable</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>movl    xval, %eax</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>call    print_int</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>call    print_nl</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<BR>
+</P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3># Prompt for an
+integer, store in yval variable</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>movl    $msg2, %eax</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>call    print_str</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>call    read_int</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>movl    %eax, yval</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>call    read_nl</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<BR>
+</P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3># Prompt for a line
+of text, store at location buff</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3># Display the line
+of text.</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>movl    $msg3, %eax</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>call    print_str</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>call    print_nl</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>movl    $buff, %eax</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>call    read_line</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>movl    $buff, %eax</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>call    print_str</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>call    print_nl</FONT></FONT></P>
+<P STYLE="margin-bottom: 0in"><FONT SIZE=3>Note that, in AT&amp;T
+syntax, <B>$label</B> is an address while <B>label</B><SPAN STYLE="font-weight: normal">
+is a memory reference, so &ldquo;movl xval, %eax&rdquo; would move
+the value stored at memory location </SPAN><B>xval</B><SPAN STYLE="font-weight: normal">
+into register </SPAN><B>EAX</B><SPAN STYLE="font-weight: normal">,
+while &ldquo;movl $xval, %eax&rdquo; would move the address of </SPAN><B>xval</B><SPAN STYLE="font-weight: normal">
+into register </SPAN><B>EAX</B><SPAN STYLE="font-weight: normal">.</SPAN></FONT></P>
+<P STYLE="margin-bottom: 0in; font-weight: normal"><BR>
+</P>
+<P STYLE="margin-bottom: 0in; font-weight: normal"><FONT SIZE=3><I>Notes</I></FONT></P>
+<OL>
+	<LI><P STYLE="margin-bottom: 0in; font-weight: normal"><FONT SIZE=3>All
+	of the routines use the C stdio routines for input/output.</FONT></P>
+</OL>
+<P STYLE="margin-bottom: 0in; font-weight: normal"><BR>
+</P>
+<OL START=2>
+	<LI><P STYLE="margin-bottom: 0in; font-weight: normal"><FONT SIZE=3>All
+	of the output routines (<B>print_char</B>, <B>print_int</B>,
+	<B>print_uint</B>, <B>print_int</B>, <B>print_single</B>,
+	<B>print_double</B>, <B>print_str</B>, <B>print_nl</B>) flush the
+	stdout buffer after calling the stdio output routine. Although this
+	is not efficient, it ensures that output appears on the screen
+	immediately. Beginning programmers usually expect output to appear
+	immediately when an output routine is used and troubleshooting
+	efforts via instrumentation (using print statements) can be stymied
+	if this is not the case.</FONT></P>
+</OL>
+<P STYLE="margin-bottom: 0in; font-weight: normal"><BR>
+</P>
+<OL START=3>
+	<LI><P STYLE="margin-bottom: 0in; font-weight: normal"><FONT SIZE=3>The
+	<B>read_int</B>, <B>read_uint</B>, <B>read_single</B>, <B>read_double</B>,
+	and <B>read_str</B> routines skip over any leading whitespace
+	(space, tabs, line feeds, carriage returns, etc) while the <B>read_char</B>
+	and <B>read_line</B> routines do not.  However, <B>read_int</B>,
+	<B>read_uint</B>, <B>read_single</B>, <B>read_double</B>, and
+	<B>read_str</B> leave trailing whitespace in the input stream.  This
+	can cause unexpected behavior when mixing calls that skip whitespace
+	with those that do not.  For example, using <B>read_int</B> to read
+	an integer at the end of a line and then calling <B>read_line</B>
+	will actually read what is left in the line after the integer
+	(perhaps nothing) and not the next line.  Use <B>read_nl</B> after
+	the call to <B>read_int</B> and before the call to <B>read_line</B>
+	to read the whitespace (including the line feed) after the integer. 
+	The call to <B>read_line</B> will then read the next line.</FONT></P>
+</OL>
+<P STYLE="margin-bottom: 0in; font-weight: normal"><BR>
+</P>
+<P STYLE="margin-bottom: 0in; font-weight: normal"><FONT SIZE=3><I>Usage</I></FONT></P>
+<P STYLE="margin-bottom: 0in; font-weight: normal"><FONT SIZE=3>An
+assembly program to be linked with the library should have the
+following general form:</FONT></P>
+<P STYLE="margin-bottom: 0in; font-weight: normal"><BR>
+</P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>.globl _asm_main</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<BR>
+</P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3># Initialized data
+goes in the data segment</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>.section .data</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<BR>
+</P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3># Uninitialized data
+goes in the bss segment</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>.section .bss</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<BR>
+</P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3># Code goes in the
+text segment</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>.section .text</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>_asm_main:</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>	enter	$0, $0		# set
+up stack frame</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>	pusha				# save all
+registers</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<BR>
+</P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>	# User-written code
+goes here.</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<BR>
+</P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>	popa					# restore
+all registers</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>	movl		$0, %eax		#
+return program status in eax</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>	leave				# restore
+stack frame</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>	ret</FONT></FONT></P>
+<P STYLE="margin-bottom: 0in"><FONT SIZE=3>The name of the entry
+point must be _<SPAN STYLE="text-decoration: none"><B>asm_main</B></SPAN><SPAN STYLE="text-decoration: none"><SPAN STYLE="font-weight: normal">
+and _</SPAN></SPAN><SPAN STYLE="text-decoration: none"><B>asm_main</B></SPAN><SPAN STYLE="text-decoration: none"><SPAN STYLE="font-weight: normal">
+must be declared global as shown.  This code is in the </SPAN></SPAN><SPAN STYLE="text-decoration: none"><B>skeleton.s</B></SPAN><SPAN STYLE="text-decoration: none"><SPAN STYLE="font-weight: normal">
+file that is in the library archive.</SPAN></SPAN></FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0in; font-weight: normal; text-decoration: none">
+<BR>
+</P>
+<P STYLE="margin-bottom: 0in"><FONT SIZE=3>To link assembly file
+<B>foobar.s</B><SPAN STYLE="font-weight: normal"> with the library
+(</SPAN><B>libcs220.a</B><SPAN STYLE="font-weight: normal">) invoke
+</SPAN><B>g++</B><SPAN STYLE="font-weight: normal"> as follows:</SPAN></FONT></P>
+<P STYLE="margin-bottom: 0in; font-weight: normal"><BR>
+</P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>g++ -o foobar
+foobar.s -LLIBDIR -lcs220</FONT></FONT></P>
+<P STYLE="margin-bottom: 0in; font-weight: normal"><BR>
+</P>
+<P STYLE="margin-bottom: 0in; font-weight: normal"><FONT SIZE=3>where
+<B>LIBDIR</B> should be replaced by the path to the directory
+containing the library (use a single period to represent the current
+directory).  </FONT>
+</P>
+<P STYLE="margin-bottom: 0in; font-weight: normal"><BR>
+</P>
+<P STYLE="margin-bottom: 0in; font-weight: normal"><FONT SIZE=3>The
+library includes a C++ <B>main</B> program that calls <B>_asm_main</B>.
+ If you want to link your own C++ <B>main</B> programs with an
+assembly routine that calls I/O routines in the CS220 library you
+will need to use the following compilation options:</FONT></P>
+<P STYLE="margin-bottom: 0in; font-weight: normal"><BR>
+</P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>g++ -o foobar
+-Wl,--defsym -Wl,_asm_main=0  \</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+    <FONT FACE="Courier New, monospace"><FONT SIZE=3>-Wl,--allow-multiple-definition
+foo.cpp bar.s \</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+    <FONT FACE="Courier New, monospace"><FONT SIZE=3>-LLIBDIR -lcs220</FONT></FONT></P>
+<P STYLE="margin-bottom: 0in; font-weight: normal"><BR>
+</P>
+<P STYLE="margin-bottom: 0in; font-weight: normal"><FONT SIZE=3>The
+options after &ldquo;-Wl,&rdquo; (that's W-ell, not W-one) are passed
+to the linker and are necessary to prevent link errors due to the
+multiple definitions of <B>main</B> (and presumably an undefined
+<B>_asm_main</B> routine).  In a <B>Makefile</B> this can be
+accomplished more neatly using:</FONT></P>
+<P STYLE="margin-bottom: 0in; font-weight: normal"><BR>
+</P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>LDOPTSA=-Wl,--defsym
+-Wl,_asm_main=0 </FONT></FONT>
+</P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>LDOPTS=$(LDOPTSA)
+-Wl,--allow-multiple-definition</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<BR>
+</P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>foobar: foo.cpp
+bar.s</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in; margin-bottom: 0in; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>	g++ -o foobar
+$(LDOPTS) foo.cpp bar.s -LLIBDIR -lcs220</FONT></FONT></P>
+<P STYLE="margin-bottom: 0in; font-weight: normal"><BR>
+</P>
+<P STYLE="margin-bottom: 0in; font-weight: normal"><BR>
+</P>
+<TABLE WIDTH=662 BORDER=1 BORDERCOLOR="#000000" CELLPADDING=4 CELLSPACING=0 STYLE="page-break-before: always; page-break-inside: avoid">
+	<COL WIDTH=87>
+	<COL WIDTH=49>
+	<COL WIDTH=49>
+	<COL WIDTH=442>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=87>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">Name</FONT></P>
+			</TH>
+			<TH WIDTH=49>
+				<P ALIGN=CENTER><FONT SIZE=2 STYLE="font-size: 10pt">Input</FONT></P>
+				<P ALIGN=CENTER><FONT SIZE=2 STYLE="font-size: 10pt">Register</FONT></P>
+			</TH>
+			<TH WIDTH=49>
+				<P ALIGN=CENTER><FONT SIZE=2 STYLE="font-size: 10pt">Output</FONT></P>
+				<P ALIGN=CENTER><FONT SIZE=2 STYLE="font-size: 10pt">Register</FONT></P>
+			</TH>
+			<TH WIDTH=442>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">Description</FONT></P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=87>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">print_char</FONT></P>
+			</TD>
+			<TD WIDTH=49>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">%eax</FONT></P>
+			</TD>
+			<TD WIDTH=49>
+				<P ALIGN=LEFT><BR>
+				</P>
+			</TD>
+			<TD WIDTH=442>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">Sends an ASCII
+				character stored in register EAX to standard output.  The
+				character should be stored in the lowest byte of the EAX
+				register.  The upper three bytes should contain zeros.</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=87>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">print_int</FONT></P>
+			</TD>
+			<TD WIDTH=49>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">%eax</FONT></P>
+			</TD>
+			<TD WIDTH=49>
+				<P ALIGN=LEFT><BR>
+				</P>
+			</TD>
+			<TD WIDTH=442>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">Converts a 32
+				bit signed integer stored in register EAX to ASCII and sends the
+				result to standard output.</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=87>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">print_uint</FONT></P>
+			</TD>
+			<TD WIDTH=49>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">%eax</FONT></P>
+			</TD>
+			<TD WIDTH=49>
+				<P ALIGN=LEFT><BR>
+				</P>
+			</TD>
+			<TD WIDTH=442>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">Converts a 32
+				bit unsigned integer stored in register EAX to ASCII and sends
+				the result to the standard output.</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=87>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">print_single</FONT></P>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">print_double</FONT></P>
+			</TD>
+			<TD WIDTH=49>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">%st(0)</FONT></P>
+			</TD>
+			<TD WIDTH=49>
+				<P ALIGN=LEFT><BR>
+				</P>
+			</TD>
+			<TD WIDTH=442>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">Converts a
+				32/64 bit float stored in register ST(0) to ASCII and sends the
+				result to the standard output.</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=87>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">print_singleptr</FONT></P>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">print_doubleptr</FONT></P>
+			</TD>
+			<TD WIDTH=49>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">%eax</FONT></P>
+			</TD>
+			<TD WIDTH=49>
+				<P ALIGN=LEFT><BR>
+				</P>
+			</TD>
+			<TD WIDTH=442>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">Converts a
+				32/64 bit float stored at address in EAX to ASCII and sends the
+				result to the standard output.</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=87>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">print_str</FONT></P>
+			</TD>
+			<TD WIDTH=49>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">%eax</FONT></P>
+			</TD>
+			<TD WIDTH=49>
+				<P ALIGN=LEFT><BR>
+				</P>
+			</TD>
+			<TD WIDTH=442>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">Sends a
+				null-terminated C string (ASCII char array) whose address is in
+				EAX to standard output.</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=87>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">print_nl</FONT></P>
+			</TD>
+			<TD WIDTH=49>
+				<P ALIGN=LEFT><BR>
+				</P>
+			</TD>
+			<TD WIDTH=49>
+				<P ALIGN=LEFT><BR>
+				</P>
+			</TD>
+			<TD WIDTH=442>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">Sends an ASCII
+				line feed character to standard output.</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=87>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">read_char</FONT></P>
+			</TD>
+			<TD WIDTH=49>
+				<P ALIGN=LEFT><BR>
+				</P>
+			</TD>
+			<TD WIDTH=49>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">%eax</FONT></P>
+			</TD>
+			<TD WIDTH=442>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">Returns a
+				character read from standard input in register EAX.  The
+				character is returned in the lowest byte of EAX, the upper three
+				bytes are set to zero.</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=87>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">read_int</FONT></P>
+			</TD>
+			<TD WIDTH=49>
+				<P ALIGN=LEFT><BR>
+				</P>
+			</TD>
+			<TD WIDTH=49>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">%eax</FONT></P>
+			</TD>
+			<TD WIDTH=442>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">Converts an
+				ASCII representation of an integer read from standard input to a
+				signed 32 bit integer and returns the result in register EAX. 
+				Leading whitespace is skipped.</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=87>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">read_uint</FONT></P>
+			</TD>
+			<TD WIDTH=49>
+				<P ALIGN=LEFT><BR>
+				</P>
+			</TD>
+			<TD WIDTH=49>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">%eax</FONT></P>
+			</TD>
+			<TD WIDTH=442>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">Converts an
+				ASCII representation of a positive integer read from standard
+				input to an unsigned 32 bit integer and returns the result in
+				register EAX.  Leading whitespace is skipped.</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=87>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">read_single</FONT></P>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">read_double</FONT></P>
+			</TD>
+			<TD WIDTH=49>
+				<P ALIGN=LEFT><BR>
+				</P>
+			</TD>
+			<TD WIDTH=49>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">%st(0)</FONT></P>
+			</TD>
+			<TD WIDTH=442>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">Converts an
+				ASCII representation of a float read from standard input to a
+				32/64 bit float and returns the result in ST(0).  Leading
+				whitespace is skipped.</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=87>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">read_singleptr</FONT></P>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">read_doubleptr</FONT></P>
+			</TD>
+			<TD WIDTH=49>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">%eax</FONT></P>
+			</TD>
+			<TD WIDTH=49>
+				<P ALIGN=LEFT><BR>
+				</P>
+			</TD>
+			<TD WIDTH=442>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">Converts an
+				ASCII representation of a float read from standard input to a
+				32/64 bit and stores the result at the address in register EAX. 
+				Leading whitespace is skipped.</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=87>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">read_str</FONT></P>
+			</TD>
+			<TD WIDTH=49>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">%eax</FONT></P>
+			</TD>
+			<TD WIDTH=49>
+				<P ALIGN=LEFT><BR>
+				</P>
+			</TD>
+			<TD WIDTH=442>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">Reads a
+				white-space delimited string (a word) from standard input and
+				stores it at the address in register EAX.  The string is null
+				terminated.  Leading whitespace is skipped.</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=87>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">read_line</FONT></P>
+			</TD>
+			<TD WIDTH=49>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">%eax</FONT></P>
+			</TD>
+			<TD WIDTH=49>
+				<P ALIGN=LEFT><BR>
+				</P>
+			</TD>
+			<TD WIDTH=442>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">Reads a
+				linefeed terminated line from standard input and stores it at the
+				address in register EAX.  The string is null terminated.  The
+				linefeed is removed from the input buffer.  Reads in a maximum of
+				255 characters.  The buffer should be 256 bytes in length (255
+				characters plus the trailing null character).  The buffer may be
+				shorter, but then buffer overflow may occur if the input line
+				contains more characters than the buffer can hold.</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=87>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">read_nl</FONT></P>
+			</TD>
+			<TD WIDTH=49>
+				<P ALIGN=LEFT><BR>
+				</P>
+			</TD>
+			<TD WIDTH=49>
+				<P ALIGN=LEFT><BR>
+				</P>
+			</TD>
+			<TD WIDTH=442>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">Reads and
+				discards all characters up to and including the next linefeed.</FONT></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=87>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">str_length</FONT></P>
+			</TD>
+			<TD WIDTH=49>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">%eax</FONT></P>
+			</TD>
+			<TD WIDTH=49>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">%eax</FONT></P>
+			</TD>
+			<TD WIDTH=442>
+				<P ALIGN=LEFT><FONT SIZE=2 STYLE="font-size: 10pt">Determines the
+				length of a null-terminated C string (ASCII char array) whose
+				address is in EAX.  The null-terminating byte is not included in
+				the length value.  The length is returned in the EAX register.</FONT></P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P ALIGN=LEFT STYLE="margin-bottom: 0in; font-weight: normal; text-decoration: none">
+<BR>
+</P>
+<P ALIGN=CENTER STYLE="margin-bottom: 0in"><FONT SIZE=3><B>Table 1:
+Routines in the CS220 Assembly Library</B></FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0in; font-weight: normal; page-break-before: always">
+<FONT SIZE=3><I>Preprocessing and Debugging</I></FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0in; font-style: normal; font-weight: normal">
+<FONT SIZE=3>Assembly source code files that have a .S (uppercase s)
+suffix are automatically run through the C preprocessor when
+assembled using either <B>gcc</B> or <B>g++</B>.  Source code files
+that have a .s (lowercase s) are assumed to be pure assembly and may
+not contain preprocessor directives.  The use of preprocessor
+definitions in assembly can result in programs that are easier to
+read and maintain.  They are particularly useful when using local
+variables in an assembly subprogram.  For example:</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0in; font-style: normal; font-weight: normal">
+<BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-left: 0.4in; margin-bottom: 0in; font-style: normal; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>#define	X_INT	-4(%ebp)</FONT></FONT></P>
+<P ALIGN=LEFT STYLE="margin-left: 0.4in; margin-bottom: 0in; font-style: normal; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>#define	Y_DBL	-12(%ebp)</FONT></FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0in; font-style: normal; font-weight: normal">
+<BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0in; font-style: normal; font-weight: normal">
+<FONT SIZE=3>The X_INT and Y_DBL labels can then be used throughout
+the assembly source code file.</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0in; font-style: normal; font-weight: normal">
+<BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0in; font-style: normal; font-weight: normal">
+<FONT SIZE=3>There is a slight problem when trying to debug
+assembly-with-preprocessor source code.  The preprocessor creates a
+pure assembly source code file in the /tmp directory that is then run
+through the assembler.  When the debugger is started it looks for an
+assembly source file in the /tmp directory (which has since been
+deleted) and not the original assembly-with-preprocessor source file.
+ The solution is to either use pure assembly when wanting to use the
+debugger (use a lowercase s suffix for the assembly source code file)
+or to break down preprocessing and assembly into two separate stages.
+ I prefer to use the asm suffix on files that contain
+assembly-with-preprocessor source code.  (This prevents problems on
+case insensitive file systems.)  To create an object file with
+debugging information from a source file named <B>foo.asm</B> then do
+the following:</FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0in; font-style: normal; font-weight: normal">
+<BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-left: 0.4in; margin-bottom: 0in; font-style: normal; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>cpp -P -x
+assembler-with-cpp foo.asm foo.s</FONT></FONT></P>
+<P ALIGN=LEFT STYLE="margin-left: 0.4in; margin-bottom: 0in; font-style: normal; font-weight: normal">
+<FONT FACE="Courier New, monospace"><FONT SIZE=3>g++ -g -c foo.s</FONT></FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0in; font-style: normal; font-weight: normal">
+<BR>
+</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0in; font-style: normal; font-weight: normal">
+<FONT SIZE=3>The file <B>foo.s</B><SPAN STYLE="font-weight: normal">
+will then serve as the source code file for the debugger.  It should
+be similar enough to the original </SPAN><B>foo.asm</B><SPAN STYLE="font-weight: normal">
+file so that debugging is not too confusing.</SPAN></FONT></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0in; font-style: normal; font-weight: normal">
+<BR>
+</P>
+<DIV TYPE=FOOTER>
+	<P STYLE="margin-top: 0.2in; margin-bottom: 0in"><FONT SIZE=2>CS220	<SDFIELD TYPE=PAGE SUBTYPE=RANDOM FORMAT=PAGE>5</SDFIELD>	Richardson</FONT></P>
+</DIV>
+</BODY>
+</HTML>
