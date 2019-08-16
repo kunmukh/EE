@@ -1,0 +1,5 @@
+﻿  Source.c
+c:\users\kunal\documents\kunal\cs 210\testapplication 2\testapplication 2\source.c(23): warning C4020: 'fclose': too many actual parameters
+c:\users\kunal\documents\kunal\cs 210\testapplication 2\testapplication 2\source.c(22): warning C4477: 'fprintf' : format string '%d' requires an argument of type 'int', but variadic argument 1 has type 'int *'
+  TestApplication 2.vcxproj -> C:\Users\Kunal\Documents\Kunal\CS 210\TestApplication 2\Debug\TestApplication 2.exe
+  TestApplication 2.vcxproj -> C:\Users\Kunal\Documents\Kunal\CS 210\TestApplication 2\Debug\TestApplication 2.pdb (Full PDB)

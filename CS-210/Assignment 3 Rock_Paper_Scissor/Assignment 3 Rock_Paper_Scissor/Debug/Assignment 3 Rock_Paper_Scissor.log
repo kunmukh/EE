@@ -1,0 +1,4 @@
+﻿  Source.c
+c:\users\kunal\documents\kunal\cs 210\assignment 3 rock_paper_scissor\assignment 3 rock_paper_scissor\source.c(25): warning C4244: 'function': conversion from 'double' to 'int', possible loss of data
+  Assignment 3 Rock_Paper_Scissor.vcxproj -> C:\Users\Kunal\Documents\Kunal\CS 210\Assignment 3 Rock_Paper_Scissor\Debug\Assignment 3 Rock_Paper_Scissor.exe
+  Assignment 3 Rock_Paper_Scissor.vcxproj -> C:\Users\Kunal\Documents\Kunal\CS 210\Assignment 3 Rock_Paper_Scissor\Debug\Assignment 3 Rock_Paper_Scissor.pdb (Full PDB)

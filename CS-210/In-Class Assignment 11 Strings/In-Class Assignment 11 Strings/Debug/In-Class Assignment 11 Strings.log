@@ -1,0 +1,5 @@
+﻿  Source.c
+c:\users\kunal\documents\kunal\cs 210\in-class assignment 11 strings\in-class assignment 11 strings\source.c(16): warning C4013: 'gets' undefined; assuming extern returning int
+c:\users\kunal\documents\kunal\cs 210\in-class assignment 11 strings\in-class assignment 11 strings\source.c(22): warning C4013: 'toupper' undefined; assuming extern returning int
+  In-Class Assignment 11 Strings.vcxproj -> C:\Users\Kunal\Documents\Kunal\CS 210\In-Class Assignment 11 Strings\Debug\In-Class Assignment 11 Strings.exe
+  In-Class Assignment 11 Strings.vcxproj -> C:\Users\Kunal\Documents\Kunal\CS 210\In-Class Assignment 11 Strings\Debug\In-Class Assignment 11 Strings.pdb (Full PDB)
