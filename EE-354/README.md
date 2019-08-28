@@ -1,2 +1,1 @@
-# EE-354
-Digital Systems
+# EE-354: Digital Systems
