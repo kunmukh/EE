@@ -1,2 +1,1 @@
-# EE-454
-Micro-controller Applications
+# EE-454: Microcontroller Applications
