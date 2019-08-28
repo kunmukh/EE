@@ -1,1 +1,1 @@
-# EE-254
+# EE-254: Logic Design
