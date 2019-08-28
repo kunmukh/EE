@@ -1,2 +1,1 @@
-# EE-380
-Interim Electrical Projects Lab
+# EE-380: Intermediate Electrical Projects Lab
